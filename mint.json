@@ -1,0 +1,13 @@
+{
+  "name": "tako",
+  "source-directories": [
+    "source"
+  ],
+  "application": {
+    "title": "Tako - SushiChain Wallet",
+    "head": "assets/head.html"
+  },
+  "test-directories": [
+    "tests"
+  ]
+}
