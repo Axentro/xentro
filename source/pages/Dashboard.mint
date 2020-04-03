@@ -9,7 +9,7 @@ component Dashboard {
 		var preLoder = $("#preloader");
 		preLoder.delay(700).fadeOut(500);
 
-         $('#recent-orders').DataTable();
+         $('#recent-transactions').DataTable();
    
     });
     })()
@@ -58,12 +58,20 @@ component Dashboard {
               <a class="nav-link" href="#">"Receive"</a>
             </li>
               <li class="nav-item">
-              <a class="nav-link" href="#">"All transactions"</a>
+              <a class="nav-link" href="#">"Transactions"</a>
             </li>
+              <li class="nav-item">
+              <a class="nav-link" href="#">"Tools"</a>
+            </li>
+             
             </ul>    
             </div>
             <div class="header-body-right">    
-
+            <ul class="navbar-nav">
+                <li class="nav-item">
+              <a class="nav-link" href="#">"Logout"</a>
+            </li>
+            </ul>
            
             </div>
         </div>
@@ -103,7 +111,11 @@ component Dashboard {
                             </div>
                             <div class="small">
                                "VDBjMjI1ZmE0MmQzYTAwYWJlZGNjMTFkNzQ5YjMxZGFkNGVhYjU2N2YwNzFmYjFk"
+                               <span class="ml-2 badge bg-dribbble">
+                              "KINGS.sc"
+                            </span>
                             </div>
+                            
                         </div>
                   
                  
@@ -143,21 +155,20 @@ component Dashboard {
                     <div class="card">
         <div class="card-body">
             <div>
-                <h6 class="card-title">"Pending Transactions"</h6>
+                <h6 class="card-title">"Recent Transactions"</h6>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                  
-                        <table id="recent-orders" class="table table-striped table-bordered">
+                  <div class="table-responsive">
+                        <table id="recent-transactions" class="table table-striped table-bordered">
                             <thead>
                             <tr>
                                 <th>"Date"</th>
-                                <th>"Id"</th>
                                 <th>"Amount"</th>
                                 <th>"Token"</th>
+                                <th>"To"</th>
                                 <th>"From"</th>
                                 <th>"Category"</th>
-                                <th>"Direction"</th>
                                 <th>"Status"</th>
                             </tr>
                             </thead>
@@ -167,22 +178,43 @@ component Dashboard {
                                 "2020-03-29 16:43:14 UTC"
                                 </td>
                                 <td>
-                                    "60961f3c5f0f7a3"
+                                  "0.00345"
+                                </td>
+                                <td>"SUSHI"</td>
+                                <td></td>
+                                <td>"KINGS.sc"</td>
+                                <td>
+                                <span class="badge bg-secondary-bright">"Mining reward"</span>
+                                <span class="text-success pl-2 ti-arrow-up"></span>
+                                 
+                                </td>
+                                <td>
+                                <span class="badge bg-success-bright">"Completed"</span>
+                                </td>
+                            </tr>
+                             <tr>
+                             <td>
+                                "2020-03-29 16:43:14 UTC"
                                 </td>
                                 <td>
                                   "0.00345"
                                 </td>
                                 <td>"SUSHI"</td>
                                 <td>"KINGS.sc"</td>
+                                <td></td>
                                 <td>
-                                  "Payment"  
+                                <span class="badge bg-info-bright">"Payment"</span>
+                                <span class="text-warning pl-2 ti-arrow-down"></span>
+                                 
                                 </td>
-                                <td>"Incoming"</td>
-                                <td>"Completed"</td>
+                                <td>
+                                 <span class="badge bg-success-bright">"Completed"</span>
+                                 </td>
                             </tr>
                             </tbody>
                         </table>
                   
+                </div>
                 </div>
             </div>
         </div>
@@ -211,28 +243,6 @@ component Dashboard {
     </div>
 
 </div>
-
-
-
-    <div class="colors">
-        <div class="bg-primary"></div>
-        <div class="bg-primary-bright"></div>
-        <div class="bg-secondary"></div>
-        <div class="bg-secondary-bright"></div>
-        <div class="bg-info"></div>
-        <div class="bg-info-bright"></div>
-        <div class="bg-success"></div>
-        <div class="bg-success-bright"></div>
-        <div class="bg-danger"></div>
-        <div class="bg-danger-bright"></div>
-        <div class="bg-warning"></div>
-        <div class="bg-warning-bright"></div>
-    </div>
-
-  
-
-
-
 
 </div>
   }
