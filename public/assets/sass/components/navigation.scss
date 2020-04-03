@@ -1,0 +1,188 @@
+.navigation {
+    background-color: white;
+    z-index: 998;
+    width: $navigation-width;
+    box-shadow: 0 4px 25px 0 rgba(0,0,0,.1);
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    left: 0;
+    bottom:0;
+    top: $header-height;
+
+    .navigation-menu-tab {
+        border-right: 1px solid $border-style-color;
+        width: $navigation-tab-width;
+        display: flex;
+        flex-direction: column;
+        margin-right: 0;
+        padding: 10px;
+
+        .avatar {
+            border: none;
+        }
+
+        ul {
+            li {
+                margin-bottom: 5px;
+
+                a {
+                    display: flex;
+                    height: 50px;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: $default-border-radius;
+                    transition: all .3s;
+
+                    &:hover {
+                        color: $color-primary
+                    }
+
+                    &.active {
+                        color: white;
+                        background-color: $color-primary;
+                        box-shadow: 0px 5px 20px -14px $color-primary;
+                    }
+
+                    svg {
+                        width: 23px;
+                        height: 23px;
+                    }
+                }
+            }
+        }
+    }
+
+    .navigation-menu-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+
+        .navigation-menu-group {
+
+            & > div {
+                display: none;
+
+                &.open {
+                    display: block;
+                }
+            }
+        }
+
+        ul {
+            li {
+
+                &.navigation-divider {
+                    padding: 10px 30px;
+                    text-transform: uppercase;
+                    font-size: 12px;
+                    letter-spacing: .5px;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                    color: #a7abc3;
+                }
+
+                & > a {
+                    display: flex;
+                    align-items: center;
+                    padding: 10px 30px;
+                    color: #505050;
+                    font-size: 14px;
+                    transition: all .3s;
+
+                    .nav-link-icon {
+                        margin-right: .8rem;
+                        stroke: rgba(black, .3);
+                        transition: stroke .3s;
+                        width: 20px;
+                        height: 20px;
+                    }
+
+                    &:hover {
+                        color: $color-primary;
+
+                        .nav-link-icon {
+                            stroke: $color-primary;
+                        }
+                    }
+
+                    &.active {
+                        position: relative;
+                        color: $color-primary;
+                        font-weight: 600;
+                        background: rgba($color-primary, .15);
+                        border-radius: $default-border-radius;
+                        margin: 0 1rem;
+
+                        &:before {
+                            content: '';
+                            // position: absolute;
+                            display: block;
+                            border: 6px solid transparent;
+                            border-left-color: $color-primary;
+                            margin-left: -12px;
+                            margin-right: 5px;
+                        }
+                    }
+
+                    .sub-menu-arrow {
+                        margin-left: auto;
+                        font-size: 14px;
+                        transition: transform .3s;
+
+                        &.rotate-in {
+                            transform: rotate(540deg);
+                        }
+                    }
+
+                    .badge {
+                        margin-left: auto;
+                        padding: 3px 7px;
+                    }
+
+                    & + ul {
+                        display: none;
+
+                        li {
+                            margin: 0;
+
+                            a {
+                                padding-left: 50px;
+                            }
+                        }
+
+                        ul {
+                            border-left: none;
+
+                            li {
+                                a {
+                                    padding-left: 70px;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                &.open {
+                    & > a {
+                        color: $color-primary;
+                        font-weight: 600;
+
+                        .nav-link-icon {
+                            stroke: $color-primary;
+                        }
+                    }
+
+                    & > ul {
+                        display: block;
+
+                        a.active {
+                            background-color: inherit;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

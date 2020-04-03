@@ -6,11 +6,11 @@ component Dashboard {
      window.requestAnimationFrame(function () {
 
        
-		var preLoder = $("#load_screen");
+		var preLoder = $("#preloader");
 		preLoder.delay(700).fadeOut(500);
 
-
-        App.init();
+         $('#recent-orders').DataTable();
+   
     });
     })()
     `
@@ -19,205 +19,222 @@ component Dashboard {
   fun render : Html {
     <div>
 
-    <div id="load_screen"> <div class="loader"> <div class="loader-content">
-        <div class="spinner-grow align-self-center"></div>
-    </div></div></div>
 
+<div id="preloader" class="preloader">
+    <div class="preloader-icon"></div>
+</div>
+
+
+
+
+
+
+<div class="layout-wrapper">
 
   
-    <div class="header-container fixed-top">
-        <header class="header navbar navbar-expand-sm">
+    <div class="header d-print-none">
 
-            <ul class="navbar-item theme-brand flex-row  text-center">
-                <li class="nav-item theme-logo">
-                    <a href="index.html">
-                        <img src="/assets/img/90x90.jpg" class="navbar-logo" alt="logo"/>
-                    </a>
-                </li>
-                <li class="nav-item theme-text">
-                    <a href="index.html" class="nav-link">"CORK"</a>
-                </li>
-            </ul>
+        <div class="header-left">
+            <div class="navigation-toggler">
+                <a href="#" data-action="navigation-toggler">
+                    <i data-feather="menu"></i>
+                </a>
+            </div>
+            <div class="header-logo">
+                <a href="index.html">
+                    <img class="logo" src="/assets/media/image/logo.png" alt="logo"/>
+                    <img class="logo-light" src="/assets/media/image/logo-light.png" alt="light logo"/>
+                </a>
+            </div>
+        </div>
 
-            <ul class="navbar-item flex-row ml-md-auto">
+        <div class="header-body">
+            <div class="header-body-left">
+             <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="#">"Send"</a>
+            </li>
+             <li class="nav-item">
+              <a class="nav-link" href="#">"Receive"</a>
+            </li>
+              <li class="nav-item">
+              <a class="nav-link" href="#">"All transactions"</a>
+            </li>
+            </ul>    
+            </div>
+            <div class="header-body-right">    
 
-                <li class="nav-item dropdown user-profile-dropdown">
-                    <a href="javascript:void(0);" class="nav-link dropdown-toggle user" id="userProfileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <img src="assets/img/90x90.jpg" alt="avatar"/>
-                    </a>
-                    <div class="dropdown-menu position-absolute" aria-labelledby="userProfileDropdown">
-                        <div class="">
-                            <div class="dropdown-item">
-                                <a class="" href="user_profile.html"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>" My Profile"</a>
-                            </div>
-                            <div class="dropdown-item">
-                                <a class="" href="apps_mailbox.html"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-inbox"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>" Inbox"</a>
-                            </div>
-                            <div class="dropdown-item">
-                                <a class="" href="auth_lockscreen.html"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>" Lock Screen"</a>
-                            </div>
-                            <div class="dropdown-item">
-                                <a class="" href="auth_login.html"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>" Sign Out"</a>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </header>
+           
+            </div>
+        </div>
+
     </div>
-  
-
  
-    <div class="sub-header-container">
-        <header class="header navbar navbar-expand-sm">
-            <a href="javascript:void(0);" class="sidebarCollapse" data-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></a>
 
-            <ul class="navbar-nav flex-row">
-                <li>
-                    <div class="page-header">
-                        <div class="page-title">
-                            <h3>"Blank Page"</h3>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </header>
-    </div>
-
-
-  
-    <div class="main-container" id="container">
-
-        <div class="overlay"></div>
-        <div class="search-overlay"></div>
+    <div class="content-wrapper">
 
        
-        <div class="sidebar-wrapper sidebar-theme">
-            
-            <nav id="sidebar">
-                <div class="shadow-bottom"></div>
+      
+      
 
-                <ul class="list-unstyled menu-categories" id="accordionExample">
-                    <li class="menu">
-                        <a href="#starter-kit" data-active="true" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
-                            <div class="">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-terminal"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
-                                <span>"Starter Kit"</span>
-                            </div>
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                            </div>
-                        </a>
-                        <ul class="submenu list-unstyled collapse show" id="starter-kit" data-parent="#accordionExample" style="">
-                            <li class="active">
-                                <a href="starter_kit_blank_page.html">" Blank Page "</a>
-                            </li>
-                            <li>
-                                <a href="starter_kit_breadcrumbs.html">" Breadcrumbs "</a>
-                            </li>
-                            <li>
-                                <a href="starter_kit_boxed.html">" Boxed "</a>
-                            </li>
-                            <li>
-                                <a href="starter_kit_alt_menu.html">" Alternate Menu "</a>
-                            </li>
-                        </ul>
-                    </li>
+        <div class="content-body">
 
-                    <li class="menu">
-                        <a href="javascript:void(0);" aria-expanded="false" class="dropdown-toggle">
-                            <div class="">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                                <span>" Menu 1"</span>
-                            </div>
-                        </a>
-                    </li>
+            <div class="content">
 
-                    <li class="menu">
-                        <a href="#submenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                            <div class="">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg>
-                                <span>" Menu 2"</span>
-                            </div>
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                            </div>
-                        </a>
-                        <ul class="collapse submenu list-unstyled" id="submenu" data-parent="#accordionExample">
-                            <li>
-                                <a href="javascript:void(0);">" Submenu 1 "</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);">" Submenu 2 "</a>
-                            </li>                           
-                        </ul>
-                    </li>
-
-                    <li class="menu">
-                        <a href="#submenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                            <div class="">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                                <span>" Menu 3"</span>
-                            </div>
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                            </div>
-                        </a>
-                        <ul class="collapse submenu list-unstyled" id="submenu2" data-parent="#accordionExample">
-                            <li>
-                                <a href="javascript:void(0);">" Submenu 1 "</a>
-                            </li>
-                            <li>
-                                <a href="#sm2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">" Submenu 2 "<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg> </a>
-                                <ul class="collapse list-unstyled sub-submenu" id="sm2" data-parent="#submenu2"> 
-                                    <li>
-                                        <a href="javascript:void(0);">" Sub-Submenu 1 "</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">" Sub-Submenu 2 "</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">" Sub-Submenu 3 "</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
                 
-            </nav>
+    <div class="page-header">
+   
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-3">
+                                <div>
+                                    <p class="text-muted">"Wallet Balances"</p>
+                                    <h2 class="font-weight-bold">"58,000"  <span class="small">" SUSHI"</span></h2>
+                                   
+                                </div>
+                          
+                            </div>
+                            <div class="small">
+                               "VDBjMjI1ZmE0MmQzYTAwYWJlZGNjMTFkNzQ5YjMxZGFkNGVhYjU2N2YwNzFmYjFk"
+                            </div>
+                        </div>
+                  
+                 
+                   <div class="table-responsive">
+                    <table class="table table-striped mb-0">
+                        <thead>
+                        <tr>
+                            <th>"Token"</th>
+                            <th>"Amount"</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                "KINGS"
+                            </td>
+                            <td>"0.001"</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                "XCURRENCY"
+                            </td>
+                            <td>"897"</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                "EAGLE"
+                            </td>
+                            <td>"1,200,000"</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                   </div>
+                 </div>
+                </div>
+                 <div class="col-md-9">
+                    <div class="card">
+        <div class="card-body">
+            <div>
+                <h6 class="card-title">"Pending Transactions"</h6>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                  
+                        <table id="recent-orders" class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>"Date"</th>
+                                <th>"Id"</th>
+                                <th>"Amount"</th>
+                                <th>"Token"</th>
+                                <th>"From"</th>
+                                <th>"Category"</th>
+                                <th>"Direction"</th>
+                                <th>"Status"</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                             <td>
+                                "2020-03-29 16:43:14 UTC"
+                                </td>
+                                <td>
+                                    "60961f3c5f0f7a3"
+                                </td>
+                                <td>
+                                  "0.00345"
+                                </td>
+                                <td>"SUSHI"</td>
+                                <td>"KINGS.sc"</td>
+                                <td>
+                                  "Payment"  
+                                </td>
+                                <td>"Incoming"</td>
+                                <td>"Completed"</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+                </div>
+            </div>
 
         </div>
-      
-        
-    
-        <div id="content" class="main-content">
-            <div class="layout-px-spacing">
+    </div>
 
-                <div class="row layout-top-spacing">
+  
 
+   
 
-                </div>
+  
+
 
             </div>
-            <div class="footer-wrapper">
-                <div class="footer-section f-section-1">
-                    <p class="">"Copyright © 2020 "<a target="_blank" href="https://designreset.com">"DesignReset"</a>", All rights reserved."</p>
-                </div>
-                <div class="footer-section f-section-2">
-                    <p class="">"Coded with" <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></p>
-                </div>
-            </div>
+
+          
+
+         
+
         </div>
-      
 
     </div>
- 
 
- 
-    
+</div>
 
+
+
+    <div class="colors">
+        <div class="bg-primary"></div>
+        <div class="bg-primary-bright"></div>
+        <div class="bg-secondary"></div>
+        <div class="bg-secondary-bright"></div>
+        <div class="bg-info"></div>
+        <div class="bg-info-bright"></div>
+        <div class="bg-success"></div>
+        <div class="bg-success-bright"></div>
+        <div class="bg-danger"></div>
+        <div class="bg-danger-bright"></div>
+        <div class="bg-warning"></div>
+        <div class="bg-warning-bright"></div>
     </div>
+
+  
+
+
+
+
+</div>
   }
 
 }

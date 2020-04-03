@@ -1,0 +1,11 @@
+body {
+    font-family: 'Inter', sans-serif;
+    position: relative;
+    background-color: #f8fafb;
+    font-size: 15px;
+    color: #505050;
+
+    &.no-scroll {
+        overflow: hidden;
+    }
+}

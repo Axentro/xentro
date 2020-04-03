@@ -1,0 +1,177 @@
+.chat-app {
+    overflow: hidden;
+    padding-bottom: 30px;
+
+    .content-footer {
+        display: none;
+    }
+
+    &.horizontal-navigation {
+        .chat-block {
+            height: calc(100vh - #{$header-height + 60px + $header-height - 20px});
+        }
+
+        .layout-wrapper .content-wrapper .content-body .content {
+            padding-top: $header-height + 30px + $header-height - 20px;
+        }
+    }
+}
+
+.chat-block {
+    height: calc(100vh - #{$header-height + 60px});
+    @extend .card;
+    border-radius: $default-border-radius;
+    overflow: hidden;
+    margin-bottom: 0;
+
+    .chat-sidebar {
+        padding: 1.5rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: #f8fafb;
+
+        .chat-sidebar-header {
+            form {
+                margin: 1.5rem 0;
+            }
+        }
+
+        .chat-sidebar-content {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: auto;
+
+            .list-group {
+                .list-group-item {
+                    background: white;
+                    border-radius: $default-border-radius;
+                    border: 1px solid transparent;
+                    margin-bottom: 1rem;
+
+                    &.active {
+                        color: black;
+                        border-color: $color-primary
+                    }
+                }
+            }
+        }
+    }
+
+    .chat-content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        .mobile-chat-close-btn {
+            display: none;
+        }
+
+        .chat-header {
+            padding: 1.5rem;
+        }
+
+        .messages {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            flex: 1;
+            overflow-x: hidden;
+
+            .message-item {
+                margin-bottom: 20px;
+                padding-left: 10px;
+                display: flex;
+                align-items: center;
+                position: relative;
+
+                .time {
+                    margin-left: 1rem;
+                }
+
+                img {
+                    max-width: 30%;
+                    border-radius: .50rem;
+                }
+
+                &:not(.message-media):not(.message-item-divider):before {
+                    content: '';
+                    border: 10px solid transparent;
+                    border-right-color: #f0f0f0;
+                    position: absolute;
+                    top: 8px;
+                    left: -10px;
+                    z-index: 1;
+                }
+
+                .message-item-content {
+                    max-width: 75%;
+                    background-color: #f0f0f0;
+                    padding: 7px 15px;
+                    line-height: 1.5rem;
+                    border-radius: .50rem;
+                    position: relative;
+                    z-index: 2;
+                }
+
+                &.me {
+                    flex-direction: row-reverse;
+                    margin-left: auto;
+                    padding-left: 0px;
+                    padding-right: 10px;
+
+                    .time {
+                        margin-left: 0;
+                        margin-right: 1rem;
+                    }
+
+                    &:not(.message-item-divider):before {
+                        left: auto;
+                        right: -10px;
+                        border-left-color: $color-primary;
+                        border-right-color: transparent;
+
+                    }
+
+                    .message-item-content {
+                        background-color: $color-primary;
+                        color: rgba(white, .9);
+                    }
+                }
+
+                &.message-item-divider {
+                    width: 100%;
+                    display: flex;
+
+                    span {
+                        @extend .small;
+                        @extend .text-muted;
+                        padding: 0 10px;
+                        user-select: none;
+                    }
+
+                    &:before, &:after {
+                        content: '';
+                        display: block;
+                        height: 1px;
+                        background-color: #f0f0f0;
+                        flex: 1;
+                    }
+                }
+            }
+        }
+
+        .chat-footer {
+            padding: 1.5rem;
+
+            .chat-footer-buttons {
+                button {
+                    margin-left: .5rem;
+                }
+            }
+        }
+    }
+}
