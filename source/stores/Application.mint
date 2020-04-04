@@ -16,7 +16,10 @@ store Application {
   }
 
   fun setWalletInfo (data : WalletInfo) : Promise(Never, Void) {
-    next { walletInfo = Maybe.just(data) }
+    sequence {
+      next { walletInfo = Maybe.nothing() }
+      next { walletInfo = Maybe.just(data) }
+    }
   }
 
   fun setDataError (message : String) : Promise(Never, Void) {

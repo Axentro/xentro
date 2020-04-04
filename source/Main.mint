@@ -87,6 +87,8 @@ component Main {
     
       setWalletInfo(walletInfo)
 
+      Debug.log(walletInfo)
+
        `
     (() => {
      window.requestAnimationFrame(function () {
