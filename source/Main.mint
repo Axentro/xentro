@@ -33,7 +33,7 @@ record RejectedTransaction {
 
 record WalletInfo {
   address : String,
-  readable : String,
+  readable : Array(String),
   tokens : Array(Token),
   recentTransactions : Array(RecentTransaction) using "recent_transactions",
   rejectedTransactions : Array(RejectedTransaction) using "rejected_transactions"
@@ -41,8 +41,6 @@ record WalletInfo {
 
 component Main {
   connect Application exposing { page, setLog, setDataError, setWalletInfo }
-
- 
 
   use Provider.WebSocket {
     url = "ws://localhost:3001/wallet_info",
@@ -64,8 +62,11 @@ component Main {
     sequence {
       setLog("Opened...")
 
-      message = { address = "VDA2NjU5N2JlNDA3ZDk5Nzg4MGY2NjY5YjhhOTUwZTE2M2VmNjM5OWM2M2EyMWQz"}
-      json = encode message
+      message =
+        { address = "VDA2NjU5N2JlNDA3ZDk5Nzg4MGY2NjY5YjhhOTUwZTE2M2VmNjM5OWM2M2EyMWQz" }
+
+      json =
+        encode message
 
       WebSocket.send(Json.stringify(json), socket)
 
@@ -74,12 +75,8 @@ component Main {
   }
 
   fun handleMessage (data : String) : Promise(Never, Void) {
- 
-
-sequence {
-
-        setLog(data)
-
+    sequence {
+      `console.log('message received')`
       json =
         Json.parse(data)
         |> Maybe.toResult("Json parsing error")
@@ -87,20 +84,25 @@ sequence {
       walletInfo =
         decode json as WalletInfo
 
-      setWalletInfo(walletInfo)  
+    
+      setWalletInfo(walletInfo)
 
-     
+       `
+    (() => {
+     window.requestAnimationFrame(function () {
+         const datatable = $('#recent-transactions').DataTable({"retrieve": true});
+    datatable.draw();
+   
+    });
+    })()
+    `
 
-      
       setDataError("")
-
     } catch String => er {
       setDataError("Could not parse json response")
     } catch Object.Error => er {
       setDataError("Could not decode json")
     }
-  
-
   }
 
   get pages : Array(Ui.Pager.Item) {
@@ -113,7 +115,7 @@ sequence {
         name = "not_found",
         contents =
           <div>
-            <{ "404" }>
+            "404"
           </div>
       }
     ]
@@ -121,9 +123,9 @@ sequence {
 
   fun render : Html {
     pages
-      |> Array.find(
-        (item : Ui.Pager.Item) : Bool  { item.name == page })
-      |> Maybe.map((item : Ui.Pager.Item) : Html  { item.contents })
-      |> Maybe.withDefault(<div/>)
+    |> Array.find(
+      (item : Ui.Pager.Item) : Bool { item.name == page })
+    |> Maybe.map((item : Ui.Pager.Item) : Html { item.contents })
+    |> Maybe.withDefault(<div/>)
   }
 }

@@ -11,16 +11,15 @@ store Application {
     }
   }
 
-  fun setLog(message : String) : Promise(Never, Void) {
+  fun setLog (message : String) : Promise(Never, Void) {
     next { logs = Array.push(message, logs) }
   }
 
- fun setWalletInfo(data : WalletInfo) : Promise(Never, Void) {
-   next { walletInfo = Maybe.just(data)}
- }
+  fun setWalletInfo (data : WalletInfo) : Promise(Never, Void) {
+    next { walletInfo = Maybe.just(data) }
+  }
 
-fun setDataError(message : String) : Promise(Never, Void) {
-  next { dataError = message }
-}
-
+  fun setDataError (message : String) : Promise(Never, Void) {
+    next { dataError = message }
+  }
 }

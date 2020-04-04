@@ -1,9 +1,8 @@
 routes {
-  
   / {
     Application.setPage("dashboard")
   }
-  
+
   /dashboard {
     Application.setPage("dashboard")
   }
