@@ -1,5 +1,7 @@
 component Dashboard {
 
+    connect Application exposing { logs, walletInfo }
+
  fun componentDidMount : Promise(Never, Void) {
         `
     (() => {
@@ -9,7 +11,9 @@ component Dashboard {
 		var preLoder = $("#preloader");
 		preLoder.delay(700).fadeOut(500);
 
-         $('#recent-transactions').DataTable();
+         $('#recent-transactions').DataTable({
+             "sDom": 'frtip'
+         });
    
     });
     })()
@@ -96,6 +100,17 @@ component Dashboard {
 
     <div class="row">
         <div class="col-md-12">
+
+        <div>
+      for (log of logs) {
+        <div>
+          <{ log }>
+        </div>
+      }
+    </div>
+
+     
+           
 
             <div class="row">
                 <div class="col-md-3">
