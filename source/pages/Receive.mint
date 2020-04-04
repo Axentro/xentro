@@ -1,9 +1,9 @@
-component Dashboard {
+component Receive {
   connect Application exposing { walletInfo }
 
   fun render : Html {
     <Layout
-      navigation=[<Navigation/>]
+      navigation=[<Navigation current="receive"/>]
       content=[renderPageContent]/>
   }
 
@@ -32,23 +32,7 @@ component Dashboard {
               tokens={walletInfo.tokens}/>
           </div>
 
-          <div class="col-md-9">
-            <div class="card">
-              <div class="card-body">
-                <div>
-                  <h6 class="card-title">
-                    "Recent Transactions"
-                  </h6>
-                </div>
-
-                <div class="row">
-                  <div class="col-md-12">
-                    <RecentTransactionsTable rows={walletInfo.recentTransactions}/>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <div class="col-md-9"/>
         </div>
       </div>
     </div>

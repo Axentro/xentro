@@ -77,6 +77,7 @@ component Main {
   fun handleMessage (data : String) : Promise(Never, Void) {
     sequence {
       `console.log('message received')`
+
       json =
         Json.parse(data)
         |> Maybe.toResult("Json parsing error")
@@ -84,7 +85,6 @@ component Main {
       walletInfo =
         decode json as WalletInfo
 
-    
       setWalletInfo(walletInfo)
 
       setDataError("")
@@ -100,6 +100,18 @@ component Main {
       {
         name = "dashboard",
         contents = <Dashboard/>
+      },
+      {
+        name = "send",
+        contents = <Send/>
+      },
+      {
+        name = "receive",
+        contents = <Receive/>
+      },
+      {
+        name = "tools",
+        contents = <Tools/>
       },
       {
         name = "not_found",
