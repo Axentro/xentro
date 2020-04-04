@@ -87,18 +87,6 @@ component Main {
     
       setWalletInfo(walletInfo)
 
-      Debug.log(walletInfo)
-
-       `
-    (() => {
-     window.requestAnimationFrame(function () {
-         const datatable = $('#recent-transactions').DataTable({"retrieve": true});
-    datatable.draw();
-   
-    });
-    })()
-    `
-
       setDataError("")
     } catch String => er {
       setDataError("Could not parse json response")
