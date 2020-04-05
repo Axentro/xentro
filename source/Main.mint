@@ -63,7 +63,7 @@ component Main {
       setLog("Opened...")
 
       message =
-        { address = "VDA2NjU5N2JlNDA3ZDk5Nzg4MGY2NjY5YjhhOTUwZTE2M2VmNjM5OWM2M2EyMWQz" }
+        { address = "VDAyMzEwODI2NmE1MWJiYTAxOTA2YjE0NzRjYTRjYjllYTk0ZDZhYmJhZGU3MmIz" }
 
       json =
         encode message
