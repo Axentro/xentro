@@ -17,7 +17,6 @@ store Application {
 
   fun setWalletInfo (data : WalletInfo) : Promise(Never, Void) {
     sequence {
-   
       next { walletInfo = Maybe.just(data) }
     }
   }

@@ -102,30 +102,34 @@ component RecentTransactionsTable {
   }
 
   fun render : Html {
-    <div class="card-scroll" style="height:500px;">
-    <div class="table-responsive">
-      <table
-        id={tableId}
-        class="table table-striped table-bordered">
+    <div
+      class="card-scroll"
+      style="height:500px;">
 
-        <thead>
-          <tr>
-            for (header of headerRow) {
-              <th>
-                <{ header }>
-              </th>
+      <div class="table-responsive">
+        <table
+          id={tableId}
+          class="table table-striped table-bordered">
+
+          <thead>
+            <tr>
+              for (header of headerRow) {
+                <th>
+                  <{ header }>
+                </th>
+              }
+            </tr>
+          </thead>
+
+          <tbody>
+            for (row of rows) {
+              renderBodyRow(row)
             }
-          </tr>
-        </thead>
+          </tbody>
 
-        <tbody>
-          for (row of rows) {
-            renderBodyRow(row)
-          }
-        </tbody>
+        </table>
+      </div>
 
-      </table>
-    </div>
     </div>
   }
 }

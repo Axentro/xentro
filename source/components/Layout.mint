@@ -25,8 +25,6 @@ component Layout {
                   class="logo"
                   src="/assets/media/image/sushichain_logo_light.png"
                   alt="logo"/>
-
-               
               </a>
             </div>
           </div>
