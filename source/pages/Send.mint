@@ -1,6 +1,38 @@
 component Send {
   connect Application exposing { walletInfo }
 
+  state address : String = ""
+  state amount : String = ""
+
+  state amountError : String = ""
+
+   fun onAddress (event : Html.Event) : Promise(Never, Void) {
+    next { address = Dom.getValue(event.target) }
+  }
+
+  fun onAmount (event : Html.Event) : Promise(Never, Void) {
+    next { amount = value }
+  } where {
+    value = Dom.getValue(event.target)
+  }
+
+  fun validateAmount(value : String, tokens : Array(Token)) : String {
+    try {
+      amt = Number.fromString(value) |> Maybe.withDefault(0)
+      sushi = tokens |> Array.find((token : Token) : Bool { token.name == "SUSHI"}) |> Maybe.map((token : Token) : Maybe(Number) {Number.fromString(token.amount)}) |> Maybe.flatten |> Maybe.withDefault(0)
+                      
+      if(sushi <= (amt + 0.0001)){
+        "You don't have enough SUSHI to send"
+      } else {
+        if(amt <= 0){
+          "you must supply an amount greater than 0"
+        } else {
+          ""
+        }
+      }
+    }
+  }
+
   fun render : Html {
     <Layout
       navigation=[<Navigation current="send"/>]
@@ -45,7 +77,8 @@ component Send {
   <div class="form-row mb-3">
     <div class="col-md-8 mb-6">
       <label for="recipient-address">"Recipient address (or human readable address)"</label>
-      <input type="text" class="form-control" id="recipient-address" placeholder="Recipient address" value="Mark" />
+      <input type="text" class="form-control" id="recipient-address" placeholder="Recipient address" onInput={onAddress}
+          value={address} />
       <div class="valid-feedback">
         "Looks good!"
       </div>
@@ -57,7 +90,8 @@ component Send {
 <div class="form-row">
     <div class="col-md-4 mb-3">
       <label for="amount-to-send">"Amount to send"</label>
-      <input type="text" class="form-control" id="amount-to-send" placeholder="Amount to send" value="Otto" />
+      <input type="text" class="form-control" id="amount-to-send" placeholder="Amount to send"  onInput={onAmount}
+          value={amount} />
       <div class="valid-feedback">
         "Looks good!"
       </div>
