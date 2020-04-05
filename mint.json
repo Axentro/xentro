@@ -9,5 +9,11 @@
   },
   "test-directories": [
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "mint-sushi": {
+      "repository": "https://github.com/SushiChain/mint-sushi",
+      "constraint": "0.0.0 <= v < 1.0.0"
+    }
+  }
 }
