@@ -7,10 +7,7 @@ component RecentTransactionsTable {
     `
     (() => {
      window.requestAnimationFrame(function () {
-         $('#recent-transactions').DataTable({
-             "sDom": 'frtip',
-             "aaSorting": [[0, 'desc']]
-                      });
+        
    
     });
     })()
@@ -105,6 +102,7 @@ component RecentTransactionsTable {
   }
 
   fun render : Html {
+    <div class="card-scroll" style="height:500px;">
     <div class="table-responsive">
       <table
         id={tableId}
@@ -127,6 +125,7 @@ component RecentTransactionsTable {
         </tbody>
 
       </table>
+    </div>
     </div>
   }
 }

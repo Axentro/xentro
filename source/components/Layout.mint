@@ -14,20 +14,8 @@ component Layout {
     `
   }
 
-  get preloader : Html {
-    <div
-      id="preloader"
-      class="preloader">
-
-      <div class="preloader-icon"/>
-
-    </div>
-  }
-
   fun render : Html {
     <div>
-      <{ preloader }>
-
       <div class="layout-wrapper">
         <div class="header d-print-none">
           <div class="header-left">
@@ -35,13 +23,10 @@ component Layout {
               <a href="index.html">
                 <img
                   class="logo"
-                  src="/assets/media/image/logo.png"
+                  src="/assets/media/image/sushichain_logo_light.png"
                   alt="logo"/>
 
-                <img
-                  class="logo-light"
-                  src="/assets/media/image/logo-light.png"
-                  alt="light logo"/>
+               
               </a>
             </div>
           </div>

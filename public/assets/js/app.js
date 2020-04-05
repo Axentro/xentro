@@ -446,7 +446,7 @@
   /*------------- aside menu toggle -------------*/
 
   /*------------- other -------------*/
-
+  
   $(document).on('click', '.dropdown-menu', function (e) {
     e.stopPropagation();
   });

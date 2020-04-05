@@ -123,11 +123,26 @@ component Main {
     ]
   }
 
+  fun preloader (contents : Html) : Html {
+    <div>
+      <div
+        id="preloader"
+        class="preloader">
+
+        <div class="preloader-icon"/>
+
+      </div>
+
+      <{ contents }>
+    </div>
+  }
+
   fun render : Html {
     pages
     |> Array.find(
       (item : Ui.Pager.Item) : Bool { item.name == page })
-    |> Maybe.map((item : Ui.Pager.Item) : Html { item.contents })
+    |> Maybe.map(
+      (item : Ui.Pager.Item) : Html { preloader(item.contents) })
     |> Maybe.withDefault(<div/>)
   }
 }
