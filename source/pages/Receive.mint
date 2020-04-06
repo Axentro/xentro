@@ -81,7 +81,7 @@ component Receive {
     domain = Array.firstWithDefault("",walletInfo.readable)
   }
 
-  fun domainAddress(domain : String) : Html {
+  fun domainAddress(domain : String) {
     if(String.isEmpty(domain)){
       <span/>
     } else {

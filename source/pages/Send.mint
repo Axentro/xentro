@@ -6,7 +6,7 @@ component Send {
 
   state amountError : String = ""
 
-   fun onAddress (event : Html.Event) : Promise(Never, Void) {
+   fun onAddress (event : Html.Event) {
     next { address = Dom.getValue(event.target) }
   }
 
