@@ -7574,42 +7574,42 @@ body.modal-open .modal.show .modal-dialog {
   border-color: #0081ff;
 }
 
-body.form-membership {
+.form-membership {
   background-attachment: fixed;
   background-size: cover;
   padding: 3rem 0;
 }
 
-body.form-membership .form-wrapper {
+.form-membership .form-wrapper {
   background-color: white;
   box-shadow: 0 3px 10px rgba(62, 85, 120, 0.045);
   padding: 3rem;
   border-radius: 0.5rem;
-  width: 430px;
+  width: 600px;
   margin: 50px auto;
   text-align: center;
 }
 
-body.form-membership .form-wrapper #logo {
+.form-membership .form-wrapper #logo {
   margin: 1rem 0 3rem;
 }
 
-body.form-membership .form-wrapper #logo img:not(.logo) {
+.form-membership .form-wrapper #logo img:not(.logo) {
   display: none;
 }
 
-body.form-membership .form-wrapper h5 {
+.form-membership .form-wrapper h5 {
   text-align: center;
   margin-bottom: 2rem;
 }
 
-body.form-membership .form-wrapper form .form-control,
-body.form-membership .form-wrapper form .swal-modal input.swal-content__input,
-.swal-modal body.form-membership .form-wrapper form input.swal-content__input {
+.form-membership .form-wrapper form .form-control,
+.form-membership .form-wrapper form .swal-modal input.swal-content__input,
+.swal-modal .form-membership .form-wrapper form input.swal-content__input {
   margin-bottom: 1.5rem;
 }
 
-body.form-membership .form-wrapper hr {
+.form-membership .form-wrapper hr {
   margin: 2rem 0;
 }
 
@@ -12102,7 +12102,7 @@ body.dark.small-navigation .navigation-menu-body ul li.navigation-divider:after 
 }
 
 @media (max-width: 768px) {
-  body.form-membership .form-wrapper {
+  .form-membership .form-wrapper {
     width: 90%;
     margin: 30px auto;
   }

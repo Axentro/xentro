@@ -1,6 +1,6 @@
 routes {
   / {
-    Application.setPage("dashboard")
+    Application.setPage("register")
   }
 
   /dashboard {
@@ -17,6 +17,14 @@ routes {
 
   /tools {
     Application.setPage("tools")
+  }
+
+  /login {
+    Application.setPage("login")
+  }
+
+  /create {
+    Application.setPage("create")
   }
 
   * {

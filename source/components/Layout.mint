@@ -4,14 +4,7 @@ component Layout {
   property navigation : Array(Html) = []
 
   fun componentDidMount : Promise(Never, Void) {
-    `
-    (() => {
-      window.requestAnimationFrame(function () {     
-		var preLoder = $("#preloader");
-		preLoder.delay(700).fadeOut(500);
-      });
-    })()
-    `
+    LayoutHelper.preLoad()
   }
 
   fun render : Html {
@@ -20,7 +13,7 @@ component Layout {
         <div class="header d-print-none">
           <div class="header-left">
             <div class="header-logo">
-              <a href="index.html">
+              <a href="/">
                 <img
                   class="logo"
                   src="/assets/media/image/sushichain_logo_light.png"
