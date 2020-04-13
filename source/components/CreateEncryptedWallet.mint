@@ -22,17 +22,20 @@ record EncryptedWalletWithName {
 }
 
 component CreateEncryptedWallet {
+  connect WalletStore exposing { storeWallet, walletError }
 
   property cancelUrl : String = "/"
 
   state name : String = ""
   state password : String = ""
   state repeatPassword : String = ""
-  state passwordStrength : PasswordStrength =   {
-      score = -1,
-      warning = "",
-      suggestions = []
-    }
+
+  state passwordStrength : PasswordStrength = {
+    score = -1,
+    warning = "",
+    suggestions = []
+  }
+
   state showPassword : Bool = false
   state showRepeatPassword : Bool = false
 
@@ -81,7 +84,8 @@ component CreateEncryptedWallet {
 
       if (String.isEmpty(pass)) {
         next
-          { password = pass,
+          {
+            password = pass,
             passwordStrength =
               {
                 score = -1,
@@ -91,14 +95,16 @@ component CreateEncryptedWallet {
           }
       } else {
         next
-          { password = pass,
+          {
+            password = pass,
             passwordStrength = strength
           }
       }
     } catch PasswordStrength.Error => error {
       sequence {
         next
-          { passwordStrength =
+          {
+            passwordStrength =
               {
                 score = -1,
                 warning = "",
@@ -123,14 +129,16 @@ component CreateEncryptedWallet {
     next { showRepeatPassword = !showRepeatPassword }
   }
 
-  fun createWallet(event : Html.Event) : Promise(Never, Void) {
+  fun createWallet (event : Html.Event) : Promise(Never, Void) {
     try {
       wallet =
-        Sushi.Wallet.generateNewWallet(Network.Prefix.testNet())
+        Sushi.Wallet.generateEncryptedWallet(Network.Prefix.testNet(), name, password)
+   
+      storeWallet(wallet)
 
-         Promise.never()     
+      Window.navigate("/login")
     } catch Wallet.Error => error {
-         next { passwordError = "Could not generate a new wallet" }
+      next { passwordError = "Could not generate a new wallet" }
     }
   }
 
@@ -197,7 +205,7 @@ component CreateEncryptedWallet {
         <div::height>
           <div class={"alert alert-" + rating.colour}>
             <span>
-              <{ "Strength: " }>
+              "Strength: "
             </span>
 
             <strong>
@@ -220,23 +228,17 @@ component CreateEncryptedWallet {
   get passwordsNotMatchingAlert : Html {
     if (String.isEmpty(password) && String.isEmpty(repeatPassword)) {
       <div/>
+    } else if (password == repeatPassword) {
+      <div/>
+    } else if (String.isEmpty(repeatPassword) || String.isEmpty(password)) {
+      <div/>
     } else {
-      if (password == repeatPassword) {
-        <div/>
-      } else {
-        if (String.isEmpty(repeatPassword) || String.isEmpty(password)) {
-          <div/>
-        } else {
-          <div::height>
-            <div class="alert alert-danger">
-              <{
-                "The password and repeat password you entered do not matc" \
-                "h"
-              }>
-            </div>
-          </div>
-        }
-      }
+      <div::height>
+        <div class="alert alert-danger">
+          "The password and repeat password you entered do not matc" \
+          "h"
+        </div>
+      </div>
     }
   }
 
@@ -259,16 +261,12 @@ component CreateEncryptedWallet {
   get checkIndicator : Html {
     if (String.isEmpty(password) && String.isEmpty(repeatPassword)) {
       <div/>
+    } else if (password == repeatPassword) {
+      checkMark("success", "check")
+    } else if (String.isEmpty(repeatPassword) || String.isEmpty(password)) {
+      <div/>
     } else {
-      if (password == repeatPassword) {
-        checkMark("success", "check")
-      } else {
-        if (String.isEmpty(repeatPassword) || String.isEmpty(password)) {
-          <div/>
-        } else {
-          checkMark("danger", "times")
-        }
-      }
+      checkMark("danger", "times")
     }
   }
 
@@ -305,120 +303,137 @@ component CreateEncryptedWallet {
   }
 
   fun cancel (event : Html.Event) : Promise(Never, Void) {
-      Window.navigate(cancelUrl)
+    Window.navigate(cancelUrl)
   }
 
   fun render : Html {
     <div>
-        <h5>
-          "Create Wallet"
-        </h5>
+      <h5>
+        "Create Wallet"
+      </h5>
 
-        <div class="text-left form-group">
-          <label class="ml-1" for="walletName">
-           <i><{ "Wallet name" }></i>
-          </label>
+      <div class="text-left form-group">
+        <label
+          class="ml-1"
+          for="walletName">
+
+          <i>
+            "Wallet name"
+          </i>
+
+        </label>
+
+        <input
+          onInput={onName}
+          type="text"
+          class="form-control"
+          id="walletName"
+          aria-describedby="walletName"
+          maxLength="100"
+          placeholder="Enter a name for this wallet"/>
+      </div>
+
+      <div class="text-left form-group">
+        <label
+          class="ml-1"
+          for="password">
+
+          <i>
+            "Password"
+          </i>
+
+        </label>
+
+        <div class="input-group mb-3">
+          <{ checkIndicator }>
 
           <input
-            onInput={onName}
-            type="text"
+            onInput={onPassword}
+            type={passwordType}
             class="form-control"
-            id="walletName"
-            aria-describedby="walletName"
+            id="password"
+            placeholder="Password"
             maxLength="100"
-            placeholder="Enter a name for this wallet"/>
-        </div>
+            aria-describedby="basic-addon2"/>
 
-        <div class="text-left form-group">
-          <label class="ml-1" for="password">
-            <i><{ "Password" }></i>
-          </label>
+          <div class="input-group-append">
+            <span
+              class="input-group-text"
+              id="basic-addon2">
 
-          <div class="input-group mb-3">
-            <{ checkIndicator }>
-
-            <input
-              onInput={onPassword}
-              type={passwordType}
-              class="form-control"
-              id="password"
-              placeholder="Password"
-              maxLength="100"
-              aria-describedby="basic-addon2"/>
-
-            <div class="input-group-append">
-              <span
-                class="input-group-text"
-                id="basic-addon2">
-
-                <span::pointer>
-                  <i
-                    onClick={togglePasswordVisibility}
-                    class={"fa fa-" + passwordEye}/>
-                </span>
-
+              <span::pointer>
+                <i
+                  onClick={togglePasswordVisibility}
+                  class={"fa fa-" + passwordEye}/>
               </span>
-            </div>
-          </div>
 
-          <{ showPasswordStrength }>
+            </span>
+          </div>
         </div>
 
-        <div class="text-left form-group">
-          <label class="ml-1" for="password">
-            <i><{ "Repeat Password" }></i>
-          </label>
+        <{ showPasswordStrength }>
+      </div>
 
-          <div class="input-group mb-3">
-            <{ checkIndicator }>
+      <div class="text-left form-group">
+        <label
+          class="ml-1"
+          for="password">
 
-            <input
-              onInput={onRepeatPasssword}
-              type={repeatPasswordType}
-              class="form-control"
-              id="repeatPassword"
-              placeholder="Repeat password"
-              maxLength="100"
-              aria-describedby="basic-addon2"/>
+          <i>
+            "Repeat Password"
+          </i>
 
-            <div class="input-group-append">
-              <span
-                class="input-group-text"
-                id="basic-addon2">
+        </label>
 
-                <span::pointer>
-                  <i
-                    onClick={toggleRepeatPasswordVisibility}
-                    class={"fa fa-" + repeatPasswordEye}/>
-                </span>
+        <div class="input-group mb-3">
+          <{ checkIndicator }>
 
+          <input
+            onInput={onRepeatPasssword}
+            type={repeatPasswordType}
+            class="form-control"
+            id="repeatPassword"
+            placeholder="Repeat password"
+            maxLength="100"
+            aria-describedby="basic-addon2"/>
+
+          <div class="input-group-append">
+            <span
+              class="input-group-text"
+              id="basic-addon2">
+
+              <span::pointer>
+                <i
+                  onClick={toggleRepeatPasswordVisibility}
+                  class={"fa fa-" + repeatPasswordEye}/>
               </span>
-            </div>
-          </div>
 
-          <{ passwordsNotMatchingAlert }>
+            </span>
+          </div>
         </div>
 
-        <button
-          onClick={cancel}
-          class="btn btn-outline-primary">
+        <{ passwordsNotMatchingAlert }>
+      </div>
 
-          <{ "Cancel" }>
+      <button
+        onClick={cancel}
+        class="btn btn-outline-primary">
 
-        </button>
+        "Cancel"
 
-        <span::spacer/>
+      </button>
 
-        <button
-          type="submit"
-          class="btn btn-primary"
-          onClick={createWallet}
-          disabled={createButtonState}>
+      <span::spacer/>
 
-          <{ "Create" }>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        onClick={createWallet}
+        disabled={createButtonState}>
 
-        </button>
-   
+        "Create"
+
+      </button>
     </div>
   }
 }

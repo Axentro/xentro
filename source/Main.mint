@@ -113,11 +113,11 @@ component Main {
         name = "tools",
         contents = <Tools/>
       },
-        {
+      {
         name = "login",
         contents = <Login/>
       },
-       {
+      {
         name = "register",
         contents = <Register/>
       },

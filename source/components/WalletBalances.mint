@@ -44,9 +44,10 @@ component WalletBalances {
           <{ domain }>
         </div>
       })
-    |> Maybe.withDefault(<div class="small">
-      <{ address }>
-    </div>)
+    |> Maybe.withDefault(
+      <div class="small">
+        <{ address }>
+      </div>)
   }
 
   fun tokenTable (tokens : Array(Token)) : Html {

@@ -1,7 +1,6 @@
 module LayoutHelper {
-
-  fun preLoad() {
-         `
+  fun preLoad {
+    `
     (() => {
       window.requestAnimationFrame(function () {     
 		var preLoder = $("#preloader");
@@ -10,5 +9,4 @@ module LayoutHelper {
     })()
     `
   }
-
 }

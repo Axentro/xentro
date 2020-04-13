@@ -1,5 +1,9 @@
 routes {
   / {
+    Application.setPage("login")
+  }
+
+  /register {
     Application.setPage("register")
   }
 
