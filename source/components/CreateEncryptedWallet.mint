@@ -133,7 +133,7 @@ component CreateEncryptedWallet {
     try {
       wallet =
         Sushi.Wallet.generateEncryptedWallet(Network.Prefix.testNet(), name, password)
-   
+
       storeWallet(wallet)
 
       Window.navigate("/login")
