@@ -12,32 +12,49 @@ component Login {
         getSavedWalletOptions()
         |> Result.withDefault([])
 
-      firstName = Array.first(saved) |> Maybe.withDefault("")
-      next { walletOptions = saved, walletName = firstName }
+      firstName =
+        Array.first(saved)
+        |> Maybe.withDefault("")
+
+      next
+        {
+          walletOptions = saved,
+          walletName = firstName
+        }
+
       LayoutHelper.preLoad()
     }
   }
 
   fun onPassword (event : Html.Event) : Promise(Never, Void) {
-    next { password = Dom.getValue(event.target), loginError = "" }
+    next
+      {
+        password = Dom.getValue(event.target),
+        loginError = ""
+      }
   }
 
   fun onName (event : Html.Event) : Promise(Never, Void) {
-    next { walletName = Dom.getValue(event.target), loginError = "" }
+    next
+      {
+        walletName = Dom.getValue(event.target),
+        loginError = ""
+      }
   }
 
   get createButtonState : Bool {
-   String.isEmpty(password)
+    String.isEmpty(password)
   }
 
   fun login (event : Html.Event) : Promise(Never, Void) {
     sequence {
-        getWallet(walletName, password)
-        if(Maybe.isNothing(currentWallet)){
-            next { loginError = "oh dear!"}
-        } else {
-            Window.navigate("/dashboard")
-        }
+      getWallet(walletName, password)
+
+      if (Maybe.isNothing(currentWallet)) {
+        next { loginError = "oh dear!" }
+      } else {
+        Window.navigate("/dashboard")
+      }
     }
   }
 
@@ -48,7 +65,7 @@ component Login {
           "Login Wallet"
         </h5>
 
-        <{UiHelper.errorAlert(loginError)}>
+        <{ UiHelper.errorAlert(loginError) }>
 
         <div class="text-left form-group">
           <label

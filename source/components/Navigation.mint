@@ -1,5 +1,4 @@
 component Navigation {
-
   connect WalletStore exposing { resetWallet }
   connect Application exposing { resetWalletInfo }
 
@@ -13,12 +12,12 @@ component Navigation {
     }
   }
 
-  fun logout(event : Html.Event) : Promise(Never, Void) {
-   sequence {
-     resetWallet
-     resetWalletInfo
-     Window.navigate("/login")
-   }
+  fun logout (event : Html.Event) : Promise(Never, Void) {
+    sequence {
+      resetWallet
+      resetWalletInfo
+      Window.navigate("/login")
+    }
   }
 
   fun render : Html {

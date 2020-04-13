@@ -3,7 +3,7 @@ component Dashboard {
   connect WalletStore exposing { currentWallet }
 
   fun componentDidMount : Promise(Never, Void) {
-    if(Maybe.isNothing(currentWallet)){
+    if (Maybe.isNothing(currentWallet)) {
       Window.navigate("/login")
     } else {
       Promise.never()

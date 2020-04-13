@@ -73,5 +73,4 @@ store WalletStore {
   fun resetWallet : Promise(Never, Void) {
     next { currentWallet = Maybe.nothing() }
   }
-
 }

@@ -2,14 +2,14 @@ component Send {
   connect Application exposing { walletInfo }
   connect WalletStore exposing { currentWallet }
 
-fun componentDidMount : Promise(Never, Void) {
-    if(Maybe.isNothing(currentWallet)){
+  fun componentDidMount : Promise(Never, Void) {
+    if (Maybe.isNothing(currentWallet)) {
       Window.navigate("/login")
     } else {
       Promise.never()
     }
   }
-  
+
   state address : String = ""
   state amount : String = ""
 

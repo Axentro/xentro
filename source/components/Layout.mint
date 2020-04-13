@@ -1,6 +1,5 @@
 component Layout {
   connect Application exposing { dataError }
-  
   property content : Array(Html) = []
   property navigation : Array(Html) = []
 
