@@ -3,17 +3,6 @@ component RecentTransactionsTable {
   property headerRow : Array(String) = ["Date", "Id", "Amount", "Token", "To", "From", "Category", "Status"]
   property rows : Array(RecentTransaction) = []
 
-  fun componentDidMount : Promise(Never, Void) {
-    `
-    (() => {
-     window.requestAnimationFrame(function () {
-        
-   
-    });
-    })()
-    `
-  }
-
   fun trunc (value : String, length : Number) : String {
     `#{value}.substring(0,#{length})`
   }
@@ -102,6 +91,20 @@ component RecentTransactionsTable {
   }
 
   fun render : Html {
+    if (Array.isEmpty(rows)) {
+      renderNoRows()
+    } else {
+      renderTable()
+    }
+  }
+
+  fun renderNoRows : Html {
+    <p>
+      "No transactions have been sent yet!"
+    </p>
+  }
+
+  fun renderTable : Html {
     <div
       class="card-scroll"
       style="height:500px;">

@@ -40,7 +40,7 @@ record WalletInfo {
 }
 
 component Main {
-  connect Application exposing { page, setLog, setDataError, setWalletInfo }
+  connect Application exposing { page, setDataError, setWalletInfo, walletInfo, setWebSocket }
 
   use Provider.WebSocket {
     url = "ws://localhost:3001/wallet_info",
@@ -50,28 +50,19 @@ component Main {
     onOpen = handleOpen
   }
 
+  fun handleOpen (socket : WebSocket) : Promise(Never, Void) {
+    sequence {
+      `console.log('handleOpen')`
+      setWebSocket(socket)
+    }
+  }
+
   fun handleClose : Promise(Never, Void) {
-    setLog("Closed...")
+    `console.log('handleClose error')`
   }
 
   fun handleError : Promise(Never, Void) {
-    setLog("Errored...")
-  }
-
-  fun handleOpen (socket : WebSocket) : Promise(Never, Void) {
-    sequence {
-      setLog("Opened...")
-
-      message =
-        { address = "VDAyMzEwODI2NmE1MWJiYTAxOTA2YjE0NzRjYTRjYjllYTk0ZDZhYmJhZGU3MmIz" }
-
-      json =
-        encode message
-
-      WebSocket.send(Json.stringify(json), socket)
-
-      setLog("Sent some data...")
-    }
+    `console.log('handleError error')`
   }
 
   fun handleMessage (data : String) : Promise(Never, Void) {

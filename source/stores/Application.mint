@@ -3,6 +3,7 @@ store Application {
   state logs : Array(String) = ["Websocket provider demo..."]
   state walletInfo : Maybe(WalletInfo) = Maybe.nothing()
   state dataError : String = ""
+  state webSocket : Maybe(WebSocket) = Maybe.nothing()
 
   fun setPage (page : String) : Promise(Never, Void) {
     sequence {
@@ -27,5 +28,9 @@ store Application {
 
   fun resetWalletInfo : Promise(Never, Void) {
     next { walletInfo = Maybe.nothing() }
+  }
+
+  fun setWebSocket (s : WebSocket) : Promise(Never, Void) {
+    next { webSocket = Maybe.just(s) }
   }
 }

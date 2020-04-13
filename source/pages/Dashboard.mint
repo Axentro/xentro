@@ -1,12 +1,35 @@
 component Dashboard {
-  connect Application exposing { walletInfo }
+  connect Application exposing { setDataError, setWalletInfo, walletInfo, webSocket }
   connect WalletStore exposing { currentWallet }
 
   fun componentDidMount : Promise(Never, Void) {
     if (Maybe.isNothing(currentWallet)) {
       Window.navigate("/login")
     } else {
-      Promise.never()
+      sequence {
+        currentWallet
+        |> Maybe.map(
+          (cw : Wallet) {
+            webSocket
+            |> Maybe.map((s : WebSocket) { sendMessage(s, cw) })
+          })
+
+        Promise.never()
+      }
+    }
+  }
+
+  fun sendMessage (socket : WebSocket, wallet : Wallet) : Promise(Never, Void) {
+    sequence {
+      `console.log('sending message ...')`
+
+      message =
+        { address = wallet.address }
+
+      json =
+        encode message
+
+      WebSocket.send(Json.stringify(json), socket)
     }
   }
 
