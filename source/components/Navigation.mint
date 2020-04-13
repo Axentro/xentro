@@ -1,4 +1,8 @@
 component Navigation {
+
+  connect WalletStore exposing { resetWallet }
+  connect Application exposing { resetWalletInfo }
+
   property current : String = "home"
 
   fun activeStyle (item : String) : String {
@@ -9,6 +13,14 @@ component Navigation {
     }
   }
 
+  fun logout(event : Html.Event) : Promise(Never, Void) {
+   sequence {
+     resetWallet
+     resetWalletInfo
+     Window.navigate("/login")
+   }
+  }
+
   fun render : Html {
     <div class="header-body">
       <div class="header-body-left">
@@ -16,7 +28,7 @@ component Navigation {
           <li class="nav-item">
             <a
               class={"nav-link " + activeStyle("home")}
-              href="/">
+              href="/dashboard">
 
               "Home"
 
@@ -59,6 +71,7 @@ component Navigation {
         <ul class="navbar-nav">
           <li class="nav-item">
             <a
+              onClick={logout}
               class="nav-link"
               href="#">
 

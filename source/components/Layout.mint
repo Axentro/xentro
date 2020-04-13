@@ -1,5 +1,6 @@
 component Layout {
   connect Application exposing { dataError }
+  
   property content : Array(Html) = []
   property navigation : Array(Html) = []
 
@@ -13,7 +14,7 @@ component Layout {
         <div class="header d-print-none">
           <div class="header-left">
             <div class="header-logo">
-              <a href="/">
+              <a href="/dashboard">
                 <img
                   class="logo"
                   src="/assets/media/image/sushichain_logo_light.png"

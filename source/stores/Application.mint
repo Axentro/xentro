@@ -24,4 +24,8 @@ store Application {
   fun setDataError (message : String) : Promise(Never, Void) {
     next { dataError = message }
   }
+
+  fun resetWalletInfo : Promise(Never, Void) {
+    next { walletInfo = Maybe.nothing() }
+  }
 }

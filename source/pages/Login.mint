@@ -4,6 +4,7 @@ component Login {
   state password : String = ""
   state walletName : String = ""
   state walletOptions : Array(String) = []
+  state loginError : String = ""
 
   fun componentDidMount : Promise(Never, Void) {
     sequence {
@@ -11,25 +12,33 @@ component Login {
         getSavedWalletOptions()
         |> Result.withDefault([])
 
-      next { walletOptions = saved }
+      firstName = Array.first(saved) |> Maybe.withDefault("")
+      next { walletOptions = saved, walletName = firstName }
       LayoutHelper.preLoad()
     }
   }
 
   fun onPassword (event : Html.Event) : Promise(Never, Void) {
-    next { password = Dom.getValue(event.target) }
+    next { password = Dom.getValue(event.target), loginError = "" }
   }
 
   fun onName (event : Html.Event) : Promise(Never, Void) {
-    next { walletName = Dom.getValue(event.target) }
+    next { walletName = Dom.getValue(event.target), loginError = "" }
   }
 
   get createButtonState : Bool {
-    (String.isEmpty(walletName) || String.isEmpty(password))
+   String.isEmpty(password)
   }
 
   fun login (event : Html.Event) : Promise(Never, Void) {
-    Promise.never()
+    sequence {
+        getWallet(walletName, password)
+        if(Maybe.isNothing(currentWallet)){
+            next { loginError = "oh dear!"}
+        } else {
+            Window.navigate("/dashboard")
+        }
+    }
   }
 
   fun renderForm : Html {
@@ -38,6 +47,8 @@ component Login {
         <h5>
           "Login Wallet"
         </h5>
+
+        <{UiHelper.errorAlert(loginError)}>
 
         <div class="text-left form-group">
           <label

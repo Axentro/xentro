@@ -1,5 +1,14 @@
 component Receive {
   connect Application exposing { walletInfo }
+  connect WalletStore exposing { currentWallet }
+
+fun componentDidMount : Promise(Never, Void) {
+    if(Maybe.isNothing(currentWallet)){
+      Window.navigate("/login")
+    } else {
+      Promise.never()
+    }
+  }
 
   fun render : Html {
     <Layout
