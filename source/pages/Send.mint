@@ -1,3 +1,8 @@
+record TransactionResponse {
+  result : Transaction,
+  status : String
+}
+
 component Send {
   connect Application exposing { walletInfo }
   connect WalletStore exposing { currentWallet }
@@ -9,6 +14,9 @@ component Send {
       Promise.never()
     }
   }
+
+  state sendError : String = ""
+  state currentTransaction : Maybe(Transaction) = Maybe.nothing()
 
   state address : String = ""
   state amount : String = ""
@@ -46,6 +54,143 @@ component Send {
       } else {
         ""
       }
+    }
+  }
+
+  fun sendTransaction (event : Html.Event) : Promise(Never, Void) {
+    sequence {
+      wi =
+        walletInfo
+
+      cw =
+        currentWallet
+        |> Maybe.toResult("Could not get current wallet")
+
+      unsignedTransaction =
+        createUnsignedTransaction(wi, cw)
+
+      postUnsignedTransaction(unsignedTransaction)
+
+      txn =
+        currentTransaction
+        |> Maybe.toResult("Could not get current transaction")
+
+      `console.log('HERE')`
+      `console.log(#{txn})`  
+
+      postSignedTransaction(txn, cw)
+    } catch {
+      next { sendError = "Could not parse json response" }
+    }
+  }
+
+  fun compactJson (value : String) : String {
+    `JSON.stringify(JSON.parse(#{value}, null, 0)) `
+  }
+
+  fun postUnsignedTransaction (transaction : Transaction) : Promise(Never, Void) {
+    sequence {
+      encodedTransaction =
+        encode transaction
+
+      response =
+        Http.post("http://localhost:3001/api/v1/transaction/unsigned")
+        |> Http.stringBody(
+          compactJson(Json.stringify(encodedTransaction)))
+        |> Http.send()
+
+      json =
+        Json.parse(response.body)
+        |> Maybe.toResult("Json parsing error")
+
+      item =
+        decode json as TransactionResponse
+
+      txn =
+        item.result
+
+      next { currentTransaction = Maybe.just(txn) }
+    } catch Http.ErrorResponse => er {
+      next { sendError = "Could not retrieve remote wallet information" }
+    } catch String => er {
+      next { sendError = "Could not parse json response" }
+    } catch Object.Error => er {
+      next { sendError = "could not decode json" }
+    }
+  }
+
+  fun postSignedTransaction (transaction : Transaction, wallet : Wallet) : Promise(Never, Void) {
+    sequence {
+      signingKey =
+        Sushi.Wallet.getPrivateKeyFromWif(wallet.wif)
+
+      transactionToSign =
+        currentTransaction
+        |> Maybe.toResult("Error - can't get transaction to sign")
+
+      signedTransaction =
+        Sushi.Wallet.signTransaction(
+          signingKey,
+          transactionToSign)
+
+      encodedTransaction =
+        encode signedTransaction
+
+      response =
+        Http.post("http://localhost:3001/api/v1/transaction")
+        |> Http.stringBody(
+          compactJson(Json.stringify(encodedTransaction)))
+        |> Http.send()
+
+      json =
+        Json.parse(response.body)
+        |> Maybe.toResult("Json parsing error")
+
+      item =
+        decode json as TransactionResponse
+
+      txn =
+        item.result
+
+      next { currentTransaction = Maybe.just(txn) }
+    } catch Http.ErrorResponse => er {
+      next { sendError = "Could not retrieve remote wallet information" }
+    } catch String => er {
+      next { sendError = "Could not parse json response" }
+    } catch Object.Error => er {
+      next { sendError = "could not decode json" }
+    } catch Wallet.Error => er {
+      next { sendError = "Error with wallet" }
+    }
+  }
+
+  fun createUnsignedTransaction (walletInfo : WalletInfo, senderWallet : Wallet) : Transaction {
+    {
+      id = "",
+      action = "send",
+      senders =
+        [
+          {
+            address = walletInfo.address,
+            publicKey = senderWallet.publicKey,
+            amount = amount,
+            fee = "0.0001",
+            signr = "0",
+            signs = "0"
+          }
+        ],
+      recipients =
+        [
+          {
+            address = address,
+            amount = amount
+          }
+        ],
+      message = "",
+      token = "SUSHI",
+      prevHash = "0",
+      timestamp = 0,
+      scaled = 1
     }
   }
 
@@ -167,6 +312,7 @@ component Send {
                   </div>
 
                   <button
+                    onClick={sendTransaction}
                     class="btn btn-secondary"
                     type="submit">
 
