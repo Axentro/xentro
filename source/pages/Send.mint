@@ -57,19 +57,20 @@ component Send {
     }
   }
 
-  fun sendTransaction (event : Html.Event) : Promise(Never, Void) {
+  fun sendTransaction (event : Html.Event, wi : WalletInfo) : Promise(Never, Void) {
     sequence {
-      wi =
-        walletInfo
-
       cw =
         currentWallet
         |> Maybe.toResult("Could not get current wallet")
 
-      unsignedTransaction =
-        createUnsignedTransaction(wi, cw)
 
-      postUnsignedTransaction(unsignedTransaction)
+     unsignedTransaction =
+        createUnsignedTransaction(wi, cw)   
+
+        postUnsignedTransaction(unsignedTransaction)  
+
+      `console.log('HERE')`
+      `console.log(#{unsignedTransaction})`  
 
       txn =
         currentTransaction
@@ -79,8 +80,9 @@ component Send {
       `console.log(#{txn})`  
 
       postSignedTransaction(txn, cw)
+      
     } catch {
-      next { sendError = "Could not parse json response" }
+      next { sendError = "(send transaction) Could not parse json response" }
     }
   }
 
@@ -103,19 +105,25 @@ component Send {
         Json.parse(response.body)
         |> Maybe.toResult("Json parsing error")
 
+       `console.log('SIGNED')`
+       `console.log(#{json})`
+
       item =
         decode json as TransactionResponse
 
       txn =
         item.result
 
+        
+        `console.log(#{txn})`
+
       next { currentTransaction = Maybe.just(txn) }
     } catch Http.ErrorResponse => er {
-      next { sendError = "Could not retrieve remote wallet information" }
+      next { sendError = "(post unsigned transaction) Could not retrieve remote wallet information" }
     } catch String => er {
-      next { sendError = "Could not parse json response" }
+      next { sendError = "(post unsigned transaction) Could not parse json response" }
     } catch Object.Error => er {
-      next { sendError = "could not decode json" }
+      next { sendError = "(post unsigned transaction) could not decode json" }
     }
   }
 
@@ -146,21 +154,25 @@ component Send {
         Json.parse(response.body)
         |> Maybe.toResult("Json parsing error")
 
+      
+
       item =
         decode json as TransactionResponse
 
       txn =
         item.result
 
+         Debug.log(txn)
+
       next { currentTransaction = Maybe.just(txn) }
     } catch Http.ErrorResponse => er {
-      next { sendError = "Could not retrieve remote wallet information" }
+      next { sendError = "(post signed transaction) Could not post remote signed transaction" }
     } catch String => er {
-      next { sendError = "Could not parse json response" }
+      next { sendError = "(post signed transaction) Could not parse json response" }
     } catch Object.Error => er {
-      next { sendError = "could not decode json" }
+      next { sendError = "(post signed transaction) could not decode json" }
     } catch Wallet.Error => er {
-      next { sendError = "Error with wallet" }
+      next { sendError = "(post signed transaction) Error with wallet" }
     }
   }
 
@@ -190,7 +202,8 @@ component Send {
       token = "SUSHI",
       prevHash = "0",
       timestamp = 0,
-      scaled = 1
+      scaled = 1,
+      kind = "SLOW"
     }
   }
 
@@ -231,6 +244,8 @@ component Send {
                 <h4 class="card-title">
                   "Send tokens"
                 </h4>
+
+                <{UiHelper.errorAlert(sendError)}>
 
                 <div>
                   <div class="form-row mb-3">
@@ -312,7 +327,7 @@ component Send {
                   </div>
 
                   <button
-                    onClick={sendTransaction}
+                    onClick={(e : Html.Event) { sendTransaction(e, walletInfo) } }
                     class="btn btn-secondary"
                     type="submit">
 
