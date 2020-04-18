@@ -1,6 +1,10 @@
 record TransactionResponse {
-  result : Transaction,
+  result : ScaledTransaction,
   status : String
+}
+
+record SignedTransactionRequest {
+  transaction : ScaledTransaction
 }
 
 component Send {
@@ -58,45 +62,22 @@ component Send {
   }
 
   fun sendTransaction (event : Html.Event, wi : WalletInfo) : Promise(Never, Void) {
-    sequence {
-      cw =
-        currentWallet
-        |> Maybe.toResult("Could not get current wallet")
-
-
-     unsignedTransaction =
-        createUnsignedTransaction(wi, cw)   
-
-        postUnsignedTransaction(unsignedTransaction)  
-
-      `console.log('HERE')`
-      `console.log(#{unsignedTransaction})`  
-
-      txn =
-        currentTransaction
-        |> Maybe.toResult("Could not get current transaction")
-
-      `console.log('HERE')`
-      `console.log(#{txn})`  
-
-      postSignedTransaction(txn, cw)
-      
-    } catch {
-      next { sendError = "(send transaction) Could not parse json response" }
-    }
+         currentWallet
+        |> Maybe.map((cw : Wallet) { postUnsignedTransaction(wi, cw, createUnsignedTransaction(wi, cw)) })
+        |> Maybe.withDefault(Promise.never())   
   }
 
   fun compactJson (value : String) : String {
     `JSON.stringify(JSON.parse(#{value}, null, 0)) `
   }
 
-  fun postUnsignedTransaction (transaction : Transaction) : Promise(Never, Void) {
+  fun postUnsignedTransaction (wi : WalletInfo, cw : Wallet, transaction : Transaction) : Promise(Never, Void) {
     sequence {
       encodedTransaction =
         encode transaction
 
       response =
-        Http.post("http://localhost:3001/api/v1/transaction/unsigned")
+        Http.post("http://localhost:3005/api/v1/transaction/unsigned")
         |> Http.stringBody(
           compactJson(Json.stringify(encodedTransaction)))
         |> Http.send()
@@ -105,72 +86,71 @@ component Send {
         Json.parse(response.body)
         |> Maybe.toResult("Json parsing error")
 
-       `console.log('SIGNED')`
-       `console.log(#{json})`
-
+       Debug.log("about to decode json in post unsigned")
+       Debug.log("raw unsigned json response is: ")
+       Debug.log(json)
       item =
         decode json as TransactionResponse
 
-      txn =
+      Debug.log("decoded unsigned transaction") 
+      unsignedScaledTransaction =
         item.result
 
         
-        `console.log(#{txn})`
+        Debug.log("post unsigned transaction")
+        Debug.log(unsignedScaledTransaction)
 
-      next { currentTransaction = Maybe.just(txn) }
+      Debug.log("getting private key from wif")
+      signingKey =
+        Sushi.Wallet.getPrivateKeyFromWif(cw.wif)
+
+       Debug.log("about to sign transaction")
+       Debug.log(unsignedScaledTransaction)
+       Debug.log(signingKey)
+
+      signedTransaction =
+        Sushi.Wallet.signTransaction(
+          signingKey,
+          unsignedScaledTransaction)
+
+      Debug.log("about to encode signed transaction")
+      Debug.log(signedTransaction)
+    
+      signedTransactionRequest = { transaction = signedTransaction}
+
+      encodedSignedTransaction =
+        encode signedTransactionRequest
+
+      Debug.log("about to post signed transaction")
+      responseSigned =
+        Http.post("http://localhost:3005/api/v1/transaction")
+        |> Http.stringBody(
+          compactJson(Json.stringify(encodedSignedTransaction)))
+        |> Http.send()
+      
+      jsonSigned =
+        Json.parse(responseSigned.body)
+        |> Maybe.toResult("Json parsing error")
+
+        Debug.log("signed transaction response is") 
+        Debug.log(jsonSigned)
+
+      itemSigned =
+        decode jsonSigned as TransactionResponse
+
+      txnSigned =
+        itemSigned.result
+
+         Debug.log(txnSigned)
+
+       Promise.never()  
+
     } catch Http.ErrorResponse => er {
       next { sendError = "(post unsigned transaction) Could not retrieve remote wallet information" }
     } catch String => er {
       next { sendError = "(post unsigned transaction) Could not parse json response" }
     } catch Object.Error => er {
       next { sendError = "(post unsigned transaction) could not decode json" }
-    }
-  }
-
-  fun postSignedTransaction (transaction : Transaction, wallet : Wallet) : Promise(Never, Void) {
-    sequence {
-      signingKey =
-        Sushi.Wallet.getPrivateKeyFromWif(wallet.wif)
-
-      transactionToSign =
-        currentTransaction
-        |> Maybe.toResult("Error - can't get transaction to sign")
-
-      signedTransaction =
-        Sushi.Wallet.signTransaction(
-          signingKey,
-          transactionToSign)
-
-      encodedTransaction =
-        encode signedTransaction
-
-      response =
-        Http.post("http://localhost:3001/api/v1/transaction")
-        |> Http.stringBody(
-          compactJson(Json.stringify(encodedTransaction)))
-        |> Http.send()
-
-      json =
-        Json.parse(response.body)
-        |> Maybe.toResult("Json parsing error")
-
-      
-
-      item =
-        decode json as TransactionResponse
-
-      txn =
-        item.result
-
-         Debug.log(txn)
-
-      next { currentTransaction = Maybe.just(txn) }
-    } catch Http.ErrorResponse => er {
-      next { sendError = "(post signed transaction) Could not post remote signed transaction" }
-    } catch String => er {
-      next { sendError = "(post signed transaction) Could not parse json response" }
-    } catch Object.Error => er {
-      next { sendError = "(post signed transaction) could not decode json" }
     } catch Wallet.Error => er {
       next { sendError = "(post signed transaction) Error with wallet" }
     }
@@ -198,11 +178,11 @@ component Send {
             amount = amount
           }
         ],
-      message = "",
+      message = "0",
       token = "SUSHI",
       prevHash = "0",
       timestamp = 0,
-      scaled = 1,
+      scaled = 0,
       kind = "SLOW"
     }
   }

@@ -28,7 +28,11 @@ record RecentTransaction {
 }
 
 record RejectedTransaction {
-  transactionId : String
+  transactionId : String using "transaction_id",
+  senderAddress : String using "sender_address",
+  rejectionReason : String using "rejection_reason",
+  datetime : String,
+  status : String
 }
 
 record WalletInfo {
@@ -43,7 +47,7 @@ component Main {
   connect Application exposing { page, setDataError, setWalletInfo, walletInfo, setWebSocket }
 
   use Provider.WebSocket {
-    url = "ws://localhost:3001/wallet_info",
+    url = "ws://localhost:3005/wallet_info",
     onMessage = handleMessage,
     onError = handleError,
     onClose = handleClose,
