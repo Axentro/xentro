@@ -167,8 +167,7 @@ component Send {
             publicKey = senderWallet.publicKey,
             amount = amount,
             fee = "0.0001",
-            signr = "0",
-            signs = "0"
+            signature = "0"
           }
         ],
       recipients =
