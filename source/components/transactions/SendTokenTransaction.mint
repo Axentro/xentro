@@ -8,45 +8,96 @@ component SendTokenTransaction {
   state recipientAddress : String = ""
   state amount : String = ""
   state amountError : String = ""
-  state fee : String = ""
-  state selectedToken : String = ""
-  state speed : String = ""
+  state recipientError : String = ""
+  state fee : String = "0.0001"
+  state selectedToken : String = "SUSHI"
+  state speed : String = "SLOW"
 
   fun onToken (event : Html.Event) {
-    next { selectedToken = Dom.getValue(event.target), amount = "" }
+    next
+      {
+        selectedToken = Dom.getValue(event.target),
+        amount = ""
+      }
+  }
+
+  fun onSpeed (event : Html.Event) {
+    next
+      {
+        speed = Dom.getValue(event.target)
+      }
   }
 
   fun onRecipientAddress (event : Html.Event) {
-    next { recipientAddress = Dom.getValue(event.target) }
-  }
-
-   fun onAmount (event : Html.Event) : Promise(Never, Void) {
-    next { amount = value, amountError = validateAmount(value, tokens, selectedToken) }
+    next
+      {
+        recipientAddress = value,
+        recipientError = validateRecipientAddress(value)
+      }
   } where {
-    value = Dom.getValue(event.target)
+    value =
+      Dom.getValue(event.target)
   }
 
-  fun validateRecipient(value : String) : String {
-    ""
+  fun onAmount (event : Html.Event) : Promise(Never, Void) {
+    next
+      {
+        amount = value,
+        amountError = validateAmount(value, tokens, selectedToken, fee)
+      }
+  } where {
+    value =
+      Dom.getValue(event.target)
   }
 
-  fun validateAmount (value : String, tokens : Array(Token), currentToken : String) : String {
+  fun validateRecipientAddress (value : String) : String {
+    if (last == ".sc") {
+      ""
+    } else {
+      try {
+        valid =
+          Sushi.Wallet.isValidAddress(value)
+
+        if (valid) {
+          ""
+        } else {
+          "The address you supplied is invalid!"
+        }
+      } catch {
+        "The address you supplied is invalid!"
+      }
+    }
+  } where {
+    last =
+      `#{value}.slice(-3)`
+  }
+
+  fun validateAmount (
+    value : String,
+    tokens : Array(Token),
+    currentToken : String,
+    currentFee : String
+  ) : String {
     try {
       amt =
         Number.fromString(value)
         |> Maybe.withDefault(0)
 
-      sushi =
+      fee =
+        Number.fromString(currentFee)
+        |> Maybe.withDefault(0.0001)
+
+      tokenAmount =
         tokens
         |> Array.find(
           (token : Token) : Bool {
-           String.toLowerCase(token.name) == String.toLowerCase(currentToken)
+            String.toLowerCase(token.name) == String.toLowerCase(currentToken)
           })
         |> Maybe.map((token : Token) : Maybe(Number) { Number.fromString(token.amount) })
         |> Maybe.flatten
         |> Maybe.withDefault(0)
 
-      if (sushi <= (amt + 0.0001) && sushi > 0) {
+      if (amt + fee > tokenAmount) {
         "You don't have enough " + currentToken + " to send"
       } else if (amt <= 0) {
         "you must supply an amount greater than 0"
@@ -65,8 +116,12 @@ component SendTokenTransaction {
       |> Array.reject((name : String) { String.toLowerCase(name) == "sushi" })
   }
 
- get sendButtonState : Bool {
-    String.isEmpty(recipientAddress) || String.isEmpty(amount) || !String.isEmpty(amountError)
+  get speedOptions : Array(String) {
+    ["SLOW","FAST"]
+  }
+
+  get sendButtonState : Bool {
+    String.isEmpty(recipientAddress) || String.isEmpty(amount) || !String.isEmpty(amountError) || !String.isEmpty(recipientError)
   }
 
   fun render : Html {
@@ -93,14 +148,14 @@ component SendTokenTransaction {
                 onInput={onRecipientAddress}
                 value={recipientAddress}/>
 
-              <div class="valid-feedback">
-                "Looks good!"
+              <div>
+                <{ UiHelper.errorAlert(recipientError) }>
               </div>
             </div>
           </div>
 
           <div class="form-row">
-            <div class="col-md-4 mb-3">
+            <div class="col-md-3 mb-3">
               <label for="amount-to-send">
                 "Amount to send"
               </label>
@@ -113,10 +168,12 @@ component SendTokenTransaction {
                 onInput={onAmount}
                 value={amount}/>
 
-              <{ UiHelper.errorAlert(amountError) }>
+              <div>
+                <{ UiHelper.errorAlert(amountError) }>
+              </div>
             </div>
 
-            <div class="col-md-4 mb-3">
+            <div class="col-md-3 mb-3">
               <label for="token-to-send">
                 "Token"
               </label>
@@ -129,10 +186,21 @@ component SendTokenTransaction {
                 <{ UiHelper.selectNameOptions(selectedToken, tokenOptions) }>
 
               </select>
+            </div>
 
-              <div class="invalid-feedback">
-                "Please choose a username."
-              </div>
+                 <div class="col-md-3 mb-3">
+              <label for="transaction-speed">
+                "Transaction speed"
+              </label>
+
+              <select
+                onChange={onSpeed}
+                class="form-control"
+                id="speed">
+
+                <{ UiHelper.selectNameOptions(speed, speedOptions) }>
+
+              </select>
             </div>
           </div>
 
