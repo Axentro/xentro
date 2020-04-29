@@ -43,8 +43,16 @@ record WalletInfo {
   rejectedTransactions : Array(RejectedTransaction) using "rejected_transactions"
 }
 
+enum ConnectionStatus {
+  Initial
+  Connected
+  Disconnected
+  Error
+  Receiving
+}
+
 component Main {
-  connect Application exposing { page, setDataError, setWalletInfo, walletInfo, setWebSocket }
+  connect Application exposing { page, setDataError, setWalletInfo, walletInfo, setWebSocket, setConnectionstatus }
 
   use Provider.WebSocket {
     url = "ws://localhost:3005/wallet_info",
@@ -58,20 +66,29 @@ component Main {
     sequence {
       `console.log('handleOpen')`
       setWebSocket(socket)
+      setConnectionstatus(ConnectionStatus::Connected)
     }
   }
 
   fun handleClose : Promise(Never, Void) {
-    `console.log('handleClose error')`
+    sequence {
+      `console.log('handleClose error')`
+      setConnectionstatus(ConnectionStatus::Disconnected)
+    }
   }
 
   fun handleError : Promise(Never, Void) {
-    `console.log('handleError error')`
+    sequence {
+      `console.log('handleError error')`
+      setConnectionstatus(ConnectionStatus::Error)
+    }
   }
 
   fun handleMessage (data : String) : Promise(Never, Void) {
     sequence {
       `console.log('message received')`
+      setConnectionstatus(ConnectionStatus::Receiving)
+      Timer.timeout(2, setConnectionstatus(ConnectionStatus::Connected))
 
       json =
         Json.parse(data)

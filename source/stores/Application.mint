@@ -4,6 +4,11 @@ store Application {
   state walletInfo : Maybe(WalletInfo) = Maybe.nothing()
   state dataError : String = ""
   state webSocket : Maybe(WebSocket) = Maybe.nothing()
+  state connectionStatus : ConnectionStatus = ConnectionStatus::Initial
+
+  fun setConnectionstatus (status : ConnectionStatus) : Promise(Never, Void) {
+    next { connectionStatus = status }
+  }
 
   fun setPage (page : String) : Promise(Never, Void) {
     sequence {

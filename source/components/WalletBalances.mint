@@ -69,7 +69,7 @@ component WalletBalances {
           </thead>
 
           <tbody>
-            for (token of tokens) {
+            for (token of tokensWithoutSushi) {
               <tr>
                 <td>
                   <{ token.name }>
@@ -87,6 +87,10 @@ component WalletBalances {
   } where {
     tokensWithoutSushi =
       tokens
-      |> Array.reject((token : Token) : Bool { token.name == "SUSHI" })
+      |> Array.reject(
+        (token : Token) : Bool {
+          (token.name
+          |> String.toLowerCase()) == "sushi"
+        })
   }
 }
