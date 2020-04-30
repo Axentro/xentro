@@ -5,8 +5,9 @@ record SenderPrivatePublic {
 
 store TransactionStore {
   state sendError : String = ""
+  state sendSuccess : String = ""
 
-  fun setSendError (error : String) : Promise(Never, Void) {
+  fun setSendMessage (error : String) : Promise(Never, Void) {
     next { sendError = error }
   }
 
@@ -87,10 +88,13 @@ store TransactionStore {
       itemSigned =
         decode jsonSigned as TransactionResponse
 
-      txnSigned =
-        itemSigned.result
+      if (itemSigned.status == "success") {
+        next { sendSuccess = "Transaction was successful: " + itemSigned.result.id }
+      } else {
+        next { sendError = "Transaction failed" }
+      }
 
-      Promise.never()
+      
     } catch {
       next { sendError = "Oops an unexpected error occured" }
     }

@@ -38,29 +38,57 @@ provider Provider.WebSocket : Provider.WebSocket.Subscription {
       subscription.url == url
     }
   }
+  
+  fun clear (socket : WebScoket) {
+    `
+    (() => {
+      let socket = #{socket};
+      
+      socket.removeEventListener("message", socket._message);
+      socket.removeEventListener("error", socket._error);
+      socket.removeEventListener("close", socket._close);
+      socket.removeEventListener("open", socket._open);
+    })()
+    `
+  }
+
+  fun initialize(url : String) {
+    `
+    (() => {
+      let socket = new WebSocket(#{url})
+          
+      this._connections.set(#{url}, socket)
+
+      socket._message = (event) => #{message(url, `event.data`)}
+      socket._error = () => #{error(url)}
+      socket._open = () => #{open(url, `socket`)}
+
+      socket._close = () => {
+        #{close(url)}
+        #{clear(`socket`)}
+        #{initialize(url)}
+      }
+
+      socket.addEventListener("message", socket._message)
+      socket.addEventListener("error", socket._error)
+      socket.addEventListener("close", socket._close)
+      socket.addEventListener("open", socket._open)
+    })()
+    `
+  }
 
   fun update : Void {
     `
     (() => {
+      console.log(window)
+      window.porvider = this;
       const connections = this._connections || (this._connections = new Map)
       const subscriptions = this.subscriptions.values()
 
       // create connections if not present
       for (let item of subscriptions) {
         if (!this._connections.has(item.url)) {
-          let socket = new WebSocket(item.url)
-          
-          this._connections.set(item.url, socket)
-
-          socket._message = (event) => #{message(`item.url`, `event.data`)}
-          socket._error = () => #{error(`item.url`)}
-          socket._close = () => #{close(`item.url`)}
-          socket._open = () => #{open(`item.url`, `socket`)}
-
-          socket.addEventListener("message", socket._message)
-          socket.addEventListener("error", socket._error)
-          socket.addEventListener("close", socket._close)
-          socket.addEventListener("open", socket._open)
+          #{initialize(`item.url`)}
         }
       }
 
@@ -75,10 +103,7 @@ provider Provider.WebSocket : Provider.WebSocket.Subscription {
           }).length
 
         if (subscriptionCount == 0) {
-          socket.removeEventListener("message", socket._message)
-          socket.removeEventListener("error", socket._error)
-          socket.removeEventListener("close", socket._close)
-          socket.removeEventListener("open", socket._open)
+          #{clear(`socket`)}
           socket.close()
         }
       }

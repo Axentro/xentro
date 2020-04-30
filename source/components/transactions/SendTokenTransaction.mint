@@ -1,6 +1,6 @@
 component SendTokenTransaction {
   connect WalletStore exposing { currentWallet }
-  connect TransactionStore exposing { sendError, senderPrivatePublic, createTokenTransaction, sendTransaction }
+  connect TransactionStore exposing { sendError, sendSuccess, senderPrivatePublic, createTokenTransaction, sendTransaction }
 
   property senderAddress : String
   property tokens : Array(Token)
@@ -17,7 +17,8 @@ component SendTokenTransaction {
     next
       {
         selectedToken = Dom.getValue(event.target),
-        amount = ""
+        amount = "",
+        amountError = ""
       }
   }
 
@@ -132,6 +133,7 @@ component SendTokenTransaction {
         </h4>
 
         <{ UiHelper.errorAlert(sendError) }>
+        <{ UiHelper.successAlert(sendSuccess) }>
 
         <div>
           <div class="form-row mb-3">
@@ -148,7 +150,7 @@ component SendTokenTransaction {
                 onInput={onRecipientAddress}
                 value={recipientAddress}/>
 
-              <div>
+              <div class="mt-2">
                 <{ UiHelper.errorAlert(recipientError) }>
               </div>
             </div>
@@ -168,7 +170,7 @@ component SendTokenTransaction {
                 onInput={onAmount}
                 value={amount}/>
 
-              <div>
+              <div class="mt-2">
                 <{ UiHelper.errorAlert(amountError) }>
               </div>
             </div>
