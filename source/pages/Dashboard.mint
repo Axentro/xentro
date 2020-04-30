@@ -19,13 +19,6 @@ component Dashboard {
     }
   }
 
-  fun componentDidUpdate : Promise(Never, Void) {
-    sequence {
-      Debug.log("component updated")
-      Promise.never()
-    }
-  }
-
   fun sendMessage (socket : WebSocket, wallet : Wallet) : Promise(Never, Void) {
     sequence {
       `console.log('sending message ...')`

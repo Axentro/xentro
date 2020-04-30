@@ -38,4 +38,8 @@ store Application {
   fun setWebSocket (s : WebSocket) : Promise(Never, Void) {
     next { webSocket = Maybe.just(s) }
   }
+
+  fun resetWebSocket : Promise(Never, Void) {
+    next { webSocket = Maybe.nothing()}
+  }
 }

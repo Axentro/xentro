@@ -6,9 +6,22 @@ record SenderPrivatePublic {
 store TransactionStore {
   state sendError : String = ""
   state sendSuccess : String = ""
+  state reset : Bool = false
 
-  fun setSendMessage (error : String) : Promise(Never, Void) {
+  fun setError (error : String) : Promise(Never, Void) {
     next { sendError = error }
+  }
+
+  fun setSuccess (message : String) : Promise(Never, Void) {
+    next { sendSuccess = message }
+  }
+
+  fun resetErrorSuccess : Promise(Never, Void) {
+    next { sendError = "", sendSuccess = ""}
+  }
+
+  fun resetStatus (status : Bool) : Promise(Never, Void) {
+    next { reset = status }
   }
 
   fun senderPrivatePublic (currentWallet : Maybe(Wallet)) : SenderPrivatePublic {
@@ -89,12 +102,14 @@ store TransactionStore {
         decode jsonSigned as TransactionResponse
 
       if (itemSigned.status == "success") {
-        next { sendSuccess = "Transaction was successful: " + itemSigned.result.id }
+        next
+          {
+            sendSuccess = "Transaction was successful: " + itemSigned.result.id,
+            reset = true
+          }
       } else {
         next { sendError = "Transaction failed" }
       }
-
-      
     } catch {
       next { sendError = "Oops an unexpected error occured" }
     }

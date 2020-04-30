@@ -39,7 +39,7 @@ provider Provider.WebSocket : Provider.WebSocket.Subscription {
     }
   }
   
-  fun clear (socket : WebScoket) {
+  fun clear (socket : WebSocket) {
     `
     (() => {
       let socket = #{socket};
@@ -123,5 +123,9 @@ provider Provider.WebSocket : Provider.WebSocket.Subscription {
 module WebSocket {
   fun send (data : String, socket : WebSocket) : Promise(Never, Void) {
     `#{socket}.send(#{data})`
+  }
+
+  fun close (socket : WebSocket) : Promise(Never, Void) {
+    `#{socket}.close()`
   }
 }

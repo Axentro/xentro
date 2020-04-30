@@ -1,6 +1,16 @@
 component SendTokenTransaction {
   connect WalletStore exposing { currentWallet }
-  connect TransactionStore exposing { sendError, sendSuccess, senderPrivatePublic, createTokenTransaction, sendTransaction }
+
+  connect TransactionStore exposing {
+    sendError,
+    sendSuccess,
+    resetStatus,
+    resetErrorSuccess,
+    reset,
+    senderPrivatePublic,
+    createTokenTransaction,
+    sendTransaction
+  }
 
   property senderAddress : String
   property tokens : Array(Token)
@@ -12,6 +22,30 @@ component SendTokenTransaction {
   state fee : String = "0.0001"
   state selectedToken : String = "SUSHI"
   state speed : String = "SLOW"
+  state confirmCheck : Bool = false
+
+ fun componentDidMount : Promise(Never, Void) {
+    resetErrorSuccess()
+ }
+
+  fun componentDidUpdate : Promise(Never, Void) {
+    if (reset) {
+      sequence {
+        next
+          {
+            recipientAddress = "",
+            amount = "",
+            selectedToken = "SUSHI",
+            speed = "SLOW",
+            confirmCheck = false
+          }
+
+        resetStatus(false)
+      }
+    } else {
+      Promise.never()
+    }
+  }
 
   fun onToken (event : Html.Event) {
     next
@@ -23,10 +57,13 @@ component SendTokenTransaction {
   }
 
   fun onSpeed (event : Html.Event) {
-    next
-      {
-        speed = Dom.getValue(event.target)
-      }
+    next { speed = Dom.getValue(event.target) }
+  }
+
+ fun onCheck (event : Html.Event) {
+    next { confirmCheck = !confirmCheck }
+  } where {
+    value = Dom.getValue(event.target)
   }
 
   fun onRecipientAddress (event : Html.Event) {
@@ -118,11 +155,11 @@ component SendTokenTransaction {
   }
 
   get speedOptions : Array(String) {
-    ["SLOW","FAST"]
+    ["SLOW", "FAST"]
   }
 
   get sendButtonState : Bool {
-    String.isEmpty(recipientAddress) || String.isEmpty(amount) || !String.isEmpty(amountError) || !String.isEmpty(recipientError)
+    String.isEmpty(recipientAddress) || String.isEmpty(amount) || !String.isEmpty(amountError) || !String.isEmpty(recipientError) || !confirmCheck
   }
 
   fun render : Html {
@@ -190,7 +227,7 @@ component SendTokenTransaction {
               </select>
             </div>
 
-                 <div class="col-md-3 mb-3">
+            <div class="col-md-3 mb-3">
               <label for="transaction-speed">
                 "Transaction speed"
               </label>
@@ -207,24 +244,21 @@ component SendTokenTransaction {
           </div>
 
           <div class="form-group">
-            <div class="form-check">
+            <div class="custom-control custom-checkbox custom-checkbox-success">
               <input
-                class="form-check-input"
                 type="checkbox"
-                value=""
-                id="invalidCheck"/>
+                onChange={onCheck}
+                class="custom-control-input"
+                checked={confirmCheck}
+                id="customCheck2"/>
 
               <label
-                class="form-check-label"
-                for="invalidCheck">
+                class="custom-control-label"
+                for="customCheck2">
 
                 "I've double checked everything is correct!"
 
               </label>
-
-              <div class="invalid-feedback">
-                "You must agree before submitting."
-              </div>
             </div>
           </div>
 
