@@ -8,6 +8,20 @@ record TransactionResponse {
   status : String
 }
 
+record ScarsResolveResponse {
+  status : String,
+  resolved : ScarsResolved using "result"
+}
+
+record ScarsResolved {
+  resolved: Bool,
+  domain: ScarsDomain
+}
+
+record ScarsDomain {
+  address: String
+}
+
 record SignedTransactionRequest {
   transaction : ScaledTransaction
 }
@@ -16,6 +30,7 @@ store TransactionStore {
   state sendError : String = ""
   state sendSuccess : String = ""
   state reset : Bool = false
+  state resolvedSenderAddress : String = ""
 
   fun setError (error : String) : Promise(Never, Void) {
     next { sendError = error }
@@ -51,26 +66,59 @@ store TransactionStore {
 
   fun sendTransaction (
     event : Html.Event,
-    senderAddress : String,
+    recipientAddress : String,
     senderWif : String,
     transaction : Transaction
   ) : Promise(Never, Void) {
-    postTransaction(senderWif, transaction)
+    sequence {
+      resolveDomainAddress(recipientAddress)
+      postTransaction(recipientAddress, senderWif, transaction)
+    }
   }
 
   fun compactJson (value : String) : String {
     `JSON.stringify(JSON.parse(#{value}, null, 0)) `
   }
 
-  fun postTransaction (wif : String, transaction : Transaction) : Promise(Never, Void) {
+  fun isDomainAddress(value : String) : Bool {
+      `#{value}.slice(-3)` == ".sc"
+  }
+
+  fun resolveDomainAddress(recipientAddress : String) : Promise(Never, Void) {
+     if (isDomainAddress(recipientAddress)) {
+       sequence {
+         resolveResponse = Http.get("http://localhost:3005/api/v1/scars/" + recipientAddress)
+        |> Http.send()
+
+        jsonResolved = Json.parse(resolveResponse.body)
+        |> Maybe.toResult("Json parsing error with domain")
+
+        resolveResult = decode jsonResolved as ScarsResolveResponse
+
+        Debug.log(resolveResult)
+        next { resolvedSenderAddress = resolveResult.resolved.domain.address }
+       } catch {
+         next { sendError = "Oops there was an error with address: " + recipientAddress }
+       }
+       } else {
+         next { resolvedSenderAddress = recipientAddress }
+       }
+  }
+
+
+  fun postTransaction (senderAddress : String, wif : String, transaction : Transaction) : Promise(Never, Void) {
     sequence {
+
+      /* need to update the transaction here and replace the to_address with the resolvedSenderAddress */
+
       encodedTransaction =
         encode transaction
 
+      requestBody = String.replace(senderAddress, resolvedSenderAddress, compactJson(Json.stringify(encodedTransaction)))  
+
       response =
         Http.post("http://localhost:3005/api/v1/transaction/unsigned")
-        |> Http.stringBody(
-          compactJson(Json.stringify(encodedTransaction)))
+        |> Http.stringBody(requestBody)
         |> Http.send()
 
       json =

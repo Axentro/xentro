@@ -263,7 +263,7 @@ component SendTokenTransaction {
           </div>
 
           <button
-            onClick={(e : Html.Event) { sendTransaction(e, senderAddress, senderWif, transaction) }}
+            onClick={(e : Html.Event) { sendTransaction(e, recipientAddress, senderWif, transaction) }}
             class="btn btn-secondary"
             disabled={sendButtonState}
             type="submit">
