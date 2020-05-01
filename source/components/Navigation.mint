@@ -69,6 +69,17 @@ component Navigation {
             </a>
           </li>
 
+
+          <li class="nav-item">
+            <a
+              class={"nav-link " + activeStyle("address")}
+              href="/address">
+
+              "Address"
+
+            </a>
+          </li>
+
           <li class="nav-item">
             <a
               class={"nav-link " + activeStyle("tools")}

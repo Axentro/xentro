@@ -1,4 +1,4 @@
-component Send {
+component Address {
   connect Application exposing { walletInfo }
   connect WalletStore exposing { currentWallet }
 
@@ -12,7 +12,7 @@ component Send {
 
   fun render : Html {
     <Layout
-      navigation=[<Navigation current="send"/>]
+      navigation=[<Navigation current="address"/>]
       content=[renderPageContent]/>
   }
 
@@ -42,9 +42,7 @@ component Send {
           </div>
 
           <div class="col-md-9">
-            <SendTokenTransaction
-              senderAddress={walletInfo.address}
-              tokens={walletInfo.tokens}/>
+            <BuyAddressTransaction  senderAddress={walletInfo.address}/>
           </div>
         </div>
       </div>

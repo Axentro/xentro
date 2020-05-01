@@ -3,6 +3,15 @@ record SenderPrivatePublic {
   publicKey : String
 }
 
+record TransactionResponse {
+  result : ScaledTransaction,
+  status : String
+}
+
+record SignedTransactionRequest {
+  transaction : ScaledTransaction
+}
+
 store TransactionStore {
   state sendError : String = ""
   state sendSuccess : String = ""
@@ -152,4 +161,31 @@ store TransactionStore {
       kind = speed
     }
   }
+
+
+  fun createBuyAddressTransaction(senderAddress : String, senderPublicKey : String, name : String , speed : String) : Transaction {
+    {
+      id = "",
+      action = "scars_buy",
+      senders =
+        [
+          {
+            address = senderAddress,
+            publicKey = senderPublicKey,
+            amount = "0",
+            fee = "0.001",
+            signature = "0"
+          }
+        ],
+      recipients =
+        [],
+      message = name,
+      token = "SUSHI",
+      prevHash = "0",
+      timestamp = 0,
+      scaled = 0,
+      kind = speed
+    }
+  }
+
 }
