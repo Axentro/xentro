@@ -23,7 +23,7 @@ routes {
     Application.setPage("tools")
   }
 
-   /address {
+  /address {
     Application.setPage("address")
   }
 

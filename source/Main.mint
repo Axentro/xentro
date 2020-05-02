@@ -125,7 +125,7 @@ component Main {
         name = "tools",
         contents = <Tools/>
       },
-         {
+      {
         name = "address",
         contents = <Address/>
       },

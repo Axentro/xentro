@@ -1,6 +1,7 @@
 store WalletStore {
   state walletError : String = ""
   state currentWallet : Maybe(Wallet) = Maybe.nothing()
+  state currentWalletName : String = ""
 
   fun storeWallet (wallet : EncryptedWallet) : Promise(Never, Void) {
     sequence {
@@ -32,7 +33,11 @@ store WalletStore {
       wallet =
         Sushi.Wallet.decryptWallet(encryptedWallet, password)
 
-      next { currentWallet = Maybe.just(wallet) }
+      next
+        {
+          currentWallet = Maybe.just(wallet),
+          currentWalletName = name
+        }
     } catch Object.Error => er {
       next { walletError = "(Object) Error could not retrieve wallet: " + name }
     } catch String => er {

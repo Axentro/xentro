@@ -38,7 +38,7 @@ provider Provider.WebSocket : Provider.WebSocket.Subscription {
       subscription.url == url
     }
   }
-  
+
   fun clear (socket : WebSocket) {
     `
     (() => {
@@ -52,7 +52,7 @@ provider Provider.WebSocket : Provider.WebSocket.Subscription {
     `
   }
 
-  fun initialize(url : String) {
+  fun initialize (url : String) {
     `
     (() => {
       let socket = new WebSocket(#{url})

@@ -1,5 +1,5 @@
 component Navigation {
-  connect WalletStore exposing { resetWallet }
+  connect WalletStore exposing { resetWallet, currentWalletName }
   connect Application exposing { resetWalletInfo, connectionStatus }
 
   property current : String = "home"
@@ -21,9 +21,9 @@ component Navigation {
 
   fun activeStyle (item : String) : String {
     if (item == current) {
-      "bg-info"
+      "btn-info"
     } else {
-      ""
+      "btn-outline-info"
     }
   }
 
@@ -41,7 +41,7 @@ component Navigation {
         <ul class="navbar-nav">
           <li class="nav-item">
             <a
-              class={"nav-link " + activeStyle("home")}
+              class={"mr-2 btn " + activeStyle("home")}
               href="/dashboard">
 
               "Home"
@@ -51,7 +51,7 @@ component Navigation {
 
           <li class="nav-item">
             <a
-              class={"nav-link " + activeStyle("send")}
+              class={"mr-2 btn " + activeStyle("send")}
               href="/send">
 
               "Send"
@@ -61,7 +61,7 @@ component Navigation {
 
           <li class="nav-item">
             <a
-              class={"nav-link " + activeStyle("receive")}
+              class={"mr-2 btn " + activeStyle("receive")}
               href="/receive">
 
               "Receive"
@@ -69,10 +69,9 @@ component Navigation {
             </a>
           </li>
 
-
           <li class="nav-item">
             <a
-              class={"nav-link " + activeStyle("address")}
+              class={"mr-2 btn " + activeStyle("address")}
               href="/address">
 
               "Address"
@@ -82,7 +81,7 @@ component Navigation {
 
           <li class="nav-item">
             <a
-              class={"nav-link " + activeStyle("tools")}
+              class={"mr-2 btn " + activeStyle("tools")}
               href="tools">
 
               "Tools"
@@ -94,14 +93,18 @@ component Navigation {
 
       <div class="header-body-right">
         <ul class="navbar-nav">
-          <li class="nav-item">
+          <li class="mr-2 nav-item">
+            <{ currentWalletName }>
+          </li>
+
+          <li class="mr-3 nav-item">
             <{ showConnectionStatus() }>
           </li>
 
           <li class="nav-item">
             <a
               onClick={logout}
-              class="nav-link"
+              class="btn btn-outline-secondary"
               href="#">
 
               "Logout"

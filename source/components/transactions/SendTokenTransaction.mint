@@ -9,7 +9,10 @@ component SendTokenTransaction {
     reset,
     senderPrivatePublic,
     createTokenTransaction,
-    sendTransaction
+    sendTransaction,
+    domainDoesNotExist,
+    setDomainError,
+    domainError
   }
 
   property senderAddress : String
@@ -24,9 +27,9 @@ component SendTokenTransaction {
   state speed : String = "SLOW"
   state confirmCheck : Bool = false
 
- fun componentDidMount : Promise(Never, Void) {
+  fun componentDidMount : Promise(Never, Void) {
     resetErrorSuccess()
- }
+  }
 
   fun componentDidUpdate : Promise(Never, Void) {
     if (reset) {
@@ -47,6 +50,13 @@ component SendTokenTransaction {
     }
   }
 
+  fun onDomain (event : Html.Event) {
+    domainDoesNotExist(value)
+  } where {
+    value =
+      Dom.getValue(event.target)
+  }
+
   fun onToken (event : Html.Event) {
     next
       {
@@ -60,18 +70,23 @@ component SendTokenTransaction {
     next { speed = Dom.getValue(event.target) }
   }
 
- fun onCheck (event : Html.Event) {
+  fun onCheck (event : Html.Event) {
     next { confirmCheck = !confirmCheck }
   } where {
-    value = Dom.getValue(event.target)
+    value =
+      Dom.getValue(event.target)
   }
 
   fun onRecipientAddress (event : Html.Event) {
-    next
-      {
-        recipientAddress = value,
-        recipientError = validateRecipientAddress(value)
-      }
+    sequence {
+      next
+        {
+          recipientAddress = value,
+          recipientError = validateRecipientAddress(value)
+        }
+
+      setDomainError("")
+    }
   } where {
     value =
       Dom.getValue(event.target)
@@ -159,7 +174,7 @@ component SendTokenTransaction {
   }
 
   get sendButtonState : Bool {
-    String.isEmpty(recipientAddress) || String.isEmpty(amount) || !String.isEmpty(amountError) || !String.isEmpty(recipientError) || !confirmCheck
+    String.isEmpty(recipientAddress) || String.isEmpty(amount) || !String.isEmpty(amountError) || !String.isEmpty(recipientError) || !confirmCheck || !String.isEmpty(domainError)
   }
 
   fun render : Html {
@@ -185,10 +200,15 @@ component SendTokenTransaction {
                 id="recipient-address"
                 placeholder="Recipient address"
                 onInput={onRecipientAddress}
+                onBlur={onDomain}
                 value={recipientAddress}/>
 
               <div class="mt-2">
                 <{ UiHelper.errorAlert(recipientError) }>
+              </div>
+
+              <div class="mt-1">
+                <{ UiHelper.errorAlert(domainError) }>
               </div>
             </div>
           </div>

@@ -40,6 +40,6 @@ store Application {
   }
 
   fun resetWebSocket : Promise(Never, Void) {
-    next { webSocket = Maybe.nothing()}
+    next { webSocket = Maybe.nothing() }
   }
 }

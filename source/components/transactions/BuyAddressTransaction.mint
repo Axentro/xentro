@@ -9,19 +9,24 @@ component BuyAddressTransaction {
     reset,
     senderPrivatePublic,
     createBuyAddressTransaction,
-    sendTransaction
+    sendTransaction,
+    domainExists,
+    setDomainError,
+    domainError
   }
 
   property senderAddress : String
+  property tokens : Array(Token)
 
   state name : String = ""
   state nameError : String = ""
+  state feeError : String = ""
   state speed : String = "SLOW"
   state confirmCheck : Bool = false
 
- fun componentDidMount : Promise(Never, Void) {
+  fun componentDidMount : Promise(Never, Void) {
     resetErrorSuccess()
- }
+  }
 
   fun componentDidUpdate : Promise(Never, Void) {
     if (reset) {
@@ -30,7 +35,8 @@ component BuyAddressTransaction {
           {
             name = "",
             speed = "SLOW",
-            confirmCheck = false
+            confirmCheck = false,
+            nameError = ""
           }
 
         resetStatus(false)
@@ -40,52 +46,68 @@ component BuyAddressTransaction {
     }
   }
 
-
-
   fun onName (event : Html.Event) {
-    next { name = Dom.getValue(event.target) }
+    sequence {
+      next
+        {
+          name = value,
+          nameError = validateName(value),
+          feeError = validateFeeAmount
+        }
+
+      setDomainError("")
+    }
+  } where {
+    value =
+      Dom.getValue(event.target)
   }
 
-    fun onSpeed (event : Html.Event) {
+  fun onDomain (event : Html.Event) {
+    domainExists(value)
+  } where {
+    value =
+      Dom.getValue(event.target)
+  }
+
+  fun validateName (value : String) : String {
+    try {
+      regexResult =
+        Regexp.create("^[a-zA-Z0-9]{1,20}\.sc")
+        |> Regexp.match(value)
+
+      if (regexResult) {
+        ""
+      } else {
+        "Please comply with the rules for a name listed above"
+      }
+    }
+  }
+
+  fun onSpeed (event : Html.Event) {
     next { speed = Dom.getValue(event.target) }
   }
-  
 
- fun onCheck (event : Html.Event) {
+  fun onCheck (event : Html.Event) {
     next { confirmCheck = !confirmCheck }
   } where {
-    value = Dom.getValue(event.target)
+    value =
+      Dom.getValue(event.target)
   }
 
-  fun validateFeeAmount (
-    value : String,
-    tokens : Array(Token),
-    currentToken : String,
-    currentFee : String
-  ) : String {
+  get validateFeeAmount : String {
     try {
-      amt =
-        Number.fromString(value)
-        |> Maybe.withDefault(0)
-
-      fee =
-        Number.fromString(currentFee)
-        |> Maybe.withDefault(0.0001)
-
       tokenAmount =
         tokens
         |> Array.find(
           (token : Token) : Bool {
-            String.toLowerCase(token.name) == String.toLowerCase(currentToken)
+            String.toLowerCase(token.name) == String.toLowerCase("sushi")
           })
         |> Maybe.map((token : Token) : Maybe(Number) { Number.fromString(token.amount) })
         |> Maybe.flatten
         |> Maybe.withDefault(0)
 
-      if (amt + fee > tokenAmount) {
-        "You don't have enough " + currentToken + " to send"
-      } else if (amt <= 0) {
-        "you must supply an amount greater than 0"
+      if (0.0001 > tokenAmount) {
+        "You don't have enough SUSHI to pay the transaction fee of 0.0001"
       } else {
         ""
       }
@@ -97,7 +119,11 @@ component BuyAddressTransaction {
   }
 
   get buyButtonState : Bool {
-    String.isEmpty(name) || !confirmCheck
+    String.isEmpty(name) || !confirmCheck || !String.isEmpty(nameError) || !String.isEmpty(domainError) || !String.isEmpty(feeError)
+  }
+
+  get rules : Html {
+    <div/>
   }
 
   fun render : Html {
@@ -106,6 +132,40 @@ component BuyAddressTransaction {
         <h4 class="card-title">
           "Buy Human Readable Address"
         </h4>
+
+        <div
+          class="alert alert-info alert-with-border"
+          role="alert">
+
+          <p>
+            "Please select a name within the following restrictions:"
+          </p>
+
+          <hr/>
+
+          <p class="mb-0">
+            <ul class="ml-3">
+              <li>
+                "- Can only contain alphanumerics"
+              </li>
+
+              <li>
+                "- Must end with the suffix: "
+
+                <b>
+                  ".sc"
+                </b>
+
+                " (e.g. myname.sc)"
+              </li>
+
+              <li>
+                "- Length must be between 1 and 20 characters (excluding suffix)"
+              </li>
+            </ul>
+          </p>
+
+        </div>
 
         <{ UiHelper.errorAlert(sendError) }>
         <{ UiHelper.successAlert(sendSuccess) }>
@@ -122,15 +182,24 @@ component BuyAddressTransaction {
                 class="form-control"
                 id="address-name"
                 placeholder="Human readable address"
+                onBlur={onDomain}
                 onInput={onName}
                 value={name}/>
 
-              <div class="mt-2">
+              <div class="mt-1">
                 <{ UiHelper.errorAlert(nameError) }>
+              </div>
+
+              <div class="mt-1">
+                <{ UiHelper.errorAlert(domainError) }>
+              </div>
+
+              <div class="mt-1">
+                <{ UiHelper.errorAlert(feeError) }>
               </div>
             </div>
 
-             <div class="col-md-3 mb-3">
+            <div class="col-md-3 mb-3">
               <label for="transaction-speed">
                 "Transaction speed"
               </label>

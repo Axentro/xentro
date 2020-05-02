@@ -42,7 +42,9 @@ component Address {
           </div>
 
           <div class="col-md-9">
-            <BuyAddressTransaction  senderAddress={walletInfo.address}/>
+            <BuyAddressTransaction
+              senderAddress={walletInfo.address}
+              tokens={walletInfo.tokens}/>
           </div>
         </div>
       </div>
