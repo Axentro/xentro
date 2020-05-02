@@ -1,6 +1,6 @@
 component Navigation {
   connect WalletStore exposing { resetWallet, currentWalletName }
-  connect Application exposing { resetWalletInfo, connectionStatus }
+  connect Application exposing { resetWalletInfo, connectionStatus, resetWebSocket }
 
   property current : String = "home"
 
@@ -31,7 +31,8 @@ component Navigation {
     sequence {
       resetWallet
       resetWalletInfo
-      Window.navigate("/login")
+      resetWebSocket
+      `location.reload()`
     }
   }
 
