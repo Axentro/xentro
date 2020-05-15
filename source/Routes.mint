@@ -23,6 +23,10 @@ routes {
     Application.setPage("tools")
   }
 
+  /settings {
+    Application.setPage("settings")
+  }
+
   /address {
     Application.setPage("address")
   }

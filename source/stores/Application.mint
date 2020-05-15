@@ -5,6 +5,18 @@ store Application {
   state dataError : String = ""
   state webSocket : Maybe(WebSocket) = Maybe.nothing()
   state connectionStatus : ConnectionStatus = ConnectionStatus::Initial
+  state shouldWebSocketConnect : Bool = false
+  state webSocketUrl : String = NodeHelper.webSocketUrl("http://testnet.sushichain.io:3000")
+
+  fun updateWebSocketConnect (value : Bool, nodeUrl : String) {
+    sequence {
+      next
+        {
+          webSocketUrl = NodeHelper.webSocketUrl(nodeUrl),
+          shouldWebSocketConnect = value
+        }
+    }
+  }
 
   fun setConnectionstatus (status : ConnectionStatus) : Promise(Never, Void) {
     next { connectionStatus = status }

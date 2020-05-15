@@ -1,5 +1,5 @@
 component Navigation {
-  connect WalletStore exposing { resetWallet, currentWalletName }
+  connect WalletStore exposing { resetWallet, currentWalletName, currentWalletConfig }
   connect Application exposing { resetWalletInfo, connectionStatus, resetWebSocket }
 
   property current : String = "home"
@@ -12,11 +12,24 @@ component Navigation {
     status =
       case (connectionStatus) {
         ConnectionStatus::Initial => <i class="fa fa-wifi"/>
-        ConnectionStatus::Connected => <i class="text-success fa fa-wifi"/>
+        ConnectionStatus::Connected => <i class={connectedStyle + " fa fa-wifi"}/>
         ConnectionStatus::Disconnected => <i class="text-danger fa fa-exclamation-circle"/>
         ConnectionStatus::Error => <i class="text-danger fa fa-exclamation-circle"/>
-        ConnectionStatus::Receiving => <i class="text-info fa fa-wifi"/>
+        ConnectionStatus::Receiving => <i class="text-primary fa fa-wifi"/>
       }
+  }
+
+  get connectedStyle : String {
+    try {
+      env =
+        NodeHelper.nodeEnv(currentWalletConfig.node)
+
+      case (env) {
+        NodeEnv::MainNet => "text-success"
+        NodeEnv::TestNet => "text-info"
+        NodeEnv::Local => "text-primary"
+      }
+    }
   }
 
   fun activeStyle (item : String) : String {
@@ -86,6 +99,16 @@ component Navigation {
               href="tools">
 
               "Tools"
+
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class={"mr-2 btn " + activeStyle("settings")}
+              href="settings">
+
+              "Settings"
 
             </a>
           </li>

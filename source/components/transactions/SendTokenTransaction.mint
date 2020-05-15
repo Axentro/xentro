@@ -51,7 +51,11 @@ component SendTokenTransaction {
   }
 
   fun onDomain (event : Html.Event) {
-    domainDoesNotExist(value)
+    if (NodeHelper.isDomain(value)) {
+      domainDoesNotExist(value)
+    } else {
+      Promise.never()
+    }
   } where {
     value =
       Dom.getValue(event.target)
@@ -104,7 +108,7 @@ component SendTokenTransaction {
   }
 
   fun validateRecipientAddress (value : String) : String {
-    if (last == ".sc") {
+    if (NodeHelper.isDomain(value)) {
       ""
     } else {
       try {
@@ -120,9 +124,6 @@ component SendTokenTransaction {
         "The address you supplied is invalid!"
       }
     }
-  } where {
-    last =
-      `#{value}.slice(-3)`
   }
 
   fun validateAmount (

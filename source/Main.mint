@@ -52,14 +52,43 @@ enum ConnectionStatus {
 }
 
 component Main {
-  connect Application exposing { page, setDataError, setWalletInfo, walletInfo, setWebSocket, setConnectionstatus }
+  connect Application exposing {
+    page,
+    setDataError,
+    setWalletInfo,
+    walletInfo,
+    setWebSocket,
+    webSocket,
+    setConnectionstatus,
+    shouldWebSocketConnect,
+    webSocketUrl
+  }
+
+  connect WalletStore exposing { currentWallet }
 
   use Provider.WebSocket {
-    url = "ws://localhost:3005/wallet_info",
+    url = webSocketUrl,
     onMessage = handleMessage,
     onError = handleError,
     onClose = handleClose,
     onOpen = handleOpen
+  } when {
+    shouldWebSocketConnect
+  }
+
+  fun getWalletInfo {
+    sequence {
+      Debug.log("WOOOOP")
+
+      currentWallet
+      |> Maybe.map(
+        (cw : Wallet) {
+          webSocket
+          |> Maybe.map((s : WebSocket) { NodeHelper.sendMessage(s, cw) })
+        })
+
+      Promise.never()
+    }
   }
 
   fun handleOpen (socket : WebSocket) : Promise(Never, Void) {
@@ -67,6 +96,8 @@ component Main {
       `console.log('handleOpen')`
       setWebSocket(socket)
       setConnectionstatus(ConnectionStatus::Connected)
+
+      getWalletInfo()
     }
   }
 
@@ -124,6 +155,10 @@ component Main {
       {
         name = "tools",
         contents = <Tools/>
+      },
+      {
+        name = "settings",
+        contents = <Settings/>
       },
       {
         name = "address",

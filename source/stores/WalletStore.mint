@@ -1,15 +1,46 @@
+record WalletConfig {
+  node : String,
+  speed : String
+}
+
+record EncryptedWalletWithConfig {
+  wallet : EncryptedWallet,
+  config : WalletConfig
+}
+
 store WalletStore {
   state walletError : String = ""
   state currentWallet : Maybe(Wallet) = Maybe.nothing()
   state currentWalletName : String = ""
+  state currentWalletConfig : WalletConfig = defaultWalletConfig
 
-  fun storeWallet (wallet : EncryptedWallet) : Promise(Never, Void) {
+  get defaultWalletConfig : WalletConfig {
+    {
+      node = "http://testnet.sushichain.io:3000",
+      speed = "FAST"
+    }
+  }
+
+  fun storeWallet (
+    wallet : EncryptedWallet,
+    config : Maybe(WalletConfig)
+  ) : Promise(Never, Void) {
     sequence {
-      encodedWallet =
-        encode wallet
+      walletConfig =
+        config
+        |> Maybe.withDefault(defaultWalletConfig)
+
+      walletWithConfig =
+        {
+          wallet = wallet,
+          config = walletConfig
+        }
+
+      encodedWalletWithConfig =
+        encode walletWithConfig
 
       walletJson =
-        Json.stringify(encodedWallet)
+        Json.stringify(encodedWalletWithConfig)
 
       Storage.Local.set("tako_wallet_" + wallet.name, walletJson)
       Promise.never()
@@ -27,16 +58,17 @@ store WalletStore {
         Json.parse(raw)
         |> Maybe.toResult("Json parsing error in getWallet")
 
-      encryptedWallet =
-        decode json as EncryptedWallet
+      encryptedWalletWithConfig =
+        decode json as EncryptedWalletWithConfig
 
       wallet =
-        Sushi.Wallet.decryptWallet(encryptedWallet, password)
+        Sushi.Wallet.decryptWallet(encryptedWalletWithConfig.wallet, password)
 
       next
         {
           currentWallet = Maybe.just(wallet),
-          currentWalletName = name
+          currentWalletName = name,
+          currentWalletConfig = encryptedWalletWithConfig.config
         }
     } catch Object.Error => er {
       next { walletError = "(Object) Error could not retrieve wallet: " + name }

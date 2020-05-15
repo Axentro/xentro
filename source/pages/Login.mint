@@ -1,5 +1,6 @@
 component Login {
-  connect WalletStore exposing { getWallet, currentWallet, getSavedWalletOptions }
+  connect WalletStore exposing { getWallet, currentWallet, getSavedWalletOptions, currentWalletConfig }
+  connect Application exposing { updateWebSocketConnect, webSocket }
 
   state password : String = ""
   state walletName : String = ""
@@ -51,9 +52,12 @@ component Login {
       getWallet(walletName, password)
 
       if (Maybe.isNothing(currentWallet)) {
-        next { loginError = "oh dear!" }
+        next { loginError = "The credentials you supplied were incorrect!" }
       } else {
-        Window.navigate("/dashboard")
+        sequence {
+          updateWebSocketConnect(true, currentWalletConfig.node)
+          Window.navigate("/dashboard")
+        }
       }
     }
   }
