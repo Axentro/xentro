@@ -1,5 +1,5 @@
 component BuyAddressTransaction {
-  connect WalletStore exposing { currentWallet }
+  connect WalletStore exposing { currentWallet, currentWalletConfig }
 
   connect TransactionStore exposing {
     sendError,
@@ -21,7 +21,7 @@ component BuyAddressTransaction {
   state name : String = ""
   state nameError : String = ""
   state feeError : String = ""
-  state speed : String = "SLOW"
+  state speed : String = currentWalletConfig.speed
   state confirmCheck : Bool = false
 
   fun componentDidMount : Promise(Never, Void) {
@@ -34,7 +34,7 @@ component BuyAddressTransaction {
         next
           {
             name = "",
-            speed = "SLOW",
+            speed = currentWalletConfig.speed,
             confirmCheck = false,
             nameError = ""
           }
@@ -83,10 +83,6 @@ component BuyAddressTransaction {
     }
   }
 
-  fun onSpeed (event : Html.Event) {
-    next { speed = Dom.getValue(event.target) }
-  }
-
   fun onCheck (event : Html.Event) {
     next { confirmCheck = !confirmCheck }
   } where {
@@ -112,10 +108,6 @@ component BuyAddressTransaction {
         ""
       }
     }
-  }
-
-  get speedOptions : Array(String) {
-    ["SLOW", "FAST"]
   }
 
   get buyButtonState : Bool {
@@ -197,21 +189,6 @@ component BuyAddressTransaction {
               <div class="mt-1">
                 <{ UiHelper.errorAlert(feeError) }>
               </div>
-            </div>
-
-            <div class="col-md-3 mb-3">
-              <label for="transaction-speed">
-                "Transaction speed"
-              </label>
-
-              <select
-                onChange={onSpeed}
-                class="form-control"
-                id="speed">
-
-                <{ UiHelper.selectNameOptions(speed, speedOptions) }>
-
-              </select>
             </div>
           </div>
 

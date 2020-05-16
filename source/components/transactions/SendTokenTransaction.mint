@@ -1,5 +1,5 @@
 component SendTokenTransaction {
-  connect WalletStore exposing { currentWallet }
+  connect WalletStore exposing { currentWallet, currentWalletConfig }
 
   connect TransactionStore exposing {
     sendError,
@@ -24,7 +24,7 @@ component SendTokenTransaction {
   state recipientError : String = ""
   state fee : String = "0.0001"
   state selectedToken : String = "SUSHI"
-  state speed : String = "SLOW"
+  state speed : String = currentWalletConfig.speed
   state confirmCheck : Bool = false
 
   fun componentDidMount : Promise(Never, Void) {
@@ -39,7 +39,7 @@ component SendTokenTransaction {
             recipientAddress = "",
             amount = "",
             selectedToken = "SUSHI",
-            speed = "SLOW",
+            speed = currentWalletConfig.speed,
             confirmCheck = false
           }
 
@@ -68,10 +68,6 @@ component SendTokenTransaction {
         amount = "",
         amountError = ""
       }
-  }
-
-  fun onSpeed (event : Html.Event) {
-    next { speed = Dom.getValue(event.target) }
   }
 
   fun onCheck (event : Html.Event) {
@@ -170,10 +166,6 @@ component SendTokenTransaction {
       |> Array.reject((name : String) { String.toLowerCase(name) == "sushi" })
   }
 
-  get speedOptions : Array(String) {
-    ["SLOW", "FAST"]
-  }
-
   get sendButtonState : Bool {
     String.isEmpty(recipientAddress) || String.isEmpty(amount) || !String.isEmpty(amountError) || !String.isEmpty(recipientError) || !confirmCheck || !String.isEmpty(domainError)
   }
@@ -244,21 +236,6 @@ component SendTokenTransaction {
                 id="token">
 
                 <{ UiHelper.selectNameOptions(selectedToken, tokenOptions) }>
-
-              </select>
-            </div>
-
-            <div class="col-md-3 mb-3">
-              <label for="transaction-speed">
-                "Transaction speed"
-              </label>
-
-              <select
-                onChange={onSpeed}
-                class="form-control"
-                id="speed">
-
-                <{ UiHelper.selectNameOptions(speed, speedOptions) }>
 
               </select>
             </div>

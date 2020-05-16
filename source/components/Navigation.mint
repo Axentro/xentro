@@ -12,22 +12,33 @@ component Navigation {
     status =
       case (connectionStatus) {
         ConnectionStatus::Initial => <i class="fa fa-wifi"/>
-        ConnectionStatus::Connected => <i class={connectedStyle + " fa fa-wifi"}/>
+        ConnectionStatus::Connected => <i class="text-success fa fa-wifi"/>
         ConnectionStatus::Disconnected => <i class="text-danger fa fa-exclamation-circle"/>
         ConnectionStatus::Error => <i class="text-danger fa fa-exclamation-circle"/>
         ConnectionStatus::Receiving => <i class="text-primary fa fa-wifi"/>
       }
   }
 
-  get connectedStyle : String {
+  get showConnectionNode : Html {
     try {
       env =
         NodeHelper.nodeEnv(currentWalletConfig.node)
 
       case (env) {
-        NodeEnv::MainNet => "text-success"
-        NodeEnv::TestNet => "text-info"
-        NodeEnv::Local => "text-primary"
+        NodeEnv::MainNet =>
+          <span class="badge badge-success">
+            "MainNet"
+          </span>
+
+        NodeEnv::TestNet =>
+          <span class="badge badge-info">
+            "TestNet"
+          </span>
+
+        NodeEnv::Local =>
+          <span class="badge badge-secondary">
+            "Local"
+          </span>
       }
     }
   }
@@ -119,6 +130,10 @@ component Navigation {
         <ul class="navbar-nav">
           <li class="mr-2 nav-item">
             <{ currentWalletName }>
+          </li>
+
+          <li class="mr-1 nav-item">
+            <{ showConnectionNode }>
           </li>
 
           <li class="mr-3 nav-item">

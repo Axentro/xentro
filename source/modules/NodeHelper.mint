@@ -20,8 +20,11 @@ module NodeHelper {
 
   fun nodeEnv (url : String) : NodeEnv {
     try {
+      parsed =
+        Url.parse(url)
+
       parts =
-        String.split("", url)
+        String.split(".", parsed.host)
 
       if (Array.contains("testnet", parts)) {
         NodeEnv::TestNet

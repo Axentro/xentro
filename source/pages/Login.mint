@@ -55,7 +55,7 @@ component Login {
         next { loginError = "The credentials you supplied were incorrect!" }
       } else {
         sequence {
-          updateWebSocketConnect(true, currentWalletConfig.node)
+          updateWebSocketConnect(currentWalletConfig.node)
           Window.navigate("/dashboard")
         }
       }

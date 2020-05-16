@@ -78,8 +78,6 @@ component Main {
 
   fun getWalletInfo {
     sequence {
-      Debug.log("WOOOOP")
-
       currentWallet
       |> Maybe.map(
         (cw : Wallet) {
@@ -184,14 +182,6 @@ component Main {
 
   fun preloader (contents : Html) : Html {
     <div>
-      <div
-        id="preloader"
-        class="preloader">
-
-        <div class="preloader-icon"/>
-
-      </div>
-
       <{ contents }>
     </div>
   }

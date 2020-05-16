@@ -1,5 +1,6 @@
 component WalletConfiguration {
-  connect WalletStore exposing { currentWallet, currentWalletConfig }
+  connect WalletStore exposing { currentWallet, currentWalletConfig, updateWallet, encryptedWalletWithConfig }
+  connect Application exposing { updateWebSocketConnect, webSocket }
 
   state node : String = currentWalletConfig.node
   state speed : String = currentWalletConfig.speed
@@ -12,12 +13,47 @@ component WalletConfiguration {
     next { speed = Dom.getValue(event.target) }
   }
 
+  fun onNodeChange (event : Html.Event) {
+    next { node = selectOrValue(Dom.getValue(event.target)) }
+  }
+
+  fun selectOrValue (value : String) : String {
+    if (value == "select") {
+      ""
+    } else {
+      value
+    }
+  }
+
   get speedOptions : Array(String) {
     ["SLOW", "FAST"]
   }
 
+  get nodeOptions : Array(String) {
+    ["select", "http://testnet.sushichain.io:3000", "http://mainnet.sushichain.io:3000"]
+  }
+
   fun update (event : Html.Event) {
-    Promise.never()
+    sequence {
+      encryptedWalletWithConfig
+      |> Maybe.map(
+        (ewc : EncryptedWalletWithConfig) {
+          sequence {
+            updateWallet(
+              ewc.wallet,
+              Maybe.just(
+                {
+                  node = node,
+                  speed = speed
+                }))
+
+            updateWebSocketConnect(currentWalletConfig.node)
+          }
+        })
+
+      webSocket
+      |> Maybe.map(WebSocket.close)
+    }
   }
 
   fun render : Html {
@@ -29,27 +65,19 @@ component WalletConfiguration {
 
         <div>
           <div>
-            <div
-              class="alert alert-info alert-with-border"
-              role="alert">
-
-              <p>
+            <div class="mb-3">
+              <label for="blockchain-node">
                 "Blockchain node"
-              </p>
+              </label>
 
-              <hr/>
+              <select
+                onChange={onNodeChange}
+                class="form-control"
+                id="node-change">
 
-              <p class="mb-0">
-                <ul class="ml-3">
-                  <li>
-                    "- http://testnet.sushichain.io:3000"
-                  </li>
+                <{ UiHelper.selectNameOptions(node, nodeOptions) }>
 
-                  <li>
-                    "- http://mainnet.sushichain.io:3000"
-                  </li>
-                </ul>
-              </p>
+              </select>
 
               <div class="mt-1">
                 <input
@@ -59,7 +87,6 @@ component WalletConfiguration {
                   onInput={onNode}
                   value={node}/>
               </div>
-
             </div>
 
             <div class="mb-3">

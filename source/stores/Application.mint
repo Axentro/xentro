@@ -8,13 +8,15 @@ store Application {
   state shouldWebSocketConnect : Bool = false
   state webSocketUrl : String = NodeHelper.webSocketUrl("http://testnet.sushichain.io:3000")
 
-  fun updateWebSocketConnect (value : Bool, nodeUrl : String) {
+  fun updateWebSocketConnect (nodeUrl : String) {
     sequence {
       next
         {
           webSocketUrl = NodeHelper.webSocketUrl(nodeUrl),
-          shouldWebSocketConnect = value
+          shouldWebSocketConnect = false
         }
+
+      next { shouldWebSocketConnect = true }
     }
   }
 

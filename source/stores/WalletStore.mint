@@ -13,11 +13,43 @@ store WalletStore {
   state currentWallet : Maybe(Wallet) = Maybe.nothing()
   state currentWalletName : String = ""
   state currentWalletConfig : WalletConfig = defaultWalletConfig
+  state encryptedWalletWithConfig : Maybe(EncryptedWalletWithConfig) = Maybe.nothing()
 
   get defaultWalletConfig : WalletConfig {
     {
       node = "http://testnet.sushichain.io:3000",
       speed = "FAST"
+    }
+  }
+
+  fun updateWallet (
+    wallet : EncryptedWallet,
+    config : Maybe(WalletConfig)
+  ) {
+    sequence {
+      storeWallet(wallet, config)
+
+      raw =
+        Storage.Local.get("tako_wallet_" + currentWalletName)
+
+      json =
+        Json.parse(raw)
+        |> Maybe.toResult("Json parsing error in getWallet")
+
+      encryptedWalletWithConfig =
+        decode json as EncryptedWalletWithConfig
+
+      next
+        {
+          currentWalletConfig = encryptedWalletWithConfig.config,
+          encryptedWalletWithConfig = Maybe.just(encryptedWalletWithConfig)
+        }
+    } catch Object.Error => er {
+      next { walletError = "(Object) Error could not update wallet: " + currentWalletName }
+    } catch String => er {
+      next { walletError = "(String) Error could not update wallet: " + currentWalletName }
+    } catch Storage.Error => er {
+      next { walletError = "(Storage) Error could not update wallet: " + currentWalletName }
     }
   }
 
@@ -68,7 +100,8 @@ store WalletStore {
         {
           currentWallet = Maybe.just(wallet),
           currentWalletName = name,
-          currentWalletConfig = encryptedWalletWithConfig.config
+          currentWalletConfig = encryptedWalletWithConfig.config,
+          encryptedWalletWithConfig = Maybe.just(encryptedWalletWithConfig)
         }
     } catch Object.Error => er {
       next { walletError = "(Object) Error could not retrieve wallet: " + name }
