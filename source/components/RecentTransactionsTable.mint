@@ -61,7 +61,7 @@ component RecentTransactionsTable {
       </td>
 
       <td>
-        <{ trunc(row.transactionId, 7) }>
+        <{ trunc(row.transactionId, 8) }>
       </td>
 
       <td>
