@@ -22,7 +22,8 @@ record EncryptedWalletWithName {
 }
 
 component CreateEncryptedWallet {
-  connect WalletStore exposing { storeWallet, walletError }
+  connect WalletStore exposing { storeWallet, walletError, getWallet, currentWalletConfig }
+  connect Application exposing { updateWebSocketConnect }
 
   property cancelUrl : String = "/"
 
@@ -130,13 +131,15 @@ component CreateEncryptedWallet {
   }
 
   fun createWallet (event : Html.Event) : Promise(Never, Void) {
-    try {
+    sequence {
       wallet =
         Sushi.Wallet.generateEncryptedWallet(Network.Prefix.testNet(), name, password)
 
-      storeWallet(wallet)
+      storeWallet(wallet, Maybe.nothing())
 
-      Window.navigate("/login")
+      getWallet(name, password)
+      updateWebSocketConnect(currentWalletConfig.node)
+      Window.navigate("/dashboard")
     } catch Wallet.Error => error {
       next { passwordError = "Could not generate a new wallet" }
     }

@@ -41,7 +41,9 @@ component Tools {
               tokens={walletInfo.tokens}/>
           </div>
 
-          <div class="col-md-9"/>
+          <div class="col-md-9">
+            <ImportExportWallet/>
+          </div>
         </div>
       </div>
     </div>

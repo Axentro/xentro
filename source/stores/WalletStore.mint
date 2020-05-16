@@ -58,6 +58,8 @@ store WalletStore {
     config : Maybe(WalletConfig)
   ) : Promise(Never, Void) {
     sequence {
+      Debug.log("storing wallet")
+
       walletConfig =
         config
         |> Maybe.withDefault(defaultWalletConfig)
@@ -68,13 +70,20 @@ store WalletStore {
           config = walletConfig
         }
 
+      Debug.log("here 1")
+
       encodedWalletWithConfig =
         encode walletWithConfig
+
+      Debug.log("here 2")
 
       walletJson =
         Json.stringify(encodedWalletWithConfig)
 
+      Debug.log("here 3")
       Storage.Local.set("tako_wallet_" + wallet.name, walletJson)
+
+      Debug.log("here 4")
       Promise.never()
     } catch Storage.Error => er {
       next { walletError = "Error could not store wallet: " + wallet.name }
