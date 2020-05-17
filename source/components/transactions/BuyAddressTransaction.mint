@@ -212,7 +212,7 @@ component BuyAddressTransaction {
           </div>
 
           <button
-            onClick={(e : Html.Event) { sendTransaction(e, senderAddress, senderWif, transaction) }}
+            onClick={(e : Html.Event) { sendTransaction(e, currentWalletConfig.node, senderAddress, senderWif, transaction) }}
             class="btn btn-secondary"
             disabled={buyButtonState}
             type="submit">

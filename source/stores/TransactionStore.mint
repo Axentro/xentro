@@ -77,13 +77,14 @@ store TransactionStore {
 
   fun sendTransaction (
     event : Html.Event,
+    baseUrl : String,
     recipientAddress : String,
     senderWif : String,
     transaction : Transaction
   ) : Promise(Never, Void) {
     sequence {
-      resolveDomainAddress(recipientAddress)
-      postTransaction(recipientAddress, senderWif, transaction)
+      resolveDomainAddress(baseUrl, recipientAddress)
+      postTransaction(baseUrl, recipientAddress, senderWif, transaction)
     }
   }
 
@@ -95,11 +96,11 @@ store TransactionStore {
     `#{value}.slice(-3)` == ".sc"
   }
 
-  fun resolveDomainAddress (recipientAddress : String) : Promise(Never, Void) {
+  fun resolveDomainAddress (baseUrl : String, recipientAddress : String) : Promise(Never, Void) {
     if (isDomainAddress(recipientAddress)) {
       sequence {
         resolveResponse =
-          Http.get("http://localhost:3005/api/v1/scars/" + recipientAddress)
+          Http.get(baseUrl + "/api/v1/scars/" + recipientAddress)
           |> Http.send()
 
         jsonResolved =
@@ -122,10 +123,10 @@ store TransactionStore {
     }
   }
 
-  fun domainExists (targetName : String) : Promise(Never, Void) {
+  fun domainExists (baseUrl : String, targetName : String) : Promise(Never, Void) {
     sequence {
       resolveResponse =
-        Http.get("http://localhost:3005/api/v1/scars/" + targetName)
+        Http.get(baseUrl + "/api/v1/scars/" + targetName)
         |> Http.send()
 
       jsonResolved =
@@ -151,10 +152,10 @@ store TransactionStore {
     }
   }
 
-  fun domainDoesNotExist (targetName : String) : Promise(Never, Void) {
+  fun domainDoesNotExist (baseUrl : String, targetName : String) : Promise(Never, Void) {
     sequence {
       resolveResponse =
-        Http.get("http://localhost:3005/api/v1/scars/" + targetName)
+        Http.get(baseUrl + "/api/v1/scars/" + targetName)
         |> Http.send()
 
       jsonResolved =
@@ -181,6 +182,7 @@ store TransactionStore {
   }
 
   fun postTransaction (
+    baseUrl : String,
     senderAddress : String,
     wif : String,
     transaction : Transaction
@@ -194,7 +196,7 @@ store TransactionStore {
         String.replace(senderAddress, resolvedSenderAddress, compactJson(Json.stringify(encodedTransaction)))
 
       response =
-        Http.post("http://localhost:3005/api/v1/transaction/unsigned")
+        Http.post(baseUrl + "/api/v1/transaction/unsigned")
         |> Http.stringBody(requestBody)
         |> Http.send()
 
@@ -223,7 +225,7 @@ store TransactionStore {
         encode signedTransactionRequest
 
       responseSigned =
-        Http.post("http://localhost:3005/api/v1/transaction")
+        Http.post(baseUrl + "/api/v1/transaction")
         |> Http.stringBody(
           compactJson(Json.stringify(encodedSignedTransaction)))
         |> Http.send()

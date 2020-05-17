@@ -48,6 +48,9 @@ provider Provider.WebSocket : Provider.WebSocket.Subscription {
       socket.removeEventListener("error", socket._error);
       socket.removeEventListener("close", socket._close);
       socket.removeEventListener("open", socket._open);
+      socket.close()
+      
+      this._connections.delete(socket.url)
     })()
     `
   }

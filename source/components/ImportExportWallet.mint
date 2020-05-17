@@ -1,9 +1,14 @@
 component ImportExportWallet {
+
+  connect WalletStore exposing { currentWallet, storeWallet, getWallet, currentWalletConfig }
+  connect Application exposing { updateWebSocketConnect } 
+
   state importErrorMessage : String = ""
   state exportSuccessMessage : String = ""
   state exportErrorMessage : String = ""
   state importWalletJson : String = ""
   state importWalletName : String = ""
+  state importWalletPassword : String = ""
   state exportWalletJson : String = ""
 
   fun onImportWallet (event : Html.Event) {
@@ -14,8 +19,12 @@ component ImportExportWallet {
     next { importWalletName = Dom.getValue(event.target) }
   }
 
+ fun onImportWalletPassword (event : Html.Event) {
+    next { importWalletPassword = Dom.getValue(event.target) }
+  }
+  
   get importButtonState : Bool {
-    String.isEmpty(importWalletJson) || String.isEmpty(importWalletName)
+    String.isEmpty(importWalletJson) || String.isEmpty(importWalletName) || String.isEmpty(importWalletPassword)
   }
 
   fun onExportWallet (event : Html.Event) {
@@ -23,11 +32,44 @@ component ImportExportWallet {
   }
 
   fun importWallet (event : Html.Event) {
-    Promise.never()
+    sequence {
+      json =
+        Json.parse(importWalletJson)
+        |> Maybe.toResult("Json parsing error in import wallet")
+
+      wallet =
+        decode json as Wallet
+
+      encryptedWallet =
+        Sushi.Wallet.encryptWallet(wallet, importWalletName, importWalletPassword)
+
+      storeWallet(encryptedWallet, Maybe.nothing())
+
+      getWallet(importWalletName, importWalletPassword)
+      
+      updateWebSocketConnect(currentWalletConfig.node)
+      Window.navigate("/dashboard") 
+
+
+    } catch {
+      next { importErrorMessage = "Oops an unexpected error occured" }
+    }
   }
 
   fun exportWallet (event : Html.Event) {
-    Promise.never()
+    sequence {
+      encodedWallet =
+        encode currentWallet
+
+      walletJson =
+        Json.stringify(encodedWallet)
+
+      next { exportWalletJson = walletJson }
+    }
+  }
+
+  fun clearExportWallet (event : Html.Event) {
+    next { exportWalletJson = "" }
   }
 
   fun render {
@@ -52,6 +94,18 @@ component ImportExportWallet {
             </div>
           </div>
 
+           <div class="form-row">
+            <div class="col-md-3 mb-3">
+              <input
+                type="password"
+                class="form-control"
+                id="import-wallet-password"
+                placeholder="Import wallet password"
+                onInput={onImportWalletPassword}
+                value={importWalletPassword}/>
+            </div>
+          </div>
+
           <div class="form-row">
             <div class="col-md-8 mb-6">
               <textarea
@@ -67,7 +121,7 @@ component ImportExportWallet {
           <div class="mt-3">
             <button
               onClick={importWallet}
-              class="btn btn-secondary"
+              class="btn btn-primary"
               disabled={importButtonState}
               type="submit">
 
@@ -99,12 +153,23 @@ component ImportExportWallet {
           <div class="mt-3">
             <button
               onClick={exportWallet}
-              class="btn btn-secondary"
+              class="btn btn-primary"
               type="submit">
 
               "Export wallet"
 
             </button>
+
+             <span class="ml-2">
+             <button
+              onClick={clearExportWallet}
+              class="btn btn-outline-primary"
+              type="submit">
+
+              "Clear"
+
+            </button>
+          </span>
           </div>
         </div>
       </div>

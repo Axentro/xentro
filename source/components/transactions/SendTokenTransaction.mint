@@ -52,7 +52,7 @@ component SendTokenTransaction {
 
   fun onDomain (event : Html.Event) {
     if (NodeHelper.isDomain(value)) {
-      domainDoesNotExist(value)
+      domainDoesNotExist(currentWalletConfig.node, value)
     } else {
       Promise.never()
     }
@@ -261,7 +261,7 @@ component SendTokenTransaction {
           </div>
 
           <button
-            onClick={(e : Html.Event) { sendTransaction(e, recipientAddress, senderWif, transaction) }}
+            onClick={(e : Html.Event) { sendTransaction(e, currentWalletConfig.node, recipientAddress, senderWif, transaction) }}
             class="btn btn-secondary"
             disabled={sendButtonState}
             type="submit">
