@@ -97,7 +97,7 @@ component ImportExportWallet {
            <div class="form-row">
             <div class="col-md-3 mb-3">
               <input
-                type="password"
+                type="text"
                 class="form-control"
                 id="import-wallet-password"
                 placeholder="Import wallet password"
