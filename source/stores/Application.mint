@@ -18,7 +18,8 @@ store Application {
      next
         {
           minerWebSocketUrl = NodeHelper.minerWebSocketUrl(nodeUrl),
-          shouldMinerWebSocketConnect = false
+          shouldMinerWebSocketConnect = false,
+          minerConnectionStatus = ConnectionStatus::Initial
         }
       
      `console.log('updateMinerWebSocketConnect: ' + #{numberProcesses} + ' canConnect: ' + #{canMinerConnect()})`

@@ -9,7 +9,11 @@ record Provider.MinerWebSocket.Subscription {
 provider Provider.MinerWebSocket : Provider.MinerWebSocket.Subscription {
   fun open (url : String, socket : WebSocket) : Array(a) {
     for (subscription of subscriptions) {
-      subscription.onOpen(socket)
+      sequence {
+        `console.log('Miner websocket subs: ' + #{subscriptions})`
+        `console.log('Miner websocket sub url: ' + #{subscription.url})`
+        subscription.onOpen(socket)
+      }
     } when {
       subscription.url == url
     }
@@ -84,7 +88,7 @@ provider Provider.MinerWebSocket : Provider.MinerWebSocket.Subscription {
     `
     (() => {
       console.log(window)
-      window.porvider = this;
+      window.provider = this;
       const connections = this._connections || (this._connections = new Map)
       const subscriptions = this.subscriptions.values()
 

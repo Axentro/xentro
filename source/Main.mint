@@ -113,7 +113,7 @@ component Main {
       currentWallet
       |> Maybe.map(
         (cw : Wallet) {
-          webSocket
+          minerWebSocket
           |> Maybe.map((s : WebSocket) { NodeHelper.minerHandshake(s, cw.address) })
         })
 
@@ -137,7 +137,7 @@ component Main {
 
   fun handleMinerMessage (data : String) : Promise(Never, Void) {
     sequence {
-      `console.log('Miner message received: ' + data)`
+      `console.log('Miner message received: ' + #{data})`
     }
   }
 

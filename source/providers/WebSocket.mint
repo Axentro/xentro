@@ -9,7 +9,11 @@ record Provider.WebSocket.Subscription {
 provider Provider.WebSocket : Provider.WebSocket.Subscription {
   fun open (url : String, socket : WebSocket) : Array(a) {
     for (subscription of subscriptions) {
-      subscription.onOpen(socket)
+      sequence {
+        `console.log('websocket subs: ' + #{subscriptions})`
+         `console.log('websocket sub url: ' + #{subscription.url})`
+        subscription.onOpen(socket)
+      }
     } when {
       subscription.url == url
     }
@@ -84,7 +88,7 @@ provider Provider.WebSocket : Provider.WebSocket.Subscription {
     `
     (() => {
       console.log(window)
-      window.porvider = this;
+      window.provider = this;
       const connections = this._connections || (this._connections = new Map)
       const subscriptions = this.subscriptions.values()
 
