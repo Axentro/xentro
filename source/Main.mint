@@ -138,8 +138,44 @@ component Main {
   fun handleMinerMessage (data : String) : Promise(Never, Void) {
     sequence {
       `console.log('Miner message received: ' + #{data})`
+
+      json =
+        Json.parse(data)
+        |> Maybe.toResult("Json parsing error") 
+
+       minerMessage =
+        decode json as MinerMessage
+
+        Debug.log(minerMessage.type)
+
+        if(minerMessage.type == MinerConnection:HANDSHAKE_ACCEPTED) {
+           handshakeAccepted()
+        } else {
+         all() 
+        }
+      
+
+
+      setDataError("")
+    } catch String => er {
+      setDataError("Could not parse json response")
+    } catch Object.Error => er {
+      setDataError("Could not decode json")
     }
   }
+
+  fun handshakeAccepted() : Promise(Never,Void) {
+    sequence {
+    Debug.log("ACCEPTED")
+    Promise.never()
+    }
+  }
+
+  fun all() : Promise(Never,Void) {
+    Promise.never()
+  }
+
+
 
   fun getWalletInfo {
     sequence {
