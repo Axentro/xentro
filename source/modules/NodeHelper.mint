@@ -14,6 +14,15 @@ module NodeHelper {
     }
   }
 
+  fun minerWebSocketUrl (url : String) : String {
+    try {
+      parsed = 
+        Url.parse(url)
+
+      "ws://" + parsed.host + "/peer" 
+    }
+  }
+
   fun isDomain (value : String) : Bool {
     `#{value}.slice(-3)` == ".sc"
   }
@@ -44,6 +53,23 @@ module NodeHelper {
         { address = wallet.address }
 
       json =
+        encode message
+
+      WebSocket.send(Json.stringify(json), socket)
+    }
+  }
+
+  fun minerHandshake (socket : WebSocket, address : String) : Promise(Never, Void) {
+    sequence {
+      `console.log('miner handshake init ...')`
+
+      content = { version = 1, mid = "535061bddb0549f691c8b9c012a55ee2", address = address }
+      contentJson = encode content
+
+      message = 
+        { type = 1, content = Json.stringify(contentJson) }
+
+      json = 
         encode message
 
       WebSocket.send(Json.stringify(json), socket)

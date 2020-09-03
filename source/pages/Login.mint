@@ -1,6 +1,6 @@
 component Login {
   connect WalletStore exposing { getWallet, currentWallet, getSavedWalletOptions, currentWalletConfig }
-  connect Application exposing { updateWebSocketConnect, webSocket }
+  connect Application exposing { updateWebSocketConnect, updateMinerWebSocketConnect, webSocket }
 
   state password : String = ""
   state walletName : String = ""
@@ -56,6 +56,7 @@ component Login {
       } else {
         sequence {
           updateWebSocketConnect(currentWalletConfig.node)
+          updateMinerWebSocketConnect(currentWalletConfig.node)
           Window.navigate("/dashboard")
         }
       }

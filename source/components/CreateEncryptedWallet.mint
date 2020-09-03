@@ -23,7 +23,7 @@ record EncryptedWalletWithName {
 
 component CreateEncryptedWallet {
   connect WalletStore exposing { storeWallet, walletError, getWallet, currentWalletConfig }
-  connect Application exposing { updateWebSocketConnect }
+  connect Application exposing { updateWebSocketConnect, updateMinerWebSocketConnect }
 
   property cancelUrl : String = "/"
 
@@ -139,6 +139,7 @@ component CreateEncryptedWallet {
 
       getWallet(name, password)
       updateWebSocketConnect(currentWalletConfig.node)
+      updateMinerWebSocketConnect(currentWalletConfig.node)
       Window.navigate("/dashboard")
     } catch Wallet.Error => error {
       next { passwordError = "Could not generate a new wallet" }

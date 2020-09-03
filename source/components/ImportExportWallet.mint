@@ -1,7 +1,6 @@
 component ImportExportWallet {
-
   connect WalletStore exposing { currentWallet, storeWallet, getWallet, currentWalletConfig }
-  connect Application exposing { updateWebSocketConnect } 
+  connect Application exposing { updateWebSocketConnect, updateMinerWebSocketConnect }
 
   state importErrorMessage : String = ""
   state exportSuccessMessage : String = ""
@@ -19,10 +18,10 @@ component ImportExportWallet {
     next { importWalletName = Dom.getValue(event.target) }
   }
 
- fun onImportWalletPassword (event : Html.Event) {
+  fun onImportWalletPassword (event : Html.Event) {
     next { importWalletPassword = Dom.getValue(event.target) }
   }
-  
+
   get importButtonState : Bool {
     String.isEmpty(importWalletJson) || String.isEmpty(importWalletName) || String.isEmpty(importWalletPassword)
   }
@@ -46,11 +45,9 @@ component ImportExportWallet {
       storeWallet(encryptedWallet, Maybe.nothing())
 
       getWallet(importWalletName, importWalletPassword)
-      
       updateWebSocketConnect(currentWalletConfig.node)
-      Window.navigate("/dashboard") 
-
-
+      updateMinerWebSocketConnect(currentWalletConfig.node)
+      Window.navigate("/dashboard")
     } catch {
       next { importErrorMessage = "Oops an unexpected error occured" }
     }
@@ -94,7 +91,7 @@ component ImportExportWallet {
             </div>
           </div>
 
-           <div class="form-row">
+          <div class="form-row">
             <div class="col-md-3 mb-3">
               <input
                 type="text"
@@ -160,16 +157,16 @@ component ImportExportWallet {
 
             </button>
 
-             <span class="ml-2">
-             <button
-              onClick={clearExportWallet}
-              class="btn btn-outline-primary"
-              type="submit">
+            <span class="ml-2">
+              <button
+                onClick={clearExportWallet}
+                class="btn btn-outline-primary"
+                type="submit">
 
-              "Clear"
+                "Clear"
 
-            </button>
-          </span>
+              </button>
+            </span>
           </div>
         </div>
       </div>

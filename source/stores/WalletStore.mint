@@ -58,7 +58,6 @@ store WalletStore {
     config : Maybe(WalletConfig)
   ) : Promise(Never, Void) {
     sequence {
-
       walletConfig =
         config
         |> Maybe.withDefault(defaultWalletConfig)

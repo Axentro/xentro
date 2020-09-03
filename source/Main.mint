@@ -7,6 +7,17 @@ record WalletWebSocketMessage {
   address : String
 }
 
+record MinerMessage {
+  type : Number,
+  content : String
+}
+
+record MinerHandshakeMessage {
+  version : Number,
+  address : String,
+  mid : String
+}
+
 record Token {
   name : String,
   amount : String
@@ -61,11 +72,14 @@ component Main {
     webSocket,
     setConnectionstatus,
     shouldWebSocketConnect,
-    webSocketUrl
+    shouldMinerWebSocketConnect,
+    webSocketUrl,
+    minerWebSocketUrl,
+    numberProcesses
   }
 
   connect WalletStore exposing { currentWallet }
-
+ 
   use Provider.WebSocket {
     url = webSocketUrl,
     onMessage = handleMessage,
@@ -74,6 +88,49 @@ component Main {
     onOpen = handleOpen
   } when {
     shouldWebSocketConnect
+  }
+
+   use Provider.MinerWebSocket {
+    url = minerWebSocketUrl,
+    onMessage = handleMinerMessage,
+    onError = handleMinerError,
+    onClose = handleMinerClose,
+    onOpen = handleMinerOpen
+  } when {
+    shouldMinerWebSocketConnect
+  }
+
+   fun handleMinerOpen (socket : WebSocket) : Promise(Never, Void) {
+    sequence {
+      `console.log('Miner handleOpen' + #{numberProcesses})`
+
+      currentWallet
+      |> Maybe.map(
+        (cw : Wallet) {
+          webSocket
+          |> Maybe.map((s : WebSocket) { NodeHelper.minerHandshake(s, cw.address) })
+        })
+
+      Promise.never()
+    }
+  }
+
+  fun handleMinerClose : Promise(Never, Void) {
+    sequence {
+      `console.log('Miner handleClose ' + #{numberProcesses})`
+    }
+  }
+
+  fun handleMinerError : Promise(Never, Void) {
+    sequence {
+      `console.log('Miner handleError ' + #{numberProcesses})`
+    }
+  }
+
+  fun handleMinerMessage (data : String) : Promise(Never, Void) {
+    sequence {
+      `console.log('Miner message received')`
+    }
   }
 
   fun getWalletInfo {

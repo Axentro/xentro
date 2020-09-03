@@ -1,6 +1,6 @@
 component WalletConfiguration {
   connect WalletStore exposing { currentWallet, currentWalletConfig, updateWallet, encryptedWalletWithConfig }
-  connect Application exposing { updateWebSocketConnect, webSocket }
+  connect Application exposing { updateWebSocketConnect, updateMinerWebSocketConnect, webSocket }
 
   state node : String = currentWalletConfig.node
   state speed : String = currentWalletConfig.speed
@@ -48,6 +48,7 @@ component WalletConfiguration {
                 }))
 
             updateWebSocketConnect(currentWalletConfig.node)
+            updateMinerWebSocketConnect(currentWalletConfig.node)
           }
         })
 

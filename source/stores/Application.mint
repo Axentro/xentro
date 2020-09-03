@@ -8,6 +8,65 @@ store Application {
   state shouldWebSocketConnect : Bool = false
   state webSocketUrl : String = NodeHelper.webSocketUrl("http://testnet.sushichain.io:3000")
 
+  state shouldMinerWebSocketConnect : Bool = false
+  state minerWebSocketUrl : String = NodeHelper.minerWebSocketUrl("http://testnet.sushichain.io:3000")
+
+  fun updateMinerWebSocketConnect (nodeUrl : String) {
+    sequence {
+     next
+        {
+          minerWebSocketUrl = NodeHelper.minerWebSocketUrl(nodeUrl),
+          shouldMinerWebSocketConnect = false
+        }
+      
+     `console.log('updateMinerWebSocketConnect: ' + #{numberProcesses} + ' canConnect: ' + #{canMinerConnect()})`
+      next { shouldMinerWebSocketConnect = canMinerConnect() }
+    }
+  }
+
+  fun canMinerConnect() : Bool {
+    numberProcesses > 0
+  }
+
+  state numberProcesses : Number = 0
+ 
+  fun setNumberProcesses (value : Number) {
+    sequence {
+      `console.log('setting processes to: ' + #{value})`
+      next { numberProcesses = value }
+      Timer.timeout(2000, updateMinerWebSocketConnect(minerWebSocketUrl))
+    }
+  }
+ 
+  fun getNumberProcesses {
+      numberProcesses
+  }
+
+  fun initMinerSlider {
+    `
+    (() => {
+      requestAnimationFrame(function(){
+      
+        $("#number-processes").ionRangeSlider({
+          min: 0,
+          max: 100,
+          from: 0,
+          to: 100,
+          skin: "round",
+          grid: true,
+          onFinish: function(data){
+            #{setNumberProcesses(`data.from`)}
+          }
+        });
+     
+        var range = $("#number-processes").data("ionRangeSlider")
+        range.update({from: #{getNumberProcesses()}})
+      })
+    })()
+    `
+  }
+
+
   fun updateWebSocketConnect (nodeUrl : String) {
     sequence {
       next
