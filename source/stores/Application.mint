@@ -22,7 +22,6 @@ store Application {
           minerConnectionStatus = ConnectionStatus::Initial
         }
       
-     `console.log('updateMinerWebSocketConnect: ' + #{numberProcesses} + ' canConnect: ' + #{canMinerConnect()})`
       next { shouldMinerWebSocketConnect = canMinerConnect() }
     }
   }
@@ -35,7 +34,6 @@ store Application {
  
   fun setNumberProcesses (value : Number) {
     sequence {
-      `console.log('setting processes to: ' + #{value})`
       next { numberProcesses = value }
       Timer.timeout(2000, updateMinerWebSocketConnect(minerWebSocketUrl))
     }

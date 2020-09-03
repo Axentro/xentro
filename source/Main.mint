@@ -16,6 +16,16 @@ record MinerRejectedMessage {
   reason : String
 }
 
+record MinerAcceptedMessage {
+  version : Number,
+  block : SlowBlock,
+  difficulty : Number
+}
+
+record SlowBlock {
+  index : Number
+}
+
 record MinerHandshakeMessage {
   version : Number,
   address : String,
@@ -109,7 +119,6 @@ component Main {
 
    fun handleMinerOpen (socket : WebSocket) : Promise(Never, Void) {
     sequence {
-      `console.log('Miner handleOpen' + #{numberProcesses})`
 
       setMinerWebSocket(socket)
       setMinerConnectionstatus(ConnectionStatus::Connected)
@@ -127,21 +136,18 @@ component Main {
 
   fun handleMinerClose : Promise(Never, Void) {
     sequence {
-      `console.log('Miner handleClose ' + #{numberProcesses})`
        setMinerConnectionstatus(ConnectionStatus::Disconnected)
     }
   }
 
   fun handleMinerError : Promise(Never, Void) {
     sequence {
-      `console.log('Miner handleError ' + #{numberProcesses})`
       setMinerConnectionstatus(ConnectionStatus::Error)
     }
   }
 
   fun handleMinerMessage (data : String) : Promise(Never, Void) {
     sequence {
-      `console.log('Miner message received: ' + #{data})`
 
       json =
         Json.parse(data)
@@ -150,14 +156,12 @@ component Main {
        minerMessage =
         decode json as MinerMessage
 
-        Debug.log(minerMessage.type)
-
         if(minerMessage.type == MinerConnection:HANDSHAKE_ACCEPTED) {
-           handshakeAccepted()
+           handshakeAccepted(minerMessage)
         } else if (minerMessage.type == MinerConnection:HANDSHAKE_REJECTED) {
            handshakeRejected(minerMessage)
         } else {
-         all() 
+         unrecognised() 
         }
       
       setDataError("")
@@ -168,10 +172,22 @@ component Main {
     }
   }
 
-  fun handshakeAccepted() : Promise(Never,Void) {
+  fun handshakeAccepted(minerMessage : MinerMessage) : Promise(Never,Void) {
     sequence {
-    Debug.log("ACCEPTED - start miner threads")
-    Promise.never()
+      json =
+        Json.parse(minerMessage.content)
+        |> Maybe.toResult("Json parsing error (handshakeAccepted)") 
+
+      content =
+        decode json as MinerAcceptedMessage
+
+      Debug.log(content.block)  
+
+      Promise.never()
+    } catch String => er {
+      setDataError("Could not parse handshakeAccepted json response")
+    } catch Object.Error => er {
+      setDataError("Could not decode handshakeAccepted json")
     }
   }
 
@@ -193,11 +209,9 @@ component Main {
     }
   }
 
-  fun all() : Promise(Never,Void) {
-    Promise.never()
+  fun unrecognised() : Promise(Never,Void) {
+     setDataError("Message was not recognised - ignoring it!")
   }
-
-
 
   fun getWalletInfo {
     sequence {
@@ -214,7 +228,6 @@ component Main {
 
   fun handleOpen (socket : WebSocket) : Promise(Never, Void) {
     sequence {
-      `console.log('handleOpen')`
       setWebSocket(socket)
       setConnectionstatus(ConnectionStatus::Connected)
 
@@ -224,21 +237,18 @@ component Main {
 
   fun handleClose : Promise(Never, Void) {
     sequence {
-      `console.log('handleClose error')`
       setConnectionstatus(ConnectionStatus::Disconnected)
     }
   }
 
   fun handleError : Promise(Never, Void) {
     sequence {
-      `console.log('handleError error')`
       setConnectionstatus(ConnectionStatus::Error)
     }
   }
 
   fun handleMessage (data : String) : Promise(Never, Void) {
     sequence {
-      `console.log('message received: ' + #{data})`
       setConnectionstatus(ConnectionStatus::Receiving)
       Timer.timeout(500, setConnectionstatus(ConnectionStatus::Connected))
 
