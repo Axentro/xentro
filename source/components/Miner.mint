@@ -1,11 +1,26 @@
 component Miner {
-  connect Application exposing { numberProcesses, initMinerSlider, setNumberProcesses}
+  connect Application exposing { numberProcesses, initMinerSlider, setNumberProcesses, minerConnectionStatus}
   connect WalletStore exposing { currentWalletConfig }
 
   fun componentDidMount {
     sequence {
    initMinerSlider()
     }
+  }
+
+   fun showMinerConnectionStatus : Html {
+    <div>
+    "Mining Processes " <{ status }>
+    </div>
+  } where {
+    status =
+      case (minerConnectionStatus) {
+        ConnectionStatus::Initial => <i class="fa fa-wifi"/>
+        ConnectionStatus::Connected => <i class="text-success fa fa-wifi"/>
+        ConnectionStatus::Disconnected => <i class="text-danger fa fa-exclamation-circle"/>
+        ConnectionStatus::Error => <i class="text-danger fa fa-exclamation-circle"/>
+        ConnectionStatus::Receiving => <i class="text-primary fa fa-wifi"/>
+      }
   }
 
   fun render {
@@ -16,7 +31,7 @@ component Miner {
 
             <div class="col-12">
               <p class="text-muted">
-              "Mining Processes" <i class="ml-1 fa fa-wifi"></i>
+              <{ showMinerConnectionStatus() }>
             </p>
 
               <input

@@ -4,7 +4,9 @@ store Application {
   state walletInfo : Maybe(WalletInfo) = Maybe.nothing()
   state dataError : String = ""
   state webSocket : Maybe(WebSocket) = Maybe.nothing()
+  state minerWebSocket : Maybe(WebSocket) = Maybe.nothing()
   state connectionStatus : ConnectionStatus = ConnectionStatus::Initial
+  state minerConnectionStatus : ConnectionStatus = ConnectionStatus::Initial
   state shouldWebSocketConnect : Bool = false
   state webSocketUrl : String = NodeHelper.webSocketUrl("http://testnet.sushichain.io:3000")
 
@@ -83,6 +85,10 @@ store Application {
     next { connectionStatus = status }
   }
 
+   fun setMinerConnectionstatus (status : ConnectionStatus) : Promise(Never, Void) {
+    next { minerConnectionStatus = status }
+  }
+
   fun setPage (page : String) : Promise(Never, Void) {
     sequence {
       Http.abortAll()
@@ -114,5 +120,13 @@ store Application {
 
   fun resetWebSocket : Promise(Never, Void) {
     next { webSocket = Maybe.nothing() }
+  }
+
+   fun setMinerWebSocket (s : WebSocket) : Promise(Never, Void) {
+    next { minerWebSocket = Maybe.just(s) }
+  }
+
+  fun resetMinerWebSocket : Promise(Never, Void) {
+    next { minerWebSocket = Maybe.nothing() }
   }
 }

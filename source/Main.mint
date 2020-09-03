@@ -70,7 +70,10 @@ component Main {
     walletInfo,
     setWebSocket,
     webSocket,
+    setMinerWebSocket,
+    minerWebSocket,
     setConnectionstatus,
+    setMinerConnectionstatus,
     shouldWebSocketConnect,
     shouldMinerWebSocketConnect,
     webSocketUrl,
@@ -104,6 +107,9 @@ component Main {
     sequence {
       `console.log('Miner handleOpen' + #{numberProcesses})`
 
+      setMinerWebSocket(socket)
+      setMinerConnectionstatus(ConnectionStatus::Connected)
+
       currentWallet
       |> Maybe.map(
         (cw : Wallet) {
@@ -118,18 +124,20 @@ component Main {
   fun handleMinerClose : Promise(Never, Void) {
     sequence {
       `console.log('Miner handleClose ' + #{numberProcesses})`
+       setMinerConnectionstatus(ConnectionStatus::Disconnected)
     }
   }
 
   fun handleMinerError : Promise(Never, Void) {
     sequence {
       `console.log('Miner handleError ' + #{numberProcesses})`
+      setMinerConnectionstatus(ConnectionStatus::Error)
     }
   }
 
   fun handleMinerMessage (data : String) : Promise(Never, Void) {
     sequence {
-      `console.log('Miner message received')`
+      `console.log('Miner message received: ' + data)`
     }
   }
 
@@ -172,9 +180,9 @@ component Main {
 
   fun handleMessage (data : String) : Promise(Never, Void) {
     sequence {
-      `console.log('message received')`
+      `console.log('message received: ' + #{data})`
       setConnectionstatus(ConnectionStatus::Receiving)
-      Timer.timeout(2, setConnectionstatus(ConnectionStatus::Connected))
+      Timer.timeout(500, setConnectionstatus(ConnectionStatus::Connected))
 
       json =
         Json.parse(data)
