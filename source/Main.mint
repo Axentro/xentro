@@ -12,6 +12,10 @@ record MinerMessage {
   content : String
 }
 
+record MinerRejectedMessage {
+  reason : String
+}
+
 record MinerHandshakeMessage {
   version : Number,
   address : String,
@@ -150,24 +154,42 @@ component Main {
 
         if(minerMessage.type == MinerConnection:HANDSHAKE_ACCEPTED) {
            handshakeAccepted()
+        } else if (minerMessage.type == MinerConnection:HANDSHAKE_REJECTED) {
+           handshakeRejected(minerMessage)
         } else {
          all() 
         }
       
-
-
       setDataError("")
     } catch String => er {
-      setDataError("Could not parse json response")
+      setDataError("Could not parse handleMinerMessage json response")
     } catch Object.Error => er {
-      setDataError("Could not decode json")
+      setDataError("Could not decode handleMinerMessage json")
     }
   }
 
   fun handshakeAccepted() : Promise(Never,Void) {
     sequence {
-    Debug.log("ACCEPTED")
+    Debug.log("ACCEPTED - start miner threads")
     Promise.never()
+    }
+  }
+
+  fun handshakeRejected(minerMessage : MinerMessage) : Promise(Never, Void) {
+    sequence {
+
+      json =
+        Json.parse(minerMessage.content)
+        |> Maybe.toResult("Json parsing error") 
+
+       content =
+        decode json as MinerRejectedMessage
+
+      setDataError(content.reason)
+    } catch String => er {
+      setDataError("Could not parse handshakeRejected json response")
+    } catch Object.Error => er {
+      setDataError("Could not decode handshakeRejected json")
     }
   }
 
