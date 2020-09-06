@@ -1,6 +1,6 @@
-# Tako - SushiChain Wallet
+# Tako - Axentro Wallet
 
-This is a desktop (electron) wallet for the SushiChain blockchain. It's written in the Mint language and distributed as an electron desktop app.
+This is a desktop (electron) wallet for the Axentro blockchain. It's written in the Mint language and distributed as an electron desktop app.
 
 ### Packaging
 
@@ -19,5 +19,5 @@ python3 -m http.server --directory dist/
 - Wrap the app in electron
 
 ```bash
-nativefier --name "Tako - SushiChain Wallet" --min-width 1280  --min-height 600 --disable-context-menu --disable-dev-tools "http://0.0.0.0:8000"
+nativefier --name "Tako - Axentro Wallet" --min-width 1280  --min-height 600 --disable-context-menu --disable-dev-tools "http://0.0.0.0:8000"
 ```

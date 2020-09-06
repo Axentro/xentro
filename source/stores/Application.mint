@@ -8,10 +8,10 @@ store Application {
   state connectionStatus : ConnectionStatus = ConnectionStatus::Initial
   state minerConnectionStatus : ConnectionStatus = ConnectionStatus::Initial
   state shouldWebSocketConnect : Bool = false
-  state webSocketUrl : String = NodeHelper.webSocketUrl("http://testnet.sushichain.io:3000")
+  state webSocketUrl : String = NodeHelper.webSocketUrl("http://testnet.axentro.io:3000")
 
   state shouldMinerWebSocketConnect : Bool = false
-  state minerWebSocketUrl : String = NodeHelper.minerWebSocketUrl("http://testnet.sushichain.io:3000")
+  state minerWebSocketUrl : String = NodeHelper.minerWebSocketUrl("http://testnet.axentro.io:3000")
 
   fun updateMinerWebSocketConnect (nodeUrl : String) {
     sequence {

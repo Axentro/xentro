@@ -9,7 +9,8 @@ component Register {
         <div id="logo">
           <img
             class="logo"
-            src="/assets/media/image/sushichain_logo_light.png"
+            src="/assets/media/image/axentro-logo.png"
+            width="150"
             alt="logo"/>
         </div>
 

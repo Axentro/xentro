@@ -17,7 +17,7 @@ store WalletStore {
 
   get defaultWalletConfig : WalletConfig {
     {
-      node = "http://testnet.sushichain.io:3000",
+      node = "http://testnet.axentro.io:3000",
       speed = "FAST"
     }
   }

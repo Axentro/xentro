@@ -4,7 +4,7 @@
     "source"
   ],
   "application": {
-    "title": "Tako - SushiChain Wallet",
+    "title": "Tako - Axentro Wallet",
     "head": "assets/head.html"
   },
   "test-directories": [
@@ -12,7 +12,7 @@
   ],
   "dependencies": {
     "mint-sushi": {
-      "repository": "https://github.com/SushiChain/mint-sushi",
+      "repository": "https://github.com/Axentro/mint-sushi",
       "constraint": "0.0.0 <= v < 1.0.0"
     }
   }
