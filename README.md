@@ -7,7 +7,7 @@ This is a desktop (electron) wallet for the Axentro blockchain. It's written in 
 - Build the mint app for production:
 
 ```bash
-mint build --skip-icons --skip-service-workers
+mint build --skip-icons --skip-service-worker
 ```
 
 - Start up the app with python

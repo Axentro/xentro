@@ -97,7 +97,7 @@ component Main {
 
   connect WalletStore exposing { currentWallet }
  
-  use Provider.WebSocket {
+  use Provider.WalletWebSocket {
     url = webSocketUrl,
     onMessage = handleMessage,
     onError = handleError,

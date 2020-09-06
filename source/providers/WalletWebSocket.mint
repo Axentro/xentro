@@ -1,4 +1,4 @@
-record Provider.WebSocket.Subscription {
+record Provider.WalletWebSocket.Subscription {
   onOpen : Function(WebSocket, Promise(Never, Void)),
   onMessage : Function(String, Promise(Never, Void)),
   onError : Function(Promise(Never, Void)),
@@ -6,7 +6,7 @@ record Provider.WebSocket.Subscription {
   url : String
 }
 
-provider Provider.WebSocket : Provider.WebSocket.Subscription {
+provider Provider.WalletWebSocket : Provider.WalletWebSocket.Subscription {
   fun open (url : String, socket : WebSocket) : Array(a) {
     for (subscription of subscriptions) {
         subscription.onOpen(socket)
@@ -122,12 +122,4 @@ provider Provider.WebSocket : Provider.WebSocket.Subscription {
   }
 }
 
-module WebSocket {
-  fun send (data : String, socket : WebSocket) : Promise(Never, Void) {
-    `#{socket}.send(#{data})`
-  }
 
-  fun close (socket : WebSocket) : Promise(Never, Void) {
-    `#{socket}.close()`
-  }
-}
