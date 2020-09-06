@@ -133,7 +133,7 @@ component CreateEncryptedWallet {
   fun createWallet (event : Html.Event) : Promise(Never, Void) {
     sequence {
       wallet =
-        Sushi.Wallet.generateEncryptedWallet(Network.Prefix.testNet(), name, password)
+        Axentro.Wallet.generateEncryptedWallet(Network.Prefix.testNet(), name, password)
 
       storeWallet(wallet, Maybe.nothing())
 

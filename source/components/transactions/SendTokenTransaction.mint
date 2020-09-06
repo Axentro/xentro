@@ -109,7 +109,7 @@ component SendTokenTransaction {
     } else {
       try {
         valid =
-          Sushi.Wallet.isValidAddress(value)
+          Axentro.Wallet.isValidAddress(value)
 
         if (valid) {
           ""

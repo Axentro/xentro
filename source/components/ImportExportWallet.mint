@@ -40,7 +40,7 @@ component ImportExportWallet {
         decode json as Wallet
 
       encryptedWallet =
-        Sushi.Wallet.encryptWallet(wallet, importWalletName, importWalletPassword)
+        Axentro.Wallet.encryptWallet(wallet, importWalletName, importWalletPassword)
 
       storeWallet(encryptedWallet, Maybe.nothing())
 

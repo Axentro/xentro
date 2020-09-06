@@ -211,10 +211,10 @@ store TransactionStore {
         item.result
 
       signingKey =
-        Sushi.Wallet.getPrivateKeyFromWif(wif)
+        Axentro.Wallet.getPrivateKeyFromWif(wif)
 
       signedTransaction =
-        Sushi.Wallet.signTransaction(
+        Axentro.Wallet.signTransaction(
           signingKey,
           unsignedScaledTransaction)
 

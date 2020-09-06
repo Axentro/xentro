@@ -11,8 +11,8 @@
     "tests"
   ],
   "dependencies": {
-    "mint-sushi": {
-      "repository": "https://github.com/Axentro/mint-sushi",
+    "mint-axentro": {
+      "repository": "https://github.com/Axentro/mint-axentro",
       "constraint": "0.0.0 <= v < 1.0.0"
     }
   }

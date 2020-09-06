@@ -95,7 +95,7 @@ store WalletStore {
         decode json as EncryptedWalletWithConfig
 
       wallet =
-        Sushi.Wallet.decryptWallet(encryptedWalletWithConfig.wallet, password)
+        Axentro.Wallet.decryptWallet(encryptedWalletWithConfig.wallet, password)
 
       next
         {
