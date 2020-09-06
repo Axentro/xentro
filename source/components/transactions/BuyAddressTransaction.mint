@@ -72,7 +72,7 @@ component BuyAddressTransaction {
   fun validateName (value : String) : String {
     try {
       regexResult =
-        Regexp.create("^[a-zA-Z0-9]{1,20}\.sc")
+        Regexp.create("^[a-zA-Z0-9]{1,20}\.ax")
         |> Regexp.match(value)
 
       if (regexResult) {
@@ -96,14 +96,14 @@ component BuyAddressTransaction {
         tokens
         |> Array.find(
           (token : Token) : Bool {
-            String.toLowerCase(token.name) == String.toLowerCase("sushi")
+            String.toLowerCase(token.name) == String.toLowerCase("axe")
           })
         |> Maybe.map((token : Token) : Maybe(Number) { Number.fromString(token.amount) })
         |> Maybe.flatten
         |> Maybe.withDefault(0)
 
       if (0.0001 > tokenAmount) {
-        "You don't have enough SUSHI to pay the transaction fee of 0.0001"
+        "You don't have enough AXE to pay the transaction fee of 0.0001"
       } else {
         ""
       }
@@ -145,10 +145,10 @@ component BuyAddressTransaction {
                 "- Must end with the suffix: "
 
                 <b>
-                  ".sc"
+                  ".ax"
                 </b>
 
-                " (e.g. myname.sc)"
+                " (e.g. myname.ax)"
               </li>
 
               <li>

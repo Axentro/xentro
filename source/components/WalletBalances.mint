@@ -13,10 +13,10 @@ component WalletBalances {
             </p>
 
             <h2 class="font-weight-bold">
-              <{ getSushiAmount(tokens) }>
+              <{ getAxeAmount(tokens) }>
 
               <span class="small">
-                " SUSHI"
+                " AXE"
               </span>
             </h2>
           </div>
@@ -29,9 +29,9 @@ component WalletBalances {
     </div>
   }
 
-  fun getSushiAmount (tokens : Array(Token)) : String {
+  fun getAxeAmount (tokens : Array(Token)) : String {
     tokens
-    |> Array.find((token : Token) : Bool { token.name == "SUSHI" })
+    |> Array.find((token : Token) : Bool { token.name == "AXE" })
     |> Maybe.map((token : Token) : String { token.amount })
     |> Maybe.withDefault("0")
   }
@@ -51,7 +51,7 @@ component WalletBalances {
   }
 
   fun tokenTable (tokens : Array(Token)) : Html {
-    if (Array.isEmpty(tokensWithoutSushi)) {
+    if (Array.isEmpty(tokensWithoutAxe)) {
       <span/>
     } else {
       <div class="table-responsive">
@@ -69,7 +69,7 @@ component WalletBalances {
           </thead>
 
           <tbody>
-            for (token of tokensWithoutSushi) {
+            for (token of tokensWithoutAxe) {
               <tr>
                 <td>
                   <{ token.name }>
@@ -85,12 +85,12 @@ component WalletBalances {
       </div>
     }
   } where {
-    tokensWithoutSushi =
+    tokensWithoutAxe =
       tokens
       |> Array.reject(
         (token : Token) : Bool {
           (token.name
-          |> String.toLowerCase()) == "sushi"
+          |> String.toLowerCase()) == "axe"
         })
   }
 }

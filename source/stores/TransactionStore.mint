@@ -93,7 +93,7 @@ store TransactionStore {
   }
 
   fun isDomainAddress (value : String) : Bool {
-    `#{value}.slice(-3)` == ".sc"
+    `#{value}.slice(-3)` == ".ax"
   }
 
   fun resolveDomainAddress (baseUrl : String, recipientAddress : String) : Promise(Never, Void) {
@@ -310,7 +310,7 @@ store TransactionStore {
         ],
       recipients = [],
       message = name,
-      token = "SUSHI",
+      token = "AXE",
       prevHash = "0",
       timestamp = 0,
       scaled = 0,

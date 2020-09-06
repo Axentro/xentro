@@ -24,7 +24,7 @@ module NodeHelper {
   }
 
   fun isDomain (value : String) : Bool {
-    `#{value}.slice(-3)` == ".sc"
+    `#{value}.slice(-3)` == ".ax"
   }
 
   fun nodeEnv (url : String) : NodeEnv {
