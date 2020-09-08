@@ -1,0 +1,10 @@
+.nicescroll-cursors {
+    border: none !important;
+}
+
+body:not(.dark) {
+    .nicescroll-cursors {
+        background-color: rgba($color-dark, .40) !important;
+        width: 3px !important;
+    }
+}

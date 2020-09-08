@@ -1,0 +1,145 @@
+@for $i from 0 through 10 {
+	.m-#{5 * $i} {
+		margin: 5px * $i !important;
+	}
+}
+
+@for $i from 0 through 10 {
+	.m-t-b-#{5 * $i} {
+		margin-top: 5px * $i !important;
+		margin-bottom: 5px * $i !important;
+	}
+}
+
+@for $i from 0 through 10 {
+	.m-l-r-#{5 * $i} {
+		margin-left: 5px * $i !important;
+		margin-right: 5px * $i !important;
+	}
+}
+
+@for $i from 0 through 10 {
+	.m-t-#{5 * $i} {
+		margin-top: 5px * $i !important;
+	}
+}
+
+@for $i from 0 through 10 {
+	.m-r-#{5 * $i} {
+		margin-right: 5px * $i !important;
+	}
+}
+
+@for $i from 0 through 10 {
+	.m-b-#{5 * $i} {
+		margin-bottom: 5px * $i !important;
+	}
+}
+
+@for $i from 0 through 10 {
+	.m-l-#{5 * $i} {
+		margin-left: 5px * $i !important;
+	}
+}
+
+@for $i from 0 through 100 {
+	.m-t-#{10 * $i}-minus {
+		margin-top: -10px * $i !important;
+	}
+}
+
+@for $i from 0 through 100 {
+	.m-r-#{10 * $i}-minus {
+		margin-right: -10px * $i !important;
+	}
+}
+
+@for $i from 0 through 100 {
+	.m-b-#{10 * $i}-minus {
+		margin-bottom: -10px * $i !important;
+	}
+}
+
+@for $i from 0 through 100 {
+	.m-l-#{10 * $i}-minus {
+		margin-left: -10px * $i !important;
+	}
+}
+
+@for $i from 0 through 10 {
+	.p-t-b-#{5 * $i} {
+		padding-top: 5px * $i !important;
+		padding-bottom: 5px * $i !important;
+	}
+}
+
+@for $i from 0 through 10 {
+	.p-l-r-#{5 * $i} {
+		padding-left: 5px * $i !important;
+		padding-right: 5px * $i !important;
+	}
+}
+
+@for $i from 0 through 10 {
+	.p-#{5 * $i} {
+		padding: 5px * $i !important;
+	}
+}
+
+@for $i from 0 through 30 {
+	.p-t-#{5 * $i} {
+		padding-top: 5px * $i !important;
+	}
+}
+
+@for $i from 0 through 30 {
+	.p-r-#{5 * $i} {
+		padding-right: 5px * $i !important;
+	}
+}
+
+@for $i from 0 through 30 {
+	.p-b-#{5 * $i} {
+		padding-bottom: 5px * $i !important;
+	}
+}
+
+@for $i from 0 through 30 {
+	.p-l-#{5 * $i} {
+		padding-left: 5px * $i !important;
+	}
+}
+
+@for $i from 0 through 9 {
+	.opacity-#{$i} {
+		opacity: $i / 10 !important;
+	}
+}
+
+@for $i from 10 through 50 {
+	.font-size-#{$i} {
+		font-size: 1px * $i !important;
+	}
+}
+
+@for $i from 0 through 50 {
+	.line-height-#{$i} {
+		line-height: 1px * $i !important;
+	}
+}
+
+@for $i from 10 through 50 {
+	.width-#{$i * 1} {
+		width: #{$i}px !important;
+	}
+}
+
+@for $i from 10 through 50 {
+	.height-#{$i * 1} {
+		height: #{$i}px !important;
+	}
+}
+
+.h-100-vh {
+	height: 100vh;
+}

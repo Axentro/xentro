@@ -1,0 +1,187 @@
+.header {
+    background-color: white;
+    z-index: 999;
+    display: flex;
+    height: $header-height;
+    box-shadow: 0px 5px 10px -10px rgba(0, 0, 0, 0.40);
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 0;
+
+    .avatar {
+        border-color: transparent;
+
+        &.avatar-state-success {
+            &:before {
+                border-color: $color-primary
+            }
+        }
+    }
+
+    .header-left {
+        width: $navigation-width;
+        padding-left: 30px;
+        display: flex;
+        align-items: center;
+
+        .navigation-toggler {
+            display: none;
+            margin-right: 15px;
+
+            a {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                svg {
+                    height: 30px;
+                    width: 30px;
+                }
+            }
+        }
+    }
+
+    .header-logo {
+        a {
+            height: $header-height;
+            display: flex;
+            align-items: center;
+
+            img:not(.logo) {
+                display: none;
+            }
+        }
+    }
+
+    .header-body {
+        padding: 0 30px;
+        position: relative;
+
+        .page-title {
+            h1, h2, h3, h4, h5, h6 {
+                margin-bottom: 0;
+                line-height: inherit;
+            }
+        }
+
+        display: flex;
+        align-items: center;
+        flex: auto;
+        justify-content: space-between;
+    }
+
+    form {
+        .input-group {
+            position: relative;
+
+            .form-control {
+                border: none;
+                background-color: rgba(white, .1);
+
+                &:focus {
+                    background-color: rgba(white, .2);
+                }
+            }
+
+            .input-group-append {
+                position: absolute;
+                right: 0;
+
+                button.btn {
+                    position: relative;
+                    z-index: 9;
+                    border-top-right-radius: 5px;
+                    border-bottom-right-radius: 5px;
+                    background-color: inherit;
+                    border: none;
+                    @extend a;
+
+                    &:hover {
+                        opacity: .7;
+                    }
+
+                    &:focus, &:active, &:hover {
+                        background-color: inherit;
+                        box-shadow: none !important;
+                    }
+                }
+            }
+        }
+    }
+
+    .header-toggler {
+        display: none;
+    }
+
+    [data-toggle="fullscreen"] {
+        .minimize {
+            display: none;
+        }
+    }
+
+    .active-fullscreen {
+        .minimize {
+            display: block;
+        }
+
+        .maximize {
+            display: none;
+        }
+    }
+
+    ul.navbar-nav {
+        flex-direction: row;
+        align-items: center;
+
+        li.nav-item {
+
+
+            a.nav-link {
+                line-height: 100%;
+                padding: 10px 15px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                &.nav-link-notify {
+                    position: relative;
+
+                    &:before {
+                        content: '';
+                        position: absolute;
+                        width: 6px;
+                        height: 6px;
+                        right: 0;
+                        border-radius: 50%;
+                        top: 3px;
+                        background: $color-danger;
+                        -webkit-animation: notify-pulse 1s infinite
+                    }
+                }
+
+                &:hover, &:focus {
+                    outline: none;
+                }
+            }
+        }
+
+        & + form.search {
+            margin-left: 1.5rem;
+        }
+    }
+
+    .dropdown-menu {
+        position: absolute;
+    }
+}
+
+@keyframes notify-pulse {
+    0% {
+        box-shadow: 0 0 0 0px rgba($color-danger, .7);
+    }
+    100% {
+        box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+    }
+}
+
