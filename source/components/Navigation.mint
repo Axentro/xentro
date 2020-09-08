@@ -56,7 +56,7 @@ component Navigation {
       resetWallet
       resetWalletInfo
       resetWebSocket
-      `location.reload()`
+      `window.location.replace('/')`
     }
   }
 

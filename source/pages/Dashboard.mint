@@ -41,8 +41,6 @@ component Dashboard {
               address={walletInfo.address}
               readable={walletInfo.readable}
               tokens={walletInfo.tokens}/>
-
-            <Miner/>
           </div>
 
           <div class="col-md-9">
