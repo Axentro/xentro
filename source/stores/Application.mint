@@ -8,7 +8,7 @@ store Application {
   state connectionStatus : ConnectionStatus = ConnectionStatus::Initial
   state minerConnectionStatus : ConnectionStatus = ConnectionStatus::Initial
   state shouldWebSocketConnect : Bool = false
-  state webSocketUrl : String = NodeHelper.webSocketUrl("http://testnet.axentro.io:3000")
+  state webSocketUrl : String = NodeHelper.webSocketUrl("https://testnet.axentro.io")
 
   state shouldMinerWebSocketConnect : Bool = false
   state minerWebSocketUrl : String = NodeHelper.minerWebSocketUrl("http://testnet.axentro.io:3000")

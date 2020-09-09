@@ -10,7 +10,16 @@ module NodeHelper {
       parsed =
         Url.parse(url)
 
-      "ws://" + parsed.host + "/wallet_info"
+        Debug.log("PROTOCOL")
+        Debug.log(parsed.protocol)
+
+      protocol = if (parsed.protocol == "https:"){
+        "wss://"
+      } else {
+        "ws://"
+      }
+
+      protocol + parsed.host + "/wallet_info"
     }
   }
 
@@ -19,7 +28,13 @@ module NodeHelper {
       parsed = 
         Url.parse(url)
 
-      "ws://" + parsed.host + "/peer" 
+       protocol = if (parsed.protocol == "https:"){
+        "wss://"
+      } else {
+        "ws://"
+      }  
+
+      protocol + parsed.host + "/peer" 
     }
   }
 
