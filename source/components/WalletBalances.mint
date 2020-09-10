@@ -16,7 +16,7 @@ component WalletBalances {
               <{ getAxeAmount(tokens) }>
 
               <span class="small">
-                " AXE"
+                " AXNT"
               </span>
             </h2>
           </div>
@@ -31,7 +31,7 @@ component WalletBalances {
 
   fun getAxeAmount (tokens : Array(Token)) : String {
     tokens
-    |> Array.find((token : Token) : Bool { token.name == "AXE" })
+    |> Array.find((token : Token) : Bool { token.name == "AXNT" })
     |> Maybe.map((token : Token) : String { token.amount })
     |> Maybe.withDefault("0")
   }

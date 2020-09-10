@@ -30,7 +30,7 @@ store WalletStore {
       storeWallet(wallet, config)
 
       raw =
-        Storage.Local.get("tako_wallet_" + currentWalletName)
+        Storage.Local.get("xentro_wallet_" + currentWalletName)
 
       json =
         Json.parse(raw)
@@ -74,7 +74,7 @@ store WalletStore {
       walletJson =
         Json.stringify(encodedWalletWithConfig)
 
-      Storage.Local.set("tako_wallet_" + wallet.name, walletJson)
+      Storage.Local.set("xentro_wallet_" + wallet.name, walletJson)
 
       Promise.never()
     } catch Storage.Error => er {
@@ -85,7 +85,7 @@ store WalletStore {
   fun getWallet (name : String, password : String) : Promise(Never, Void) {
     sequence {
       raw =
-        Storage.Local.get("tako_wallet_" + name)
+        Storage.Local.get("xentro_wallet_" + name)
 
       json =
         Json.parse(raw)
@@ -127,8 +127,8 @@ store WalletStore {
             break;
           }
 
-          if (r.startsWith("tako_wallet_")) {
-            var parts = r.split("tako_wallet_")
+          if (r.startsWith("xentro_wallet_")) {
+            var parts = r.split("xentro_wallet_")
             var name = parts[parts.length - 1]
             names.push(name)
            }

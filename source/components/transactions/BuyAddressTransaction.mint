@@ -103,7 +103,7 @@ component BuyAddressTransaction {
         |> Maybe.withDefault(0)
 
       if (0.0001 > tokenAmount) {
-        "You don't have enough AXE to pay the transaction fee of 0.0001"
+        "You don't have enough AXNT to pay the transaction fee of 0.0001"
       } else {
         ""
       }

@@ -1,10 +1,10 @@
 {
-  "name": "tako",
+  "name": "xentro",
   "source-directories": [
     "source"
   ],
   "application": {
-    "title": "Tako - Axentro Wallet",
+    "title": "Xentro - Axentro Wallet",
     "head": "assets/head.html"
   },
   "test-directories": [

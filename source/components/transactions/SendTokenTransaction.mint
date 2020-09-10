@@ -23,7 +23,7 @@ component SendTokenTransaction {
   state amountError : String = ""
   state recipientError : String = ""
   state fee : String = "0.0001"
-  state selectedToken : String = "AXE"
+  state selectedToken : String = "AXNT"
   state speed : String = currentWalletConfig.speed
   state confirmCheck : Bool = false
 
@@ -38,7 +38,7 @@ component SendTokenTransaction {
           {
             recipientAddress = "",
             amount = "",
-            selectedToken = "AXE",
+            selectedToken = "AXNT",
             speed = currentWalletConfig.speed,
             confirmCheck = false
           }
@@ -158,7 +158,7 @@ component SendTokenTransaction {
   }
 
   get tokenOptions : Array(String) {
-    Array.insertAt("AXE", 0, otherTokens)
+    Array.insertAt("AXNT", 0, otherTokens)
   } where {
     otherTokens =
       tokens
