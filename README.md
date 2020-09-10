@@ -1,4 +1,4 @@
-# Tako - Axentro Wallet
+# Xentro - Axentro Wallet
 
 This is a desktop (electron) wallet for the Axentro blockchain. It's written in the Mint language and distributed as an electron desktop app.
 
