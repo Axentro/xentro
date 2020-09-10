@@ -96,7 +96,7 @@ component BuyAddressTransaction {
         tokens
         |> Array.find(
           (token : Token) : Bool {
-            String.toLowerCase(token.name) == String.toLowerCase("axe")
+            String.toLowerCase(token.name) == String.toLowerCase("axnt")
           })
         |> Maybe.map((token : Token) : Maybe(Number) { Number.fromString(token.amount) })
         |> Maybe.flatten

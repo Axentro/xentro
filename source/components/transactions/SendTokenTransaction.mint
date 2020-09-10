@@ -163,7 +163,7 @@ component SendTokenTransaction {
     otherTokens =
       tokens
       |> Array.map(.name)
-      |> Array.reject((name : String) { String.toLowerCase(name) == "axe" })
+      |> Array.reject((name : String) { String.toLowerCase(name) == "axnt" })
   }
 
   get sendButtonState : Bool {

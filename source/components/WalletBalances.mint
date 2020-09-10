@@ -90,7 +90,7 @@ component WalletBalances {
       |> Array.reject(
         (token : Token) : Bool {
           (token.name
-          |> String.toLowerCase()) == "axe"
+          |> String.toLowerCase()) == "axnt"
         })
   }
 }
