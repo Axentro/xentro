@@ -9,4 +9,21 @@ module LayoutHelper {
     })()
     `
   }
+
+  fun feedback {
+     `
+    (() => {
+      window.requestAnimationFrame(function () {     
+		    $.feedback({
+          endpoint: "https://app.loopinput.com/5f5c9ab7e70b0600173624d3/comments",
+          initButtonText: "Give Feedback"
+        });
+      });
+    })()
+    `
+  }
 }
+
+
+
+
