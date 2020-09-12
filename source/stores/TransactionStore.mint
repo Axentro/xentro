@@ -310,7 +310,7 @@ store TransactionStore {
         ],
       recipients = [],
       message = name,
-      token = "ANXT",
+      token = "AXNT",
       prevHash = "0",
       timestamp = 0,
       scaled = 0,
