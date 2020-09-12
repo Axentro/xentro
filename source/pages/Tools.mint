@@ -39,6 +39,7 @@ component Tools {
               address={walletInfo.address}
               readable={walletInfo.readable}
               tokens={walletInfo.tokens}/>
+            <Feedback/>   
           </div>
 
           <div class="col-md-9">
