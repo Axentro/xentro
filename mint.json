@@ -4,7 +4,7 @@
     "source"
   ],
   "application": {
-    "title": "Xentro - Axentro Wallet",
+    "title": "Axentro Wallet",
     "head": "assets/head.html"
   },
   "test-directories": [
