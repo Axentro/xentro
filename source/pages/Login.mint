@@ -165,8 +165,8 @@ component Login {
             src="/assets/media/image/axentro-logo-v.png"
             width="150"
             alt="logo"/>
+            <Version/>
         </div>
-
         <{ formOrNoWallet() }>
       </div>
     </div>
