@@ -16,7 +16,7 @@ component Layout {
               <a href="/dashboard">
                 <img
                   class="logo"
-                  src="/assets/media/image/axentro-logo.png"
+                  src="/assets/media/image/axentro-logo-h.svg"
                   width="150"
                   alt="logo"/>
               </a>
