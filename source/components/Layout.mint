@@ -36,8 +36,6 @@ component Layout {
               <div class="page-header"/>
               <{ dataError }>
               <{ content }>
-              <a href="https://axentrowalletfeedback.loopinput.com/5f5c9ab7e70b0600173624d3 "target="_blank" id="feedbackButton">"Have a Suggestion?"</a>
-
               
             </div>
           </div>

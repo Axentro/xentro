@@ -31,8 +31,8 @@ component Miner {
 
             <div class="col-12">
               <p class="text-muted">
-              <{ showMinerConnectionStatus() }>
-            </p>
+                <{ showMinerConnectionStatus() }>
+              </p>
 
               <input
                 type="text"
