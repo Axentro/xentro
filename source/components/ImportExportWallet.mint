@@ -60,6 +60,7 @@ component ImportExportWallet {
 
       walletJson =
         Json.stringify(encodedWallet)
+        |> String.replace("publicKey", "public_key")
 
       next { exportWalletJson = walletJson }
     }
