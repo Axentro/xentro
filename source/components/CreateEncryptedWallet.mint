@@ -333,7 +333,7 @@ component CreateEncryptedWallet {
           class="form-control"
           id="walletName"
           aria-describedby="walletName"
-          maxLength="100"
+          maxLength="30"
           placeholder="Enter a name for this wallet"/>
       </div>
 
