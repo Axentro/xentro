@@ -42,6 +42,7 @@ component Dashboard {
               readable={walletInfo.readable}
               tokens={walletInfo.tokens}/>
               <Feedback/>
+              <TestnetCurrency/>
           </div>
 
           <div class="col-md-9">
