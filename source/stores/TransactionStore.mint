@@ -297,7 +297,7 @@ store TransactionStore {
   ) : Transaction {
     {
       id = "",
-      action = "scars_buy",
+      action = "hra_buy",
       senders =
         [
           {
