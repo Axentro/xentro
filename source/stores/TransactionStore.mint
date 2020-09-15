@@ -100,7 +100,7 @@ store TransactionStore {
     if (isDomainAddress(recipientAddress)) {
       sequence {
         resolveResponse =
-          Http.get(baseUrl + "/api/v1/scars/" + recipientAddress)
+          Http.get(baseUrl + "/api/v1/hra/" + recipientAddress)
           |> Http.send()
 
         jsonResolved =
@@ -126,7 +126,7 @@ store TransactionStore {
   fun domainExists (baseUrl : String, targetName : String) : Promise(Never, Void) {
     sequence {
       resolveResponse =
-        Http.get(baseUrl + "/api/v1/scars/" + targetName)
+        Http.get(baseUrl + "/api/v1/hra/" + targetName)
         |> Http.send()
 
       jsonResolved =
@@ -155,7 +155,7 @@ store TransactionStore {
   fun domainDoesNotExist (baseUrl : String, targetName : String) : Promise(Never, Void) {
     sequence {
       resolveResponse =
-        Http.get(baseUrl + "/api/v1/scars/" + targetName)
+        Http.get(baseUrl + "/api/v1/hra/" + targetName)
         |> Http.send()
 
       jsonResolved =
