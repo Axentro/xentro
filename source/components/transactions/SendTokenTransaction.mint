@@ -170,6 +170,19 @@ component SendTokenTransaction {
     String.isEmpty(recipientAddress) || String.isEmpty(amount) || !String.isEmpty(amountError) || !String.isEmpty(recipientError) || !confirmCheck || !String.isEmpty(domainError)
   }
 
+  fun processSendTransaction(
+    event : Html.Event,
+    baseUrl : String,
+    recipientAddress : String,
+    senderWif : String,
+    transaction : Transaction
+   ) {
+     sequence {
+      next { confirmCheck = false }
+      sendTransaction(event, baseUrl, recipientAddress, senderWif, transaction)
+     }
+  }
+
   fun render : Html {
     <div class="card border-dark mb-3">
       <div class="card-body">
@@ -261,7 +274,7 @@ component SendTokenTransaction {
           </div>
 
           <button
-            onClick={(e : Html.Event) { sendTransaction(e, currentWalletConfig.node, recipientAddress, senderWif, transaction) }}
+            onClick={(e : Html.Event) { processSendTransaction(e, currentWalletConfig.node, recipientAddress, senderWif, transaction) }}
             class="btn btn-secondary"
             disabled={sendButtonState}
             type="submit">

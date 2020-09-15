@@ -118,6 +118,19 @@ component BuyAddressTransaction {
     <div/>
   }
 
+  fun processSendTransaction(
+    event : Html.Event,
+    baseUrl : String,
+    recipientAddress : String,
+    senderWif : String,
+    transaction : Transaction
+   ) {
+     sequence {
+      next { confirmCheck = false }
+      sendTransaction(event, baseUrl, recipientAddress, senderWif, transaction)
+     }
+  }
+
   fun render : Html {
     <div class="card border-dark mb-3">
       <div class="card-body">
@@ -212,7 +225,7 @@ component BuyAddressTransaction {
           </div>
 
           <button
-            onClick={(e : Html.Event) { sendTransaction(e, currentWalletConfig.node, senderAddress, senderWif, transaction) }}
+            onClick={(e : Html.Event) { processSendTransaction(e, currentWalletConfig.node, senderAddress, senderWif, transaction) }}
             class="btn btn-secondary"
             disabled={buyButtonState}
             type="submit">
