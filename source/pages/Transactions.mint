@@ -1,4 +1,4 @@
-component Dashboard {
+component Transactions {
   connect Application exposing { setDataError, setWalletInfo, walletInfo, webSocket, updateWebSocketConnect, shouldWebSocketConnect }
   connect WalletStore exposing { currentWallet, currentWalletConfig }
 
@@ -42,24 +42,25 @@ component Dashboard {
               readable={walletInfo.readable}
               tokens={walletInfo.tokens}/>
               <Feedback/>
-              <TestnetCurrency/>
           </div>
 
           <div class="col-md-9">
-            <div class="card">
+             <div class="card">
               <div class="card-body">
                 <div>
                   <h6 class="card-title">
-                    "Recent Transactions"
+                    "Rejected Transactions"
                   </h6>
                 </div>
-                <div class="row">
+                  <div class="row">
                   <div class="col-md-12">
-                    <RecentTransactionsTable rows={walletInfo.recentTransactions}/>
+                    <RejectedTransactionsTable rows={walletInfo.rejectedTransactions}/>
                   </div>
                 </div>
+
               </div>
             </div>
+
           </div>
         </div>
       </div>

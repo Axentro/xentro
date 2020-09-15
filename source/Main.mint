@@ -295,6 +295,10 @@ component Main {
         name = "address",
         contents = <Address/>
       },
+       {
+        name = "transactions",
+        contents = <Transactions/>
+      },
       {
         name = "login",
         contents = <Login/>
