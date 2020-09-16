@@ -13,7 +13,14 @@ component News {
          </p>
          
          <p>
-           <span class="text-muted">"V0.1.5 wallet released"</span>
+           <span class="text-muted">"v0.1.6 wallet released"</span>
+           <ul>
+             <li>"- Add fee & data to transactions"</li>
+           </ul>   
+         </p>
+
+         <p>
+           <span class="text-muted">"v0.1.5 wallet released"</span>
            <ul>
              <li>"- Prevent buying hra if already have one"</li>
              <li>"- Improved auto update"</li>
@@ -21,7 +28,7 @@ component News {
          </p>
 
          <p>
-           <span class="text-muted">"V0.1.4 wallet released"</span>
+           <span class="text-muted">"v0.1.4 wallet released"</span>
            <ul>
              <li>"- Fixed buy human readable address"</li>
            </ul>   

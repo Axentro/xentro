@@ -48,6 +48,8 @@ record RecentTransaction {
   token : String,
   category : String,
   datetime : String,
+  fee : String,
+  data : String,
   status : String,
   direction : String
 }

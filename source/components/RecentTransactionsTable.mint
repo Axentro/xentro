@@ -1,6 +1,6 @@
 component RecentTransactionsTable {
   property tableId : String = "recent-transactions"
-  property headerRow : Array(String) = ["Date", "Id", "Amount", "Token", "To", "From", "Category", "Status"]
+  property headerRow : Array(String) = ["Date", "Id", "Amount", "Fee", "Token", "To", "From", "Data", "Category", "Status"]
   property rows : Array(RecentTransaction) = []
 
   fun trunc (value : String, length : Number) : String {
@@ -69,6 +69,10 @@ component RecentTransactionsTable {
       </td>
 
       <td>
+        <{ row.fee }>
+      </td>
+
+      <td>
         <{ row.token }>
       </td>
 
@@ -78,6 +82,10 @@ component RecentTransactionsTable {
 
       <td>
         <{ renderAddress(row.from, row.fromReadable) }>
+      </td>
+
+      <td>
+        <{ row.data }>
       </td>
 
       <td>
