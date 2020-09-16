@@ -41,7 +41,7 @@ component Dashboard {
               address={walletInfo.address}
               readable={walletInfo.readable}
               tokens={walletInfo.tokens}/>
-              <Feedback/>
+              <News/>
               <TestnetCurrency/>
           </div>
 

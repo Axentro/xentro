@@ -39,12 +39,13 @@ component Address {
               address={walletInfo.address}
               readable={walletInfo.readable}
               tokens={walletInfo.tokens}/>
-            <Feedback/>
+            <News/>
           </div>
 
           <div class="col-md-9">
             <BuyAddressTransaction
               senderAddress={walletInfo.address}
+              readable={walletInfo.readable}
               tokens={walletInfo.tokens}/>
           </div>
         </div>

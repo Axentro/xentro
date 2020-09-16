@@ -16,6 +16,7 @@ component BuyAddressTransaction {
   }
 
   property senderAddress : String
+  property readable : Array(String) = []
   property tokens : Array(Token)
 
   state name : String = ""
@@ -131,7 +132,35 @@ component BuyAddressTransaction {
      }
   }
 
-  fun render : Html {
+  fun render {
+   if(Array.isEmpty(readable)){
+     getAddressView()
+   } else {
+    alreadyHaveAddressView()
+   }
+  }
+
+  fun alreadyHaveAddressView : Html {
+    <div class="card border-dark mb-3">
+      <div class="card-body">
+        <h4 class="card-title">
+          "Buy Human Readable Address"
+        </h4>
+
+        <div
+          class="alert alert-info alert-with-border"
+          role="alert">
+
+          <p>
+            "You may only have 1 human readable address per wallet address."
+          </p>
+
+        </div>
+      </div>
+    </div>
+  }
+
+  fun getAddressView : Html {
     <div class="card border-dark mb-3">
       <div class="card-body">
         <h4 class="card-title">

@@ -47,7 +47,7 @@ component Settings {
               address={walletInfo.address}
               readable={walletInfo.readable}
               tokens={walletInfo.tokens}/>
-             <Feedback/>  
+             <News/>  
           </div>
 
           <div class="col-md-9">

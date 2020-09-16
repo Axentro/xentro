@@ -20852,7 +20852,7 @@ exports.constants = {
 }(this, function (CryptoJS) {
 
 	/**
-	 * Cipher Feedback block mode.
+	 * Cipher News block mode.
 	 */
 	CryptoJS.mode.CFB = (function () {
 	    var CFB = CryptoJS.lib.BlockCipherMode.extend();
@@ -21148,7 +21148,7 @@ exports.constants = {
 }(this, function (CryptoJS) {
 
 	/**
-	 * Output Feedback block mode.
+	 * Output News block mode.
 	 */
 	CryptoJS.mode.OFB = (function () {
 	    var OFB = CryptoJS.lib.BlockCipherMode.extend();
