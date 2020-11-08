@@ -297,7 +297,11 @@ component Main {
         name = "address",
         contents = <Address/>
       },
-       {
+      {
+        name = "tokens",
+        contents = <Tokens/>
+      },
+      {
         name = "transactions",
         contents = <Transactions/>
       },

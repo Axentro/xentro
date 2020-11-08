@@ -22,6 +22,11 @@ record ScarsDomain {
   address : String
 }
 
+record TokenListResponse {
+  status : String,
+  tokens : Array(String) using "result"
+}
+
 record SignedTransactionRequest {
   transaction : ScaledTransaction
 }
@@ -30,12 +35,17 @@ store TransactionStore {
   state sendError : String = ""
   state sendSuccess : String = ""
   state domainError : String = ""
+  state tokenError : String = ""
 
   state reset : Bool = false
   state resolvedSenderAddress : String = ""
 
   fun setDomainError (error : String) : Promise(Never, Void) {
     next { domainError = error }
+  }
+
+  fun setTokenError(error : String) : Promise(Never, Void) {
+    next { tokenError = error }
   }
 
   fun setError (error : String) : Promise(Never, Void) {
@@ -51,7 +61,8 @@ store TransactionStore {
       {
         sendError = "",
         sendSuccess = "",
-        domainError = ""
+        domainError = "",
+        tokenError = "",
       }
   }
 
@@ -176,6 +187,35 @@ store TransactionStore {
           next { domainError = "" }
         } else {
           next { domainError = "Oops there was an error checking: " + targetName }
+        }
+      }
+    }
+  }
+
+  fun tokenExists (baseUrl : String, token : String) : Promise(Never, Void) {
+    sequence {
+      resolveResponse =
+        Http.get(baseUrl + "/api/v1/tokens")
+        |> Http.send()
+
+      jsonResolved =
+        Json.parse(resolveResponse.body)
+        |> Maybe.toResult("Json parsing error with domain")
+
+      tokenResult =
+        decode jsonResolved as TokenListResponse
+
+      if (Array.contains(token, tokenResult.tokens)) {
+        next { tokenError = "Sorry the token: " + token + " already exists" }
+      } else {
+        next { tokenError = "" }
+      }
+    } catch {
+      sequence {
+        if (String.isEmpty(token)) {
+          next { tokenError = "" }
+        } else {
+          next { tokenError = "Oops there was an error checking: " + token }
         }
       }
     }
@@ -311,6 +351,78 @@ store TransactionStore {
       recipients = [],
       message = name,
       token = "AXNT",
+      prevHash = "0",
+      timestamp = 0,
+      scaled = 0,
+      kind = speed
+    }
+  }
+
+  fun createCustomTokenTransaction (
+    senderAddress : String,
+    senderPublicKey : String,
+    name : String,
+    amount : String,
+    speed : String
+  ) : Transaction {
+    {
+      id = "",
+      action = "create_token",
+      senders =
+        [
+          {
+            address = senderAddress,
+            publicKey = senderPublicKey,
+            amount = amount,
+            fee = "10",
+            signature = "0"
+          }
+        ],
+      recipients =
+        [
+          {
+            address = senderAddress,
+            amount = amount
+          }
+        ],
+      message = "0",
+      token = name,
+      prevHash = "0",
+      timestamp = 0,
+      scaled = 0,
+      kind = speed
+    }
+  }
+
+  fun updateCustomTokenTransaction (
+    senderAddress : String,
+    senderPublicKey : String,
+    name : String,
+    amount : String,
+    speed : String
+  ) : Transaction {
+    {
+      id = "",
+      action = "update_token",
+      senders =
+        [
+          {
+            address = senderAddress,
+            publicKey = senderPublicKey,
+            amount = amount,
+            fee = "0.0001",
+            signature = "0"
+          }
+        ],
+      recipients =
+        [
+          {
+            address = senderAddress,
+            amount = amount
+          }
+        ],
+      message = "0",
+      token = name,
       prevHash = "0",
       timestamp = 0,
       scaled = 0,

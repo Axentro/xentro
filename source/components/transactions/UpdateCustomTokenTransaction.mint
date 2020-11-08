@@ -1,4 +1,4 @@
-component BuyAddressTransaction {
+component UpdateCustomTokenTransaction {
   connect WalletStore exposing { currentWallet, currentWalletConfig }
 
   connect TransactionStore exposing {
@@ -8,19 +8,19 @@ component BuyAddressTransaction {
     resetErrorSuccess,
     reset,
     senderPrivatePublic,
-    createBuyAddressTransaction,
+    createCustomTokenTransaction,
     sendTransaction,
-    domainExists,
-    setDomainError,
-    domainError
+    tokenExists,
+    setTokenError,
+    tokenError
   }
 
   property senderAddress : String
-  property readable : Array(String) = []
   property tokens : Array(Token)
+  state selectedToken : String = "AXNT"
 
-  state name : String = ""
-  state nameError : String = ""
+  state amount : String = ""
+  state amountError : String = ""
   state feeError : String = ""
   state speed : String = currentWalletConfig.speed
   state confirmCheck : Bool = false
@@ -34,10 +34,10 @@ component BuyAddressTransaction {
       sequence {
         next
           {
-            name = "",
+            amount = "",
+            selectedToken = "",
             speed = currentWalletConfig.speed,
             confirmCheck = false,
-            nameError = ""
           }
 
         resetStatus(false)
@@ -47,41 +47,39 @@ component BuyAddressTransaction {
     }
   }
 
-  fun onName (event : Html.Event) {
-    sequence {
-      next
-        {
-          name = value,
-          nameError = validateName(value),
-          feeError = validateFeeAmount
-        }
-
-      setDomainError("")
-    }
-  } where {
-    value =
-      Dom.getValue(event.target)
-  }
-
-  fun onDomain (event : Html.Event) {
-    domainExists(currentWalletConfig.node, value)
-  } where {
-    value =
-      Dom.getValue(event.target)
-  }
-
-  fun validateName (value : String) : String {
-    try {
-      regexResult =
-        Regexp.create("^[a-zA-Z0-9]{1,20}\.ax")
-        |> Regexp.match(value)
-
-      if (regexResult) {
-        ""
-      } else {
-        "Please comply with the rules for a name listed above"
+   fun onAmount (event : Html.Event) : Promise(Never, Void) {
+    next
+      {
+        amount = value,
+        amountError = validateAmount(value)
       }
-    }
+  } where {
+    value =
+      Dom.getValue(event.target)
+  }
+
+
+  fun validateAmount(value : String) : String {
+      if((Number.fromString(value) |> Maybe.withDefault(0)) <= 0) {
+       "Please supply a number greater than 0"
+      } else {
+          ""
+      }
+  }
+
+  fun onToken (event : Html.Event) {
+    next
+      {
+        selectedToken = Dom.getValue(event.target),
+        amount = "",
+        amountError = ""
+      }
+  }
+
+ get tokenOptions : Array(String) {
+      tokens
+      |> Array.map(.name)
+      |> Array.reject((name : String) { String.toLowerCase(name) == "axnt" })
   }
 
   fun onCheck (event : Html.Event) {
@@ -112,7 +110,7 @@ component BuyAddressTransaction {
   }
 
   get buyButtonState : Bool {
-    String.isEmpty(name) || !confirmCheck || !String.isEmpty(nameError) || !String.isEmpty(domainError) || !String.isEmpty(feeError)
+    !confirmCheck || !String.isEmpty(tokenError) || !String.isEmpty(feeError)
   }
 
   get rules : Html {
@@ -132,104 +130,49 @@ component BuyAddressTransaction {
      }
   }
 
-  fun render {
-   if(Array.isEmpty(readable)){
-     getAddressView()
-   } else {
-    alreadyHaveAddressView()
-   }
-  }
-
-  fun alreadyHaveAddressView : Html {
+  fun render : Html {
     <div class="card border-dark mb-3">
       <div class="card-body">
         <h4 class="card-title">
-          "Buy Human Readable Address"
+          "Update Custom Token"
         </h4>
 
-        <div
-          class="alert alert-info alert-with-border"
-          role="alert">
-
-          <p>
-            "You may only have 1 human readable address per wallet address."
-          </p>
-
-        </div>
-      </div>
-    </div>
-  }
-
-  fun getAddressView : Html {
-    <div class="card border-dark mb-3">
-      <div class="card-body">
-        <h4 class="card-title">
-          "Buy Human Readable Address"
-        </h4>
-
-        <div
-          class="alert alert-info alert-with-border"
-          role="alert">
-
-          <p>
-            "Please select a name within the following restrictions:"
-          </p>
-
-          <hr/>
-
-          <p class="mb-0">
-            <ul class="ml-3">
-              <li>
-                "- Can only contain alphanumerics"
-              </li>
-
-              <li>
-                "- Must end with the suffix: "
-
-                <b>
-                  ".ax"
-                </b>
-
-                " (e.g. myname.ax)"
-              </li>
-
-              <li>
-                "- Length must be between 1 and 20 characters (excluding suffix)"
-              </li>
-            </ul>
-          </p>
-
-        </div>
-
+        
         <{ UiHelper.errorAlert(sendError) }>
         <{ UiHelper.successAlert(sendSuccess) }>
 
         <div>
           <div class="form-row mb-3">
-            <div class="col-md-8 mb-6">
-              <label for="recipient-address">
-                "Name of human readable address"
+           <div class="col-md-3 mb-3">
+              <label for="token-to-send">
+                "Token"
+              </label>
+
+              <select
+                onChange={onToken}
+                class="form-control"
+                id="token">
+
+                <{ UiHelper.selectNameOptions(selectedToken, tokenOptions) }>
+
+              </select>
+            </div>
+        
+            <div class="col-md-3 mb-3">
+              <label for="amount-to-update">
+                "Amount to update by"
               </label>
 
               <input
                 type="text"
                 class="form-control"
-                id="address-name"
-                placeholder="Human readable address"
-                onBlur={onDomain}
-                onInput={onName}
-                value={name}/>
+                id="amount-to-create"
+                placeholder="Amount to update by"
+                onInput={onAmount}
+                value={amount}/>
 
-              <div class="mt-1">
-                <{ UiHelper.errorAlert(nameError) }>
-              </div>
-
-              <div class="mt-1">
-                <{ UiHelper.errorAlert(domainError) }>
-              </div>
-
-              <div class="mt-1">
-                <{ UiHelper.errorAlert(feeError) }>
+              <div class="mt-2">
+                <{ UiHelper.errorAlert(amountError) }>
               </div>
             </div>
           </div>
@@ -259,7 +202,7 @@ component BuyAddressTransaction {
             disabled={buyButtonState}
             type="submit">
 
-            "Buy"
+            "Update Token"
 
           </button>
         </div>
@@ -276,6 +219,6 @@ component BuyAddressTransaction {
       senderInfo.wif
 
     transaction =
-      createBuyAddressTransaction(senderAddress, senderPublicKey, name, speed)
+      createCustomTokenTransaction(senderAddress, senderPublicKey, selectedToken, amount, speed)
   }
 }

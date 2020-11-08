@@ -31,6 +31,10 @@ routes {
     Application.setPage("address")
   }
 
+  /tokens {
+    Application.setPage("tokens")
+  }
+
   /transactions {
     Application.setPage("transactions")
   }

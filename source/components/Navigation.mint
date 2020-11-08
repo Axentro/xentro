@@ -104,6 +104,16 @@ component Navigation {
             </a>
           </li>
 
+          <li class="nav-item"> 
+            <a
+              class={"mr-2 btn " + activeStyle("tokens")}
+              href="/tokens">
+
+              "Tokens"
+
+            </a>
+          </li>
+
          <li class="nav-item">
             <a
               class={"mr-2 btn " + activeStyle("transactions")}

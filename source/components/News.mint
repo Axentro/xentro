@@ -12,6 +12,13 @@ component News {
             <strong>"News & Updates"</strong>
          </p>
          
+          <p>
+           <span class="text-muted">"v0.1.7 wallet released"</span>
+           <ul>
+             <li>"- Create custom token"</li>
+           </ul>   
+         </p>
+
          <p>
            <span class="text-muted">"v0.1.6 wallet released"</span>
            <ul>
