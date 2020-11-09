@@ -93,7 +93,7 @@ component WalletBalances {
                   <{ token.name }> 
                 </td>
                 <td>
-                <{isLockedStyle(token.isMine)}> <{isMineStyle(token.isMine)}>
+                <{isLockedStyle(token.isLocked)}> <{isMineStyle(token.isMine)}>
                 </td>
                 <td>
                   <{ token.amount }>
