@@ -33,7 +33,9 @@ record MinerHandshakeMessage {
 }
 
 record Token {
-  name : String,
+  name : String using "token",
+  isLocked : Bool using "is_locked",
+  isMine : Bool using "is_mine",
   amount : String
 }
 
@@ -66,6 +68,7 @@ record WalletInfo {
   address : String,
   readable : Array(String),
   tokens : Array(Token),
+  myTokens : Array(Token) using "my_tokens",
   recentTransactions : Array(RecentTransaction) using "recent_transactions",
   rejectedTransactions : Array(RejectedTransaction) using "rejected_transactions"
 }

@@ -50,6 +50,22 @@ component WalletBalances {
       </div>)
   }
 
+  fun isMineStyle(isMine : Bool) : Html {
+      if (isMine) {
+        <span class="text-primary ti-user"/>
+      } else {
+        <span/>
+      }
+  }
+
+    fun isLockedStyle(isLocked : Bool) : Html {
+      if (isLocked) {
+        <span class="text-danger ti-lock"/>
+      } else {
+         <span class="text-success ti-key"/>
+      }
+  }
+
   fun tokenTable (tokens : Array(Token)) : Html {
     if (Array.isEmpty(tokensWithoutAxe)) {
       <span/>
@@ -62,6 +78,8 @@ component WalletBalances {
                 "Token"
               </th>
 
+              <th></th>
+
               <th>
                 "Amount"
               </th>
@@ -72,9 +90,11 @@ component WalletBalances {
             for (token of tokensWithoutAxe) {
               <tr>
                 <td>
-                  <{ token.name }>
+                  <{ token.name }> 
                 </td>
-
+                <td>
+                <{isLockedStyle(token.isMine)}> <{isMineStyle(token.isMine)}>
+                </td>
                 <td>
                   <{ token.amount }>
                 </td>
