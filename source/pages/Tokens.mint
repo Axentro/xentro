@@ -30,7 +30,7 @@ component Tokens {
   }
 
   fun pageContent (walletInfo : WalletInfo) : Html {
-    <div class="container col-md-12">
+    <div class="container-fluid">
           <div class="row">
           <div class="col-md-3">
             <WalletBalances
@@ -40,7 +40,7 @@ component Tokens {
               <News/>
           </div>
 
-          <div class="col">
+          <div class="col-md-9">
 
              <{ UiHelper.errorAlert(sendError) }>
              <{ UiHelper.successAlert(sendSuccess) }>
@@ -48,13 +48,9 @@ component Tokens {
              <CreateCustomTokenTransaction
               senderAddress={walletInfo.address}
               tokens={walletInfo.tokens} />
-          </div>
-
-        </div>
-
-         <div class="row">
-         <div class="col-md-3"></div>
-      
+          
+            <div class="row">
+              
            <div class="col">
                <UpdateCustomTokenTransaction
                senderAddress={walletInfo.address}
@@ -70,6 +66,12 @@ component Tokens {
              </div>
 
           </div>
+          
+          </div>
+
+        </div>
+
+       
           </div>
        
 

@@ -167,14 +167,14 @@ component UpdateCustomTokenTransaction {
         
             <div class="col-md-3 mb-3">
               <label for="amount-to-update">
-                "Amount to update by"
+                "Update amount"
               </label>
 
               <input
                 type="text"
                 class="form-control"
                 id="amount-to-update"
-                placeholder="Amount to update by"
+                placeholder="Update amount"
                 onInput={onAmount}
                 value={amount}/>
 
