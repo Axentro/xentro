@@ -30,7 +30,7 @@ component WalletConfiguration {
   }
 
   get nodeOptions : Array(String) {
-    ["select", "https://testnet.axentro.io"]
+    ["select", "https://mainnet.axentro.io", "https://testnet.axentro.io"]
   }
 
   fun update (event : Html.Event) {

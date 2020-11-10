@@ -42,6 +42,8 @@ component CreateEncryptedWallet {
 
   state passwordError : String = ""
 
+  state selectedNetwork : String = "Mainnet"
+
   style spacer {
     padding-left: 10px;
   }
@@ -132,8 +134,14 @@ component CreateEncryptedWallet {
 
   fun createWallet (event : Html.Event) : Promise(Never, Void) {
     sequence {
+      network = if (selectedNetwork == "Mainnet"){
+        Network.Prefix.mainNet()
+      } else {
+        Network.Prefix.testNet()
+      }
+
       wallet =
-        Axentro.Wallet.generateEncryptedWallet(Network.Prefix.testNet(), name, password)
+        Axentro.Wallet.generateEncryptedWallet(network, name, password)
 
       storeWallet(wallet, Maybe.nothing())
 
@@ -310,6 +318,17 @@ component CreateEncryptedWallet {
     Window.navigate(cancelUrl)
   }
 
+   get networkOptions : Array(String) {
+    ["Mainnet","Testnet"]
+  } 
+
+   fun onNetwork (event : Html.Event) {
+    next
+      {
+        selectedNetwork = Dom.getValue(event.target)
+      }
+  }
+
   fun render : Html {
     <div>
       <h5>
@@ -417,6 +436,27 @@ component CreateEncryptedWallet {
         </div>
 
         <{ passwordsNotMatchingAlert }>
+      </div>
+
+      <div class="text-left form-group">
+        <label
+          class="ml-1"
+          for="network">
+
+          <i>
+            "Network"
+          </i>
+
+        </label>
+
+          <select
+                onChange={onNetwork}
+                class="form-control"
+                id="network">
+
+                <{ UiHelper.selectNameOptions(selectedNetwork, networkOptions) }>
+
+              </select>
       </div>
 
       <button
