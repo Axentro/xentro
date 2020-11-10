@@ -30,11 +30,8 @@ component Tokens {
   }
 
   fun pageContent (walletInfo : WalletInfo) : Html {
-    <div class="row">
-      <div class="col-md-12">
-        <div/>
-
-        <div class="row">
+    <div class="container col-md-12">
+          <div class="row">
           <div class="col-md-3">
             <WalletBalances
               address={walletInfo.address}
@@ -73,10 +70,10 @@ component Tokens {
              </div>
 
           </div>
+          </div>
        
 
-      </div>
-    </div>
+  
   } where {
     unlockedTokens = walletInfo.myTokens |> Array.select((t : Token){ !t.isLocked })
   }
