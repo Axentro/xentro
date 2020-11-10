@@ -1,6 +1,7 @@
 component Tokens {
   connect Application exposing { walletInfo }
   connect WalletStore exposing { currentWallet }
+  connect TransactionStore exposing { sendError, sendSuccess }
 
   fun componentDidMount : Promise(Never, Void) {
     if (Maybe.isNothing(currentWallet)) {
@@ -43,13 +44,40 @@ component Tokens {
           </div>
 
           <div class="col-md-9">
+
+             <{ UiHelper.errorAlert(sendError) }>
+             <{ UiHelper.successAlert(sendSuccess) }>
+
              <CreateCustomTokenTransaction
               senderAddress={walletInfo.address}
-              tokens={walletInfo.tokens}/>
+              tokens={walletInfo.tokens} />
           </div>
 
         </div>
+
+         <div class="row">
+         <div class="col-md-3"></div>
+      
+           <div class="col-md-4">
+               <UpdateCustomTokenTransaction
+               senderAddress={walletInfo.address}
+               tokens={walletInfo.tokens}
+               myTokens={unlockedTokens}/>
+             </div>
+
+          <div class="col-md-4">
+               <LockCustomTokenTransaction
+               senderAddress={walletInfo.address}
+               tokens={walletInfo.tokens}
+               myTokens={unlockedTokens}/>
+             </div>
+
+          </div>
+       
+
       </div>
     </div>
+  } where {
+    unlockedTokens = walletInfo.myTokens |> Array.select((t : Token){ !t.isLocked })
   }
 }

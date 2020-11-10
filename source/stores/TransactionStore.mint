@@ -429,4 +429,40 @@ store TransactionStore {
       kind = speed
     }
   }
+
+  fun lockCustomTokenTransaction (
+    senderAddress : String,
+    senderPublicKey : String,
+    name : String,
+    speed : String
+  ) : Transaction {
+    {
+      id = "",
+      action = "lock_token",
+      senders =
+        [
+          {
+            address = senderAddress,
+            publicKey = senderPublicKey,
+            amount = "0",
+            fee = "0.0001",
+            signature = "0"
+          }
+        ],
+      recipients =
+        [
+          {
+            address = senderAddress,
+            amount = "0"
+          }
+        ],
+      message = "0",
+      token = name,
+      prevHash = "0",
+      timestamp = 0,
+      scaled = 0,
+      kind = speed
+    }
+  }
+
 }

@@ -184,9 +184,6 @@ component CreateCustomTokenTransaction {
 
         </div>
 
-        <{ UiHelper.errorAlert(sendError) }>
-        <{ UiHelper.successAlert(sendSuccess) }>
-
         <div>
           <div class="form-row mb-3">
             <div class="col-md-8 mb-6">

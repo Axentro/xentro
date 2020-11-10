@@ -1,4 +1,4 @@
-component UpdateCustomTokenTransaction {
+component LockCustomTokenTransaction {
   connect WalletStore exposing { currentWallet, currentWalletConfig }
 
   connect TransactionStore exposing {
@@ -8,7 +8,7 @@ component UpdateCustomTokenTransaction {
     resetErrorSuccess,
     reset,
     senderPrivatePublic,
-    updateCustomTokenTransaction,
+    lockCustomTokenTransaction,
     sendTransaction,
     tokenError
   }
@@ -18,8 +18,6 @@ component UpdateCustomTokenTransaction {
   property myTokens : Array(Token)
   state selectedToken : String = firstCustomToken(myTokens)
 
-  state amount : String = ""
-  state amountError : String = ""
   state feeError : String = ""
   state speed : String = currentWalletConfig.speed
   state confirmCheck : Bool = false
@@ -37,7 +35,6 @@ component UpdateCustomTokenTransaction {
       sequence {
         next
           {
-            amount = "",
             selectedToken = firstCustomToken(myTokens),
             speed = currentWalletConfig.speed,
             confirmCheck = false,
@@ -50,32 +47,11 @@ component UpdateCustomTokenTransaction {
     }
   }
 
-   fun onAmount (event : Html.Event) : Promise(Never, Void) {
-    next
-      {
-        amount = value,
-        amountError = validateAmount(value)
-      }
-  } where {
-    value =
-      Dom.getValue(event.target)
-  }
-
-
-  fun validateAmount(value : String) : String {
-      if((Number.fromString(value) |> Maybe.withDefault(0)) <= 0) {
-       "Please supply a number greater than 0"
-      } else {
-          ""
-      }
-  }
-
   fun onToken (event : Html.Event) {
     next
       {
         selectedToken = Dom.getValue(event.target),
-        amount = "",
-        amountError = ""
+        feeError = validateFeeAmount
       }
   }
 
@@ -113,11 +89,7 @@ component UpdateCustomTokenTransaction {
   }
 
   get buyButtonState : Bool {
-    !confirmCheck || String.isEmpty(amount) || !String.isEmpty(feeError)
-  }
-
-  get rules : Html {
-    <div/>
+    !confirmCheck || !String.isEmpty(feeError)
   }
 
   fun processSendTransaction(
@@ -145,42 +117,27 @@ component UpdateCustomTokenTransaction {
     <div class="card border-dark mb-3">
       <div class="card-body">
         <h4 class="card-title">
-          "Update Custom Token"
+          "Lock Custom Token"
         </h4>
 
+        <{ UiHelper.errorAlert(feeError) }>
+        
         <div>
           <div class="form-row mb-3">
            <div class="col-md-3 mb-3">
-              <label for="token-to-update">
+              <label for="token-to-lock">
                 "Token"
               </label>
 
               <select
                 onChange={onToken}
                 class="form-control"
-                id="token-to-update">
+                id="token-to-lock">
 
                 <{ UiHelper.selectNameOptions(selectedToken, tokenOptions) }>
 
               </select>
-            </div>
-        
-            <div class="col-md-3 mb-3">
-              <label for="amount-to-update">
-                "Amount to update by"
-              </label>
 
-              <input
-                type="text"
-                class="form-control"
-                id="amount-to-update"
-                placeholder="Amount to update by"
-                onInput={onAmount}
-                value={amount}/>
-
-              <div class="mt-2">
-                <{ UiHelper.errorAlert(amountError) }>
-              </div>
             </div>
           </div>
 
@@ -191,11 +148,11 @@ component UpdateCustomTokenTransaction {
                 onChange={onCheck}
                 class="custom-control-input"
                 checked={confirmCheck}
-                id="customCheckUpdate"/>
+                id="customCheckLock"/>
 
               <label
                 class="custom-control-label"
-                for="customCheckUpdate">
+                for="customCheckLock">
 
                 "I've double checked everything is correct!"
 
@@ -209,7 +166,7 @@ component UpdateCustomTokenTransaction {
             disabled={buyButtonState}
             type="submit">
 
-            "Update Token"
+            "Lock Token"
 
           </button>
         </div>
@@ -226,6 +183,6 @@ component UpdateCustomTokenTransaction {
       senderInfo.wif
 
     transaction =
-      updateCustomTokenTransaction(senderAddress, senderPublicKey, selectedToken, amount, speed)
+      lockCustomTokenTransaction(senderAddress, senderPublicKey, selectedToken, speed)
   }
 }
