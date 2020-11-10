@@ -43,7 +43,7 @@ component Tokens {
               <News/>
           </div>
 
-          <div class="col-md-9">
+          <div class="col">
 
              <{ UiHelper.errorAlert(sendError) }>
              <{ UiHelper.successAlert(sendSuccess) }>
@@ -58,14 +58,14 @@ component Tokens {
          <div class="row">
          <div class="col-md-3"></div>
       
-           <div class="col-md-4">
+           <div class="col">
                <UpdateCustomTokenTransaction
                senderAddress={walletInfo.address}
                tokens={walletInfo.tokens}
                myTokens={unlockedTokens}/>
              </div>
 
-          <div class="col-md-4">
+          <div class="col">
                <LockCustomTokenTransaction
                senderAddress={walletInfo.address}
                tokens={walletInfo.tokens}
