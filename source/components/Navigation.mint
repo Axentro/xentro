@@ -43,6 +43,12 @@ component Navigation {
     }
   }
 
+  get showWalletName : Html {
+    <span class="badge badge-info">
+      <{ currentWalletName }>
+    </span>
+  }
+
   fun activeStyle (item : String) : String {
     if (item == current) {
       "btn-info"
@@ -148,29 +154,32 @@ component Navigation {
 
       <div class="header-body-right">
         <ul class="navbar-nav">
-          <li class="mr-2 nav-item">
-            <{ currentWalletName }>
-          </li>
 
-          <li class="mr-1 nav-item">
+         
+        </ul>
+         <ul class="navbar-nav flex-row mb-2">
+         <li class="mr-1 nav-item">
             <{ showConnectionNode }>
           </li>
 
           <li class="mr-3 nav-item">
             <{ showConnectionStatus() }>
           </li>
-
-          <li class="nav-item">
+           <li class="mr-2 nav-item">
+            <{ showWalletName }>
+          </li>
+           <li class="nav-item">
             <a
               onClick={logout}
-              class="btn btn-outline-secondary"
+              class="btn btn-sm btn-outline-secondary"
               href="#">
 
               "Logout"
 
             </a>
+       
           </li>
-        </ul>
+         </ul>
       </div>
     </div>
   }
