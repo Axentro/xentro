@@ -22,6 +22,10 @@ store WalletStore {
     }
   }
 
+  fun resetWalletError : Promise(Never, Void) {
+    next { walletError = ""}
+  }
+  
   fun updateWallet (
     wallet : EncryptedWallet,
     config : Maybe(WalletConfig)
