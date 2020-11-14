@@ -16,17 +16,13 @@ component UpdateCustomTokenTransaction {
   property senderAddress : String
   property tokens : Array(Token)
   property myTokens : Array(Token)
-  state selectedToken : String = firstCustomToken(myTokens)
+  state selectedToken : String = "Choose"
 
   state amount : String = ""
   state amountError : String = ""
   state feeError : String = ""
   state speed : String = currentWalletConfig.speed
   state confirmCheck : Bool = false
-
-  fun firstCustomToken(tokens : Array(Token)) : String {
-    tokens |> Array.map((t : Token){ t.name }) |> Array.firstWithDefault("AXNT")
-  }
 
   fun componentDidMount : Promise(Never, Void) {
     resetErrorSuccess()
@@ -38,7 +34,7 @@ component UpdateCustomTokenTransaction {
         next
           {
             amount = "",
-            selectedToken = firstCustomToken(myTokens),
+            selectedToken = "Choose",
             speed = currentWalletConfig.speed,
             confirmCheck = false,
           }
@@ -80,7 +76,9 @@ component UpdateCustomTokenTransaction {
   }
 
  get tokenOptions : Array(String) {
-      myTokens
+     Array.append(["Choose"],options)
+  } where {
+      options = myTokens
       |> Array.map(.name)
       |> Array.reject((name : String) { String.toLowerCase(name) == "axnt" })
   }
@@ -113,7 +111,7 @@ component UpdateCustomTokenTransaction {
   }
 
   get buyButtonState : Bool {
-    !confirmCheck || String.isEmpty(amount) || !String.isEmpty(feeError)
+    !confirmCheck || String.isEmpty(amount) || !String.isEmpty(feeError) || selectedToken == "Choose"
   }
 
   get rules : Html {
@@ -149,8 +147,8 @@ component UpdateCustomTokenTransaction {
         </h4>
 
         <div>
-          <div class="form-row mb-3">
-           <div class="col-md-3 mb-3">
+          <div class="form-group">
+           <div class="col">
               <label for="token-to-update">
                 "Token"
               </label>
@@ -164,8 +162,10 @@ component UpdateCustomTokenTransaction {
 
               </select>
             </div>
+            </div>
         
-            <div class="col-md-3 mb-3">
+        <div class="form-group">
+            <div class="col">
               <label for="amount-to-update">
                 "Update amount"
               </label>
@@ -185,6 +185,7 @@ component UpdateCustomTokenTransaction {
           </div>
 
           <div class="form-group">
+          <div class="col">
             <div class="custom-control custom-checkbox custom-checkbox-success">
               <input
                 type="checkbox"
@@ -201,6 +202,7 @@ component UpdateCustomTokenTransaction {
 
               </label>
             </div>
+          </div>
           </div>
 
           <button

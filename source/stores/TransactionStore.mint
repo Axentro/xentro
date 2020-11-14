@@ -465,4 +465,40 @@ store TransactionStore {
     }
   }
 
+ fun burnCustomTokenTransaction (
+    senderAddress : String,
+    senderPublicKey : String,
+    name : String,
+    amount : String,
+    speed : String
+  ) : Transaction {
+    {
+      id = "",
+      action = "burn_token",
+      senders =
+        [
+          {
+            address = senderAddress,
+            publicKey = senderPublicKey,
+            amount = amount,
+            fee = "0.0001",
+            signature = "0"
+          }
+        ],
+      recipients =
+        [
+          {
+            address = senderAddress,
+            amount = amount
+          }
+        ],
+      message = "0",
+      token = name,
+      prevHash = "0",
+      timestamp = 0,
+      scaled = 0,
+      kind = speed
+    }
+  }
+
 }

@@ -51,19 +51,25 @@ component Tokens {
           
             <div class="row">
               
-           <div class="col">
+            <div class="col">
                <UpdateCustomTokenTransaction
                senderAddress={walletInfo.address}
                tokens={walletInfo.tokens}
                myTokens={unlockedTokens}/>
-             </div>
+            </div>
 
-          <div class="col">
+            <div class="col">
                <LockCustomTokenTransaction
                senderAddress={walletInfo.address}
                tokens={walletInfo.tokens}
                myTokens={unlockedTokens}/>
-             </div>
+            </div>
+
+            <div class="col">
+               <BurnCustomTokenTransaction
+               senderAddress={walletInfo.address}
+               tokens={walletInfo.tokens}/>
+            </div>
 
           </div>
           

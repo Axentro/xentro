@@ -1,4 +1,4 @@
-component LockCustomTokenTransaction {
+component BurnCustomTokenTransaction {
   connect WalletStore exposing { currentWallet, currentWalletConfig }
 
   connect TransactionStore exposing {
@@ -8,16 +8,17 @@ component LockCustomTokenTransaction {
     resetErrorSuccess,
     reset,
     senderPrivatePublic,
-    lockCustomTokenTransaction,
+    burnCustomTokenTransaction,
     sendTransaction,
     tokenError
   }
 
   property senderAddress : String
   property tokens : Array(Token)
-  property myTokens : Array(Token)
   state selectedToken : String = "Choose"
 
+  state amount : String = ""
+  state amountError : String = ""
   state feeError : String = ""
   state speed : String = currentWalletConfig.speed
   state confirmCheck : Bool = false
@@ -31,6 +32,7 @@ component LockCustomTokenTransaction {
       sequence {
         next
           {
+            amount = "",
             selectedToken = "Choose",
             speed = currentWalletConfig.speed,
             confirmCheck = false,
@@ -43,18 +45,40 @@ component LockCustomTokenTransaction {
     }
   }
 
+   fun onAmount (event : Html.Event) : Promise(Never, Void) {
+    next
+      {
+        amount = value,
+        amountError = validateAmount(value)
+      }
+  } where {
+    value =
+      Dom.getValue(event.target)
+  }
+
+
+  fun validateAmount(value : String) : String {
+      if((Number.fromString(value) |> Maybe.withDefault(0)) <= 0) {
+       "Please supply a number greater than 0"
+      } else {
+          ""
+      }
+  }
+
   fun onToken (event : Html.Event) {
     next
       {
         selectedToken = Dom.getValue(event.target),
-        feeError = validateFeeAmount
+        amount = "",
+        amountError = ""
       }
   }
 
  get tokenOptions : Array(String) {
      Array.append(["Choose"],options)
   } where {
-      options = myTokens
+      options = tokens
+      |> Array.reject((t : Token) { t.amount == "0"})
       |> Array.map(.name)
       |> Array.reject((name : String) { String.toLowerCase(name) == "axnt" })
   }
@@ -87,7 +111,11 @@ component LockCustomTokenTransaction {
   }
 
   get buyButtonState : Bool {
-    !confirmCheck || !String.isEmpty(feeError) || selectedToken == "Choose"
+    !confirmCheck || String.isEmpty(amount) || !String.isEmpty(feeError) || selectedToken == "Choose"
+  }
+
+  get rules : Html {
+    <div/>
   }
 
   fun processSendTransaction(
@@ -104,60 +132,81 @@ component LockCustomTokenTransaction {
   }
 
   fun render : Html {
-      if (Array.isEmpty(myTokens)){
+      if (Array.isEmpty(options)){
        <div/>
       } else {
           renderView()
       }
+  } where {
+      options = tokenOptions
+                |> Array.reject((t : String) {t == "Choose"})
   }
 
   fun renderView : Html {
     <div class="card border-dark mb-3">
       <div class="card-body">
         <h4 class="card-title">
-          "Lock Custom Token"
+          "Burn Custom Token"
         </h4>
 
-        <{ UiHelper.errorAlert(feeError) }>
-        
         <div>
-          <div class="form-group">
+        <div class="form-group">
            <div class="col">
-              <label for="token-to-lock">
+              <label for="token-to-update">
                 "Token"
               </label>
 
               <select
                 onChange={onToken}
                 class="form-control"
-                id="token-to-lock">
+                id="token-to-burn">
 
                 <{ UiHelper.selectNameOptions(selectedToken, tokenOptions) }>
 
               </select>
+            </div>
+            </div>
+        
+        <div class="form-group">
+            <div class="col">
+              <label for="amount-to-burn">
+                "Burn amount"
+              </label>
 
+              <input
+                type="text"
+                class="form-control"
+                id="amount-to-burn"
+                placeholder="Burn amount"
+                onInput={onAmount}
+                value={amount}/>
+
+              <div class="mt-2">
+                <{ UiHelper.errorAlert(amountError) }>
+              </div>
             </div>
           </div>
+         
 
           <div class="form-group">
-           <div class="col">
+          <div class="col">
             <div class="custom-control custom-checkbox custom-checkbox-success">
               <input
                 type="checkbox"
                 onChange={onCheck}
                 class="custom-control-input"
                 checked={confirmCheck}
-                id="customCheckLock"/>
+                id="customCheckBurn"/>
 
               <label
                 class="custom-control-label"
-                for="customCheckLock">
+                for="customCheckBurn">
 
                 "I've double checked everything is correct!"
 
               </label>
             </div>
-            </div>
+          </div>
           </div>
 
           <button
@@ -166,7 +215,7 @@ component LockCustomTokenTransaction {
             disabled={buyButtonState}
             type="submit">
 
-            "Lock Token"
+            "Burn Token"
 
           </button>
         </div>
@@ -183,6 +232,6 @@ component LockCustomTokenTransaction {
       senderInfo.wif
 
     transaction =
-      lockCustomTokenTransaction(senderAddress, senderPublicKey, selectedToken, speed)
+      burnCustomTokenTransaction(senderAddress, senderPublicKey, selectedToken, amount, speed)
   }
 }
