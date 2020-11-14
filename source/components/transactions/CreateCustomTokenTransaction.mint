@@ -97,7 +97,9 @@ component CreateCustomTokenTransaction {
         Regexp.create("^[A-Z0-9]{1,20}")
         |> Regexp.match(value)
 
-      if (regexResult) {
+      allCaps = String.toUpperCase(value) == value
+   
+      if (regexResult && allCaps) {
         ""
       } else {
         "Please comply with the rules for a name listed above"
