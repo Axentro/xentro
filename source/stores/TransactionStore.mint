@@ -325,7 +325,8 @@ store TransactionStore {
       prevHash = "0",
       timestamp = 0,
       scaled = 0,
-      kind = speed
+      kind = speed,
+      version = "V1"
     }
   }
 
@@ -354,7 +355,8 @@ store TransactionStore {
       prevHash = "0",
       timestamp = 0,
       scaled = 0,
-      kind = speed
+      kind = speed,
+      version = "V1"
     }
   }
 
@@ -390,7 +392,8 @@ store TransactionStore {
       prevHash = "0",
       timestamp = 0,
       scaled = 0,
-      kind = speed
+      kind = speed,
+      version = "V1"
     }
   }
 
@@ -426,7 +429,8 @@ store TransactionStore {
       prevHash = "0",
       timestamp = 0,
       scaled = 0,
-      kind = speed
+      kind = speed,
+      version = "V1"
     }
   }
 
@@ -461,7 +465,8 @@ store TransactionStore {
       prevHash = "0",
       timestamp = 0,
       scaled = 0,
-      kind = speed
+      kind = speed,
+      version = "V1"
     }
   }
 
@@ -497,7 +502,8 @@ store TransactionStore {
       prevHash = "0",
       timestamp = 0,
       scaled = 0,
-      kind = speed
+      kind = speed,
+      version = "V1"
     }
   }
 
