@@ -154,7 +154,7 @@ fun fetchAllOrders(senderAddress : String, currentWalletConfig : WalletConfig, c
                 "Address"
                 </th>
                   <th>
-                "Toke amount"
+                "Token amount"
                 </th> 
                 <th>
                 "Amount"
