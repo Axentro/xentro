@@ -39,6 +39,10 @@ routes {
     Application.setPage("transactions")
   }
 
+  /purchase {
+    Application.setPage("purchase")
+  }
+
   /login {
     Application.setPage("login")
   }

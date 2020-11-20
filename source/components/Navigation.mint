@@ -82,6 +82,16 @@ component Navigation {
 
           <li class="nav-item">
             <a
+              class={"mr-2 btn " + activeStyle("purchase")}
+              href="/purchase">
+
+              "Purchase"
+
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
               class={"mr-2 btn " + activeStyle("send")}
               href="/send">
 
