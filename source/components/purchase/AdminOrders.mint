@@ -210,14 +210,11 @@ fun fetchAllOrders(senderAddress : String, currentWalletConfig : WalletConfig, c
   }
 
   fun updateOrderStatus() : Html {
-    if (Array.isEmpty(statuses)) {
+    if (Array.isEmpty(allOrders)) {
        <div></div>
     } else {
        renderUpdateStatus()
     }
-  } where {
-      statuses = allOrders 
-                 |> Array.select((o : AllOrdersResponse) { o.status == "verifying payment"})
   }
 
     get validateUpdateStatusButton : Bool {
