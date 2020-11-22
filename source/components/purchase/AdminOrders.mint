@@ -217,7 +217,7 @@ fun fetchAllOrders(senderAddress : String, currentWalletConfig : WalletConfig, c
     }
   } where {
       statuses = allOrders 
-                 |> Array.select((o : AllOrdersResponse) { o.status == "awaiting payment"})
+                 |> Array.select((o : AllOrdersResponse) { o.status == "verifying payment"})
   }
 
     get validateUpdateStatusButton : Bool {
