@@ -252,6 +252,7 @@ fun onPaymentType (event : Html.Event) {
        <Orders senderAddress={senderAddress}/>
        <AdminOrders senderAddress={senderAddress}/>
        <AdminReferrals senderAddress={senderAddress}/>
+       <AdminCompleteReferrals senderAddress={senderAddress}/>
        </div>
      } else {
        <div></div>

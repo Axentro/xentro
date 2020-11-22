@@ -1,7 +1,6 @@
 record AllReferralsResponse {
   id : String,
-  address : String,
-  bonus : String
+  address : String
   }
 
 record CreateReferralRequest {
@@ -145,11 +144,7 @@ fun fetchAllReferrals(senderAddress : String, currentWalletConfig : WalletConfig
        <td>
         <{ referral.address }>
       </td>
-      <td>
-        <{ referral.bonus }>
-      </td>
-      
-      </tr>
+     </tr>
   }
 
   get referralTable : Html {
@@ -165,11 +160,7 @@ fun fetchAllReferrals(senderAddress : String, currentWalletConfig : WalletConfig
                 </th>
                  <th>
                   "Address"
-                </th>
-                 <th>
-                  "Bonus"
-                </th>
-               
+                </th>   
             </tr>
           </thead>
 
