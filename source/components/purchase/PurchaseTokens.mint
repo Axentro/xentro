@@ -438,7 +438,7 @@ fun onPaymentType (event : Html.Event) {
           class="alert alert-info alert-with-border"
           role="alert">
 
-          <p>"You must be invited to take part in this private fundraising and have recieved a referral code."</p>
+          <p>"You must be invited to take part in this private fundraising and have received a referral code."</p>
         </div>
 
         <div>
