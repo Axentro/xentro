@@ -33,10 +33,7 @@ component PrivateSale {
     <div class="container-fluid">
           <div class="row">
           <div class="col-md-3">
-            <WalletBalances
-              address={walletInfo.address}
-              readable={walletInfo.readable}
-              tokens={walletInfo.tokens}/>
+            <PurchaseInfo/>
               <Referrals senderAddress={walletInfo.address}/>
           </div>
 

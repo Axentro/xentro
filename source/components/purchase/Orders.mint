@@ -6,6 +6,7 @@ record OrdersResponse {
   amount : String,
   paymentMethod : String using "payment_method",
   transactionId : String using "transaction_id",
+  agree : String,
   status : String
 }
 
@@ -32,9 +33,13 @@ component Orders {
   state selectedOrder : String = "Choose"
   state transactionId : String = ""
   state updateError : String = ""
+  state myReferralCode : String = ""
 
   fun componentDidMount : Promise(Never, Void) {
+    sequence {
       fetchOrders(senderAddress, currentWalletConfig, currentWallet)
+      fetchReferralCode(senderAddress, currentWalletConfig, currentWallet)
+    }
   }
   
    fun onOrderId (event : Html.Event) {
@@ -135,6 +140,20 @@ component Orders {
       </div>
   }
 
+   get renderMyReferralCode : Html {
+     if(String.isEmpty(myReferralCode)){
+       <div></div>
+     } else {
+        <div
+          class="alert alert-primary alert-with-border"
+          role="alert">
+
+          <p>"Your referral code is: " <b><{myReferralCode}></b>  "   ("<i>"Give this to your friends to earn a 10% bonus"</i>")"</p>
+           
+        </div>
+     }
+   }
+
   fun renderOrders : Html {
        <div class="card border-dark mb-3">
       <div class="card-body">
@@ -149,10 +168,12 @@ component Orders {
           class="alert alert-warning alert-with-border"
           role="alert">
 
-          <p>"please transfer " <b>"ETH"</b> " to this address: " <b>"0x1aA054d3Fb8a285220CF19f55Ab6da93Ecf5337c"</b></p>
-          <p>"please transfer " <b>"BTC"</b> " to this address: " <b>"1CQ52yVDzQjV4NXbwQc4LYDur69hmD9Wu9"</b></p>
+          <p>"Please transfer " <b>"ETH"</b> " to this address: " <b>"0x1aA054d3Fb8a285220CF19f55Ab6da93Ecf5337c"</b></p>
+          <p>"Please transfer " <b>"BTC"</b> " to this address: " <b>"1CQ52yVDzQjV4NXbwQc4LYDur69hmD9Wu9"</b></p>
           
-        </div>   
+        </div>  
+
+    <{ renderMyReferralCode }>     
 
      <{ orderTable }>
     
@@ -176,6 +197,52 @@ component Orders {
     get validateUpdateButton : Bool {
     selectedOrder == "Choose" || String.isEmpty(transactionId)
   }
+
+  fun fetchReferralCode(senderAddress : String, currentWalletConfig : WalletConfig, currentWallet : Maybe(Wallet)) {
+    sequence {
+
+
+       hexPrivateKey =
+                      currentWallet 
+                      |> Maybe.map((w : Wallet) { Axentro.Wallet.getPrivateKeyFromWif(w.wif) |> Result.withDefault("error") })
+                      |> Maybe.withDefault("error")
+        
+
+      publicKey = currentWallet
+                  |> Maybe.map((w : Wallet) { w.publicKey })
+                  |> Maybe.withDefault("error")
+
+
+      data = senderAddress + publicKey
+      hash = toHash(data)
+      signature = signPrivateSale(hash, hexPrivateKey)
+
+      payload = { address = senderAddress, publicKey = publicKey, hash = hash, signature = signature}   
+      
+      requestBody = encode { call = "private_sale", action = "my_referral_code", payload = payload }
+      baseUrl = currentWalletConfig.node
+
+      response =
+        Http.post(baseUrl + "/rpc")
+        |> Http.jsonBody(requestBody)
+        |> Http.send()
+
+        json = 
+          Json.parse(response.body)
+          |> Maybe.toResult("Json parsing error with fetch orders")
+
+        result =
+          decode json as Array(String)
+
+      if (response.status == 200) {
+           next { myReferralCode = Array.firstWithDefault("",result) }
+      } else {
+        Promise.never()
+      }
+    } catch {
+         Promise.never()
+    }
+  } 
 
  fun postUpdateOrder(event : Html.Event) {
     sequence {

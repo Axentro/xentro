@@ -24,6 +24,7 @@ record CreateOrder {
   amount : String,
   tokenAmount : String using "token_amount",
   paymentMethod : String using "payment_method",
+  agree : String,
   publicKey : String using "public_key",
   hash : String,
   signature : String
@@ -44,6 +45,7 @@ component PurchaseTokens {
   state rates : Maybe(RatesResponse) = Maybe.nothing()
   state selectedPaymentType : String = "Choose"
   state selectedAmount : String = "Choose"
+  state selectedAgree : String = "Choose"
 
   fun componentDidMount : Promise(Never, Void) {
     fetchRates()
@@ -64,7 +66,7 @@ component PurchaseTokens {
   }
 
     get validatePurchaseButton : Bool {
-    selectedAmount == "Choose" || selectedPaymentType == "Choose" 
+    selectedAmount == "Choose" || selectedPaymentType == "Choose" || selectedAgree == "Choose" || selectedAgree == "I disagree"
   }
 
   fun fetchRates() {
@@ -144,12 +146,12 @@ component PurchaseTokens {
                    |> Maybe.map((r : RatesResponse) { totalToPay(r) } )
                    |> Maybe.withDefault("0")
 
-      data = senderAddress + referralCode + totalAmount + selectedPaymentType + selectedAmount + publicKey
+      data = senderAddress + referralCode + totalAmount + selectedPaymentType + selectedAmount + selectedAgree + publicKey
       hash = toHash(data)
       signature = signPrivateSale(hash, hexPrivateKey)
 
-      payload = {  address = senderAddress, referral = referralCode, tokenAmount = selectedAmount, amount = totalAmount, paymentMethod = selectedPaymentType,
-                   publicKey = publicKey, hash = hash, signature = signature
+      payload = {  address = senderAddress, referral = referralCode, tokenAmount = selectedAmount, amount = totalAmount, 
+                   paymentMethod = selectedPaymentType, agree = selectedAgree, publicKey = publicKey, hash = hash, signature = signature
       }
 
       requestBody = encode { call = "private_sale", action = "create_order", payload = payload }
@@ -162,7 +164,7 @@ component PurchaseTokens {
 
       if (response.status == 200) {
         sequence {
-          next { selectedAmount = "Choose", selectedPaymentType = "Choose" }
+          next { selectedAmount = "Choose", selectedPaymentType = "Choose", selectedAgree = "Choose" }
           fetchOrders(senderAddress, currentWalletConfig, currentWallet)
         }
       } else {
@@ -180,6 +182,13 @@ fun onPaymentType (event : Html.Event) {
       }
   }
 
+ fun onAgree (event : Html.Event) {
+    next
+      {
+        selectedAgree = Dom.getValue(event.target)
+      }
+  }
+
   fun onAmount (event : Html.Event) {
     next
       {
@@ -189,6 +198,10 @@ fun onPaymentType (event : Html.Event) {
 
    get paymentOptions : Array(String) {
     ["Choose","ETH","BTC","Alternative"] 
+   }
+
+   get agreeOptions : Array(String) {
+     ["Choose", "I agree", "I disagree"]
    }
 
    get amountOptions : Array(String) {
@@ -238,6 +251,7 @@ fun onPaymentType (event : Html.Event) {
        <div>
        <Orders senderAddress={senderAddress}/>
        <AdminOrders senderAddress={senderAddress}/>
+       <AdminReferrals senderAddress={senderAddress}/>
        </div>
      } else {
        <div></div>
@@ -280,6 +294,33 @@ fun onPaymentType (event : Html.Event) {
                 id="payment-type">
 
                 <{ UiHelper.selectNameOptions(selectedPaymentType, paymentOptions) }>
+
+              </select>
+            </div>
+            </div>
+
+          <div class="form-group">
+            <div class="col">
+              <label for="agree">
+                "I Agree to the conditions of the private fund raising"
+              </label>
+
+              <div
+          class="alert alert-danger alert-with-border"
+          role="alert">
+
+          <p>"By selecting "<b>"I agree"</b>" from the select box below, you agree that you are not a citizen of America, China or any other country in which making a purchase is illegal."</p>
+          <p>"You may cancel an order within 30 days of the initial order date for a full refund."</p>
+          <p>"By selecting "<b>"I agree"</b>" you acknowledge that you are making this purchase at your own risk and that the value of your purchase may go up or down and is not intended as an investment of any kind."</p>
+         
+        </div>
+
+              <select
+                onChange={onAgree}
+                class="form-control"
+                id="agree">
+
+                <{ UiHelper.selectNameOptions(selectedAgree, agreeOptions) }>
 
               </select>
             </div>

@@ -7,6 +7,7 @@ record AllOrdersResponse {
   amount : String,
   paymentMethod : String using "payment_method",
   transactionId : String using "transaction_id",
+  agree : String,
   status : String
 }
 
@@ -130,6 +131,9 @@ fun fetchAllOrders(senderAddress : String, currentWalletConfig : WalletConfig, c
       <td>
         <{ order.transactionId }>
       </td>
+        <td>
+        <{ order.agree }>
+      </td>
       <td>
         <{ order.status }>
       </td>
@@ -167,6 +171,9 @@ fun fetchAllOrders(senderAddress : String, currentWalletConfig : WalletConfig, c
                 </th>
                 <th>
                 "Transaction Id"
+                </th>
+                 <th>
+                "Agreed"
                 </th>
                 <th>
                 "Status"
