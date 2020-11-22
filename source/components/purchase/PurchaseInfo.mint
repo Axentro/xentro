@@ -13,7 +13,8 @@ component PurchaseInfo {
             <strong>"Fund Raising Purpose"</strong>
          </p>
 
-         <p>"Axentro has been self funded since it's inception but now requires some funding to sustain it in MainNet"</p>
+         <p>"Axentro has been self funded since it's inception but now requires some funding to sustain it in MainNet."</p>
+         <p>"If you believe in this platform please support us and help us build something incredible!"</p>
          <p>"The aim of this private fund raising round is to raise " <b>"£50,000 GBP"</b> " to cover the following expenses:"</p>
          
           <p>

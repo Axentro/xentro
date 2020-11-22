@@ -310,7 +310,7 @@ fun onPaymentType (event : Html.Event) {
           role="alert">
 
           <p>"By selecting "<b>"I agree"</b>" from the select box below, you agree that you are not a citizen of America, China or any other country in which making a purchase is illegal."</p>
-          <p>"You may cancel an order within 30 days of the initial order date for a full refund."</p>
+          <p>"You may cancel an order within 30 days of the initial order date for a full refund upon return of the purchased tokens."</p>
           <p>"By selecting "<b>"I agree"</b>" you acknowledge that you are making this purchase at your own risk and that the value of your purchase may go up or down and is not intended as an investment of any kind."</p>
          
         </div>
