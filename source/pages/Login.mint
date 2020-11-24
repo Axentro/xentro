@@ -65,10 +65,8 @@ component Login {
 
   fun renderForm : Html {
     <div>
-      <div>
-        <h5>
-          "Login Wallet"
-        </h5>
+      <form>
+        <h5>"Login Wallet"</h5>
 
         <{ UiHelper.errorAlert(loginError) }>
 
@@ -77,9 +75,7 @@ component Login {
             class="ml-1"
             for="walletName">
 
-            <i>
-              "Wallet name"
-            </i>
+            <i>"Wallet name"</i>
 
           </label>
 
@@ -98,9 +94,7 @@ component Login {
             class="ml-1"
             for="password">
 
-            <i>
-              "Password"
-            </i>
+            <i>"Password"</i>
 
           </label>
 
@@ -124,7 +118,7 @@ component Login {
           "Login"
 
         </button>
-      </div>
+      </form>
 
       <hr/>
 
@@ -165,8 +159,10 @@ component Login {
             src="/assets/media/image/axentro-logo-v.png"
             width="150"
             alt="logo"/>
-            <Version/>
+
+          <Version/>
         </div>
+
         <{ formOrNoWallet() }>
       </div>
     </div>
