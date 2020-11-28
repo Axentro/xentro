@@ -9,7 +9,7 @@ record Provider.WalletWebSocket.Subscription {
 provider Provider.WalletWebSocket : Provider.WalletWebSocket.Subscription {
   fun open (url : String, socket : WebSocket) : Array(a) {
     for (subscription of subscriptions) {
-        subscription.onOpen(socket)
+      subscription.onOpen(socket)
     } when {
       subscription.url == url
     }
@@ -121,5 +121,3 @@ provider Provider.WalletWebSocket : Provider.WalletWebSocket.Subscription {
     update()
   }
 }
-
-

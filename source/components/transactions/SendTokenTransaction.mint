@@ -170,17 +170,17 @@ component SendTokenTransaction {
     String.isEmpty(recipientAddress) || String.isEmpty(amount) || !String.isEmpty(amountError) || !String.isEmpty(recipientError) || !confirmCheck || !String.isEmpty(domainError)
   }
 
-  fun processSendTransaction(
+  fun processSendTransaction (
     event : Html.Event,
     baseUrl : String,
     recipientAddress : String,
     senderWif : String,
     transaction : Transaction
-   ) {
-     sequence {
+  ) {
+    sequence {
       next { confirmCheck = false }
       sendTransaction(event, baseUrl, recipientAddress, senderWif, transaction)
-     }
+    }
   }
 
   fun render : Html {

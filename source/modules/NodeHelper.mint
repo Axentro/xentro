@@ -10,14 +10,15 @@ module NodeHelper {
       parsed =
         Url.parse(url)
 
-        Debug.log("PROTOCOL")
-        Debug.log(parsed.protocol)
+      Debug.log("PROTOCOL")
+      Debug.log(parsed.protocol)
 
-      protocol = if (parsed.protocol == "https:"){
-        "wss://"
-      } else {
-        "ws://"
-      }
+      protocol =
+        if (parsed.protocol == "https:") {
+          "wss://"
+        } else {
+          "ws://"
+        }
 
       protocol + parsed.host + "/wallet_info"
     }
@@ -25,16 +26,17 @@ module NodeHelper {
 
   fun minerWebSocketUrl (url : String) : String {
     try {
-      parsed = 
+      parsed =
         Url.parse(url)
 
-       protocol = if (parsed.protocol == "https:"){
-        "wss://"
-      } else {
-        "ws://"
-      }  
+      protocol =
+        if (parsed.protocol == "https:") {
+          "wss://"
+        } else {
+          "ws://"
+        }
 
-      protocol + parsed.host + "/peer" 
+      protocol + parsed.host + "/peer"
     }
   }
 
@@ -78,13 +80,23 @@ module NodeHelper {
     sequence {
       `console.log('miner handshake init ...')`
 
-      content = { version = 1, mid = "535061bddb0549f691c8b9c012a55ee2", address = address }
-      contentJson = encode content
+      content =
+        {
+          version = 1,
+          mid = "535061bddb0549f691c8b9c012a55ee2",
+          address = address
+        }
 
-      message = 
-        { type = 1, content = Json.stringify(contentJson) }
+      contentJson =
+        encode content
 
-      json = 
+      message =
+        {
+          type = 1,
+          content = Json.stringify(contentJson)
+        }
+
+      json =
         encode message
 
       WebSocket.send(Json.stringify(json), socket)

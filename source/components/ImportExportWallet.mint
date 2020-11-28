@@ -1,5 +1,14 @@
 component ImportExportWallet {
-  connect WalletStore exposing { currentWallet, storeWallet, getWallet, walletError, resetWalletError, currentWalletConfig, encryptedWalletWithConfig }
+  connect WalletStore exposing {
+    currentWallet,
+    storeWallet,
+    getWallet,
+    walletError,
+    resetWalletError,
+    currentWalletConfig,
+    encryptedWalletWithConfig
+  }
+
   connect Application exposing { updateWebSocketConnect, updateMinerWebSocketConnect }
 
   state importErrorMessage : String = ""
@@ -9,7 +18,6 @@ component ImportExportWallet {
   state importDecryptedWalletJson : String = ""
   state importDecryptedWalletName : String = ""
   state importDecryptedWalletPassword : String = ""
-  
   state importEncryptedWalletJson : String = ""
   state importEncryptedWalletPassword : String = ""
 
@@ -18,15 +26,27 @@ component ImportExportWallet {
   state selectedImport : String = "Encrypted"
 
   fun onImportDecryptedWallet (event : Html.Event) {
-    next { importDecryptedWalletJson = Dom.getValue(event.target), importErrorMessage = "" }
+    next
+      {
+        importDecryptedWalletJson = Dom.getValue(event.target),
+        importErrorMessage = ""
+      }
   }
 
   fun onImportDecryptedWalletName (event : Html.Event) {
-    next { importDecryptedWalletName = Dom.getValue(event.target), importErrorMessage = "" }
+    next
+      {
+        importDecryptedWalletName = Dom.getValue(event.target),
+        importErrorMessage = ""
+      }
   }
 
   fun onImportDecryptedWalletPassword (event : Html.Event) {
-    next { importDecryptedWalletPassword = Dom.getValue(event.target), importErrorMessage = "" }
+    next
+      {
+        importDecryptedWalletPassword = Dom.getValue(event.target),
+        importErrorMessage = ""
+      }
   }
 
   get importDecryptedButtonState : Bool {
@@ -34,11 +54,19 @@ component ImportExportWallet {
   }
 
   fun onImportEncryptedWallet (event : Html.Event) {
-    next { importEncryptedWalletJson = Dom.getValue(event.target), importErrorMessage = "" }
+    next
+      {
+        importEncryptedWalletJson = Dom.getValue(event.target),
+        importErrorMessage = ""
+      }
   }
 
   fun onImportEncryptedWalletPassword (event : Html.Event) {
-    next { importEncryptedWalletPassword = Dom.getValue(event.target), importErrorMessage = "" }
+    next
+      {
+        importEncryptedWalletPassword = Dom.getValue(event.target),
+        importErrorMessage = ""
+      }
   }
 
   get importEncryptedButtonState : Bool {
@@ -49,17 +77,19 @@ component ImportExportWallet {
     next { exportWalletJson = Dom.getValue(event.target) }
   }
 
-   fun onExportKind (event : Html.Event) {
+  fun onExportKind (event : Html.Event) {
     next
       {
-        selectedExport = Dom.getValue(event.target), exportErrorMessage = ""
+        selectedExport = Dom.getValue(event.target),
+        exportErrorMessage = ""
       }
   }
 
-   fun onImportKind (event : Html.Event) {
+  fun onImportKind (event : Html.Event) {
     next
       {
-        selectedImport = Dom.getValue(event.target), importErrorMessage = ""
+        selectedImport = Dom.getValue(event.target),
+        importErrorMessage = ""
       }
   }
 
@@ -86,7 +116,7 @@ component ImportExportWallet {
     }
   }
 
-   fun importEncryptedWallet (event : Html.Event) {
+  fun importEncryptedWallet (event : Html.Event) {
     sequence {
       json =
         Json.parse(importEncryptedWalletJson)
@@ -98,14 +128,13 @@ component ImportExportWallet {
       storeWallet(encryptedWallet, Maybe.nothing())
 
       resetWalletError()
-      
       getWallet(encryptedWallet.name, importEncryptedWalletPassword)
 
-      if (String.isEmpty(walletError)){
+      if (String.isEmpty(walletError)) {
         sequence {
-        updateWebSocketConnect(currentWalletConfig.node)
-        updateMinerWebSocketConnect(currentWalletConfig.node)
-        Window.navigate("/dashboard")
+          updateWebSocketConnect(currentWalletConfig.node)
+          updateMinerWebSocketConnect(currentWalletConfig.node)
+          Window.navigate("/dashboard")
         }
       } else {
         Promise.never()
@@ -116,7 +145,7 @@ component ImportExportWallet {
   }
 
   fun exportDecryptedWallet : Promise(Never, Void) {
-     sequence {
+    sequence {
       encodedWallet =
         encode currentWallet
 
@@ -128,32 +157,34 @@ component ImportExportWallet {
     }
   }
 
-  fun convertAndSetEncryptedWalletExport(ew : EncryptedWallet) : Promise(Never, Void) {
-     sequence {
+  fun convertAndSetEncryptedWalletExport (ew : EncryptedWallet) : Promise(Never, Void) {
+    sequence {
       encodedWallet =
         encode ew
 
       walletJson =
         Json.stringify(encodedWallet)
-        
+
       next { exportWalletJson = walletJson }
     }
   }
 
   fun exportEncryptedWallet : Promise(Never, Void) {
-      if (encryptedWalletWithConfig |> Maybe.isJust) {
-        sequence {
+    if (encryptedWalletWithConfig
+        |> Maybe.isJust) {
+      sequence {
         encryptedWalletWithConfig
-         |> Maybe.map((ew : EncryptedWalletWithConfig) { convertAndSetEncryptedWalletExport(ew.wallet) })
-         Promise.never()
-        }
-      } else {
-        next { exportErrorMessage = "Could not export encrypted wallet - use the decrypted export instead" }
+        |> Maybe.map((ew : EncryptedWalletWithConfig) { convertAndSetEncryptedWalletExport(ew.wallet) })
+
+        Promise.never()
       }
+    } else {
+      next { exportErrorMessage = "Could not export encrypted wallet - use the decrypted export instead" }
+    }
   }
 
   fun exportWallet (event : Html.Event) {
-    if ( selectedExport == "Encrypted"){
+    if (selectedExport == "Encrypted") {
       exportEncryptedWallet()
     } else {
       exportDecryptedWallet()
@@ -163,106 +194,105 @@ component ImportExportWallet {
   fun clearExportWallet (event : Html.Event) {
     next { exportWalletJson = "" }
   }
-  
+
   get exportOptions : Array(String) {
-    ["Encrypted","Decrypted"]
-  } 
+    ["Encrypted", "Decrypted"]
+  }
 
   fun renderImportDecrypted : Html {
     <div>
- <div class="form-row">
-            <div class="col-md-3 mb-3">
-              <input
-                type="text"
-                class="form-control"
-                id="import-dec-wallet-name"
-                placeholder="Import wallet name"
-                onInput={onImportDecryptedWalletName}
-                value={importDecryptedWalletName}/>
-            </div>
-          </div>
+      <div class="form-row">
+        <div class="col-md-3 mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="import-dec-wallet-name"
+            placeholder="Import wallet name"
+            onInput={onImportDecryptedWalletName}
+            value={importDecryptedWalletName}/>
+        </div>
+      </div>
 
-          <div class="form-row">
-            <div class="col-md-3 mb-3">
-              <input
-                type="text"
-                class="form-control"
-                id="import-dec-wallet-password"
-                placeholder="Import wallet password"
-                onInput={onImportDecryptedWalletPassword}
-                value={importDecryptedWalletPassword}/>
-            </div>
-          </div>
+      <div class="form-row">
+        <div class="col-md-3 mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="import-dec-wallet-password"
+            placeholder="Import wallet password"
+            onInput={onImportDecryptedWalletPassword}
+            value={importDecryptedWalletPassword}/>
+        </div>
+      </div>
 
-          <div class="form-row">
-            <div class="col-md-8 mb-6">
-              <textarea
-                type="text"
-                class="form-control"
-                id="import-dec-wallet"
-                placeholder="Non encrypted wallet json"
-                onInput={onImportDecryptedWallet}
-                value={importDecryptedWalletJson}/>
-            </div>
-          </div>
+      <div class="form-row">
+        <div class="col-md-8 mb-6">
+          <textarea
+            type="text"
+            class="form-control"
+            id="import-dec-wallet"
+            placeholder="Non encrypted wallet json"
+            onInput={onImportDecryptedWallet}
+            value={importDecryptedWalletJson}/>
+        </div>
+      </div>
 
-          <div class="mt-3">
-            <button
-              onClick={importDecryptedWallet}
-              class="btn btn-primary"
-              disabled={importDecryptedButtonState}
-              type="submit">
+      <div class="mt-3">
+        <button
+          onClick={importDecryptedWallet}
+          class="btn btn-primary"
+          disabled={importDecryptedButtonState}
+          type="submit">
 
-              "Import decrypted wallet"
+          "Import decrypted wallet"
 
-            </button>
-          </div>
-          </div>
+        </button>
+      </div>
+    </div>
   }
 
   fun renderImportEncrypted : Html {
     <div>
+      <div class="form-row">
+        <div class="col-md-3 mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="import-enc-wallet-password"
+            placeholder="Existing password"
+            onInput={onImportEncryptedWalletPassword}
+            value={importEncryptedWalletPassword}/>
+        </div>
+      </div>
 
-          <div class="form-row">
-            <div class="col-md-3 mb-3">
-              <input
-                type="text"
-                class="form-control"
-                id="import-enc-wallet-password"
-                placeholder="Existing password"
-                onInput={onImportEncryptedWalletPassword}
-                value={importEncryptedWalletPassword}/>
-            </div>
-          </div>
+      <div class="form-row">
+        <div class="col-md-8 mb-6">
+          <textarea
+            type="text"
+            class="form-control"
+            id="import-enc-wallet"
+            placeholder="Encrypted wallet json"
+            onInput={onImportEncryptedWallet}
+            value={importEncryptedWalletJson}/>
+        </div>
+      </div>
 
-          <div class="form-row">
-            <div class="col-md-8 mb-6">
-              <textarea
-                type="text"
-                class="form-control"
-                id="import-enc-wallet"
-                placeholder="Encrypted wallet json"
-                onInput={onImportEncryptedWallet}
-                value={importEncryptedWalletJson}/>
-            </div>
-          </div>
+      <div class="mt-3">
+        <button
+          onClick={importEncryptedWallet}
+          class="btn btn-primary"
+          disabled={importEncryptedButtonState}
+          type="submit">
 
-          <div class="mt-3">
-            <button
-              onClick={importEncryptedWallet}
-              class="btn btn-primary"
-              disabled={importEncryptedButtonState}
-              type="submit">
+          "Import encrypted wallet"
 
-              "Import encrypted wallet"
-
-            </button>
-          </div>
-          </div>
+        </button>
+      </div>
+    </div>
   }
 
   fun renderImportWallet : Html {
-    if (selectedImport == "Encrypted"){
+    if (selectedImport == "Encrypted") {
       renderImportEncrypted()
     } else {
       renderImportDecrypted()
@@ -281,8 +311,8 @@ component ImportExportWallet {
           <{ UiHelper.errorAlert(walletError) }>
 
           <div class="form-row">
-          <div class="col-md-3 mb-3">
-               <select
+            <div class="col-md-3 mb-3">
+              <select
                 onChange={onImportKind}
                 class="form-control"
                 id="import-kind">
@@ -291,10 +321,9 @@ component ImportExportWallet {
 
               </select>
             </div>
-            </div>
+          </div>
 
           <{ renderImportWallet() }>
-        
         </div>
       </div>
 
@@ -304,11 +333,11 @@ component ImportExportWallet {
             "Export Wallet"
           </h4>
 
-       <{ UiHelper.errorAlert(exportErrorMessage) }>
+          <{ UiHelper.errorAlert(exportErrorMessage) }>
 
           <div class="form-row">
-           <div class="col-md-3 mb-3">
-             <select
+            <div class="col-md-3 mb-3">
+              <select
                 onChange={onExportKind}
                 class="form-control"
                 id="export-kind">
@@ -317,9 +346,9 @@ component ImportExportWallet {
 
               </select>
             </div>
-            </div>
+          </div>
 
-             <div class="form-row">
+          <div class="form-row">
             <div class="col-md-8 mb-6">
               <textarea
                 type="text"

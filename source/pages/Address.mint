@@ -23,9 +23,7 @@ component Address {
   }
 
   get loadingPageContent : Html {
-    <div>
-      "LOADING"
-    </div>
+    <div>"LOADING"</div>
   }
 
   fun pageContent (walletInfo : WalletInfo) : Html {
@@ -39,6 +37,7 @@ component Address {
               address={walletInfo.address}
               readable={walletInfo.readable}
               tokens={walletInfo.tokens}/>
+
             <News/>
           </div>
 

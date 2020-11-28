@@ -23,9 +23,7 @@ component Tools {
   }
 
   get loadingPageContent : Html {
-    <div>
-      "LOADING"
-    </div>
+    <div>"LOADING"</div>
   }
 
   fun pageContent (walletInfo : WalletInfo) : Html {
@@ -39,7 +37,8 @@ component Tools {
               address={walletInfo.address}
               readable={walletInfo.readable}
               tokens={walletInfo.tokens}/>
-            <News/>   
+
+            <News/>
           </div>
 
           <div class="col-md-9">

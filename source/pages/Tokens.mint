@@ -24,65 +24,56 @@ component Tokens {
   }
 
   get loadingPageContent : Html {
-    <div>
-      "LOADING"
-    </div>
+    <div>"LOADING"</div>
   }
 
   fun pageContent (walletInfo : WalletInfo) : Html {
     <div class="container-fluid">
-          <div class="row">
-          <div class="col-md-3">
-            <WalletBalances
-              address={walletInfo.address}
-              readable={walletInfo.readable}
-              tokens={walletInfo.tokens}/>
-              <News/>
-          </div>
+      <div class="row">
+        <div class="col-md-3">
+          <WalletBalances
+            address={walletInfo.address}
+            readable={walletInfo.readable}
+            tokens={walletInfo.tokens}/>
 
-          <div class="col-md-9">
-
-             <{ UiHelper.errorAlert(sendError) }>
-             <{ UiHelper.successAlert(sendSuccess) }>
-
-             <CreateCustomTokenTransaction
-              senderAddress={walletInfo.address}
-              tokens={walletInfo.tokens} />
-          
-            <div class="row">
-              
-            <div class="col">
-               <UpdateCustomTokenTransaction
-               senderAddress={walletInfo.address}
-               tokens={walletInfo.tokens}
-               myTokens={unlockedTokens}/>
-            </div>
-
-            <div class="col">
-               <LockCustomTokenTransaction
-               senderAddress={walletInfo.address}
-               tokens={walletInfo.tokens}
-               myTokens={unlockedTokens}/>
-            </div>
-
-            <div class="col">
-               <BurnCustomTokenTransaction
-               senderAddress={walletInfo.address}
-               tokens={walletInfo.tokens}/>
-            </div>
-
-          </div>
-          
-          </div>
-
+          <News/>
         </div>
 
-       
-          </div>
-       
+        <div class="col-md-9">
+          <{ UiHelper.errorAlert(sendError) }>
+          <{ UiHelper.successAlert(sendSuccess) }>
 
-  
+          <CreateCustomTokenTransaction
+            senderAddress={walletInfo.address}
+            tokens={walletInfo.tokens}/>
+
+          <div class="row">
+            <div class="col">
+              <UpdateCustomTokenTransaction
+                senderAddress={walletInfo.address}
+                tokens={walletInfo.tokens}
+                myTokens={unlockedTokens}/>
+            </div>
+
+            <div class="col">
+              <LockCustomTokenTransaction
+                senderAddress={walletInfo.address}
+                tokens={walletInfo.tokens}
+                myTokens={unlockedTokens}/>
+            </div>
+
+            <div class="col">
+              <BurnCustomTokenTransaction
+                senderAddress={walletInfo.address}
+                tokens={walletInfo.tokens}/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   } where {
-    unlockedTokens = walletInfo.myTokens |> Array.select((t : Token){ !t.isLocked })
+    unlockedTokens =
+      walletInfo.myTokens
+      |> Array.select((t : Token) { !t.isLocked })
   }
 }

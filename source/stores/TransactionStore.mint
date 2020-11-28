@@ -44,7 +44,7 @@ store TransactionStore {
     next { domainError = error }
   }
 
-  fun setTokenError(error : String) : Promise(Never, Void) {
+  fun setTokenError (error : String) : Promise(Never, Void) {
     next { tokenError = error }
   }
 
@@ -62,7 +62,7 @@ store TransactionStore {
         sendError = "",
         sendSuccess = "",
         domainError = "",
-        tokenError = "",
+        tokenError = ""
       }
   }
 
@@ -470,7 +470,7 @@ store TransactionStore {
     }
   }
 
- fun burnCustomTokenTransaction (
+  fun burnCustomTokenTransaction (
     senderAddress : String,
     senderPublicKey : String,
     name : String,
@@ -506,5 +506,4 @@ store TransactionStore {
       version = "V1"
     }
   }
-
 }

@@ -107,9 +107,7 @@ component RecentTransactionsTable {
   }
 
   fun renderNoRows : Html {
-    <p>
-      "No transactions have been sent yet!"
-    </p>
+    <p>"No transactions have been sent yet!"</p>
   }
 
   fun renderTable : Html {

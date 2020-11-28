@@ -25,9 +25,7 @@ component Dashboard {
   }
 
   get loadingPageContent : Html {
-    <div>
-      "LOADING"
-    </div>
+    <div>"LOADING"</div>
   }
 
   fun pageContent (walletInfo : WalletInfo) : Html {
@@ -41,8 +39,9 @@ component Dashboard {
               address={walletInfo.address}
               readable={walletInfo.readable}
               tokens={walletInfo.tokens}/>
-              <News/>
-              <TestnetCurrency/>
+
+            <News/>
+            <TestnetCurrency/>
           </div>
 
           <div class="col-md-9">
@@ -53,6 +52,7 @@ component Dashboard {
                     "Recent Transactions"
                   </h6>
                 </div>
+
                 <div class="row">
                   <div class="col-md-12">
                     <RecentTransactionsTable rows={walletInfo.recentTransactions}/>

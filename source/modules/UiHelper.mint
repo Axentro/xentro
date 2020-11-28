@@ -29,6 +29,17 @@ module UiHelper {
     }
   }
 
+  fun submitOnEnter (
+    event : Html.Event,
+    callback : Function(Html.Event, Promise(Never, Void))
+  ) : Promise(Never, Void) {
+    if (event.charCode == 13) {
+      callback(event)
+    } else {
+      Promise.never()
+    }
+  }
+
   fun selectNameOptions (selectedName : String, options : Array(String)) : Array(Html) {
     options
     |> Array.map(

@@ -35,7 +35,7 @@ component BurnCustomTokenTransaction {
             amount = "",
             selectedToken = "Choose",
             speed = currentWalletConfig.speed,
-            confirmCheck = false,
+            confirmCheck = false
           }
 
         resetStatus(false)
@@ -45,7 +45,7 @@ component BurnCustomTokenTransaction {
     }
   }
 
-   fun onAmount (event : Html.Event) : Promise(Never, Void) {
+  fun onAmount (event : Html.Event) : Promise(Never, Void) {
     next
       {
         amount = value,
@@ -56,13 +56,13 @@ component BurnCustomTokenTransaction {
       Dom.getValue(event.target)
   }
 
-
-  fun validateAmount(value : String) : String {
-      if((Number.fromString(value) |> Maybe.withDefault(0)) <= 0) {
-       "Please supply a number greater than 0"
-      } else {
-          ""
-      }
+  fun validateAmount (value : String) : String {
+    if ((Number.fromString(value)
+        |> Maybe.withDefault(0)) <= 0) {
+      "Please supply a number greater than 0"
+    } else {
+      ""
+    }
   }
 
   fun onToken (event : Html.Event) {
@@ -74,11 +74,12 @@ component BurnCustomTokenTransaction {
       }
   }
 
- get tokenOptions : Array(String) {
-     Array.append(["Choose"],options)
+  get tokenOptions : Array(String) {
+    Array.append(["Choose"], options)
   } where {
-      options = tokens
-      |> Array.reject((t : Token) { t.amount == "0"})
+    options =
+      tokens
+      |> Array.reject((t : Token) { t.amount == "0" })
       |> Array.map(.name)
       |> Array.reject((name : String) { String.toLowerCase(name) == "axnt" })
   }
@@ -118,28 +119,29 @@ component BurnCustomTokenTransaction {
     <div/>
   }
 
-  fun processSendTransaction(
+  fun processSendTransaction (
     event : Html.Event,
     baseUrl : String,
     recipientAddress : String,
     senderWif : String,
     transaction : Transaction
-   ) {
-     sequence {
+  ) {
+    sequence {
       next { confirmCheck = false }
       sendTransaction(event, baseUrl, recipientAddress, senderWif, transaction)
-     }
+    }
   }
 
   fun render : Html {
-      if (Array.isEmpty(options)){
-       <div/>
-      } else {
-          renderView()
-      }
+    if (Array.isEmpty(options)) {
+      <div/>
+    } else {
+      renderView()
+    }
   } where {
-      options = tokenOptions
-                |> Array.reject((t : String) {t == "Choose"})
+    options =
+      tokenOptions
+      |> Array.reject((t : String) { t == "Choose" })
   }
 
   fun renderView : Html {
@@ -150,8 +152,8 @@ component BurnCustomTokenTransaction {
         </h4>
 
         <div>
-        <div class="form-group">
-           <div class="col">
+          <div class="form-group">
+            <div class="col">
               <label for="token-to-update">
                 "Token"
               </label>
@@ -165,9 +167,9 @@ component BurnCustomTokenTransaction {
 
               </select>
             </div>
-            </div>
-        
-        <div class="form-group">
+          </div>
+
+          <div class="form-group">
             <div class="col">
               <label for="amount-to-burn">
                 "Burn amount"
@@ -186,27 +188,26 @@ component BurnCustomTokenTransaction {
               </div>
             </div>
           </div>
-         
 
           <div class="form-group">
-          <div class="col">
-            <div class="custom-control custom-checkbox custom-checkbox-success">
-              <input
-                type="checkbox"
-                onChange={onCheck}
-                class="custom-control-input"
-                checked={confirmCheck}
-                id="customCheckBurn"/>
+            <div class="col">
+              <div class="custom-control custom-checkbox custom-checkbox-success">
+                <input
+                  type="checkbox"
+                  onChange={onCheck}
+                  class="custom-control-input"
+                  checked={confirmCheck}
+                  id="customCheckBurn"/>
 
-              <label
-                class="custom-control-label"
-                for="customCheckBurn">
+                <label
+                  class="custom-control-label"
+                  for="customCheckBurn">
 
-                "I've double checked everything is correct!"
+                  "I've double checked everything is correct!"
 
-              </label>
+                </label>
+              </div>
             </div>
-          </div>
           </div>
 
           <button

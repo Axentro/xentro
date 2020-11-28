@@ -25,9 +25,7 @@ component Transactions {
   }
 
   get loadingPageContent : Html {
-    <div>
-      "LOADING"
-    </div>
+    <div>"LOADING"</div>
   }
 
   fun pageContent (walletInfo : WalletInfo) : Html {
@@ -41,26 +39,26 @@ component Transactions {
               address={walletInfo.address}
               readable={walletInfo.readable}
               tokens={walletInfo.tokens}/>
-              <News/>
+
+            <News/>
           </div>
 
           <div class="col-md-9">
-             <div class="card">
+            <div class="card">
               <div class="card-body">
                 <div>
                   <h6 class="card-title">
                     "Rejected Transactions"
                   </h6>
                 </div>
-                  <div class="row">
+
+                <div class="row">
                   <div class="col-md-12">
                     <RejectedTransactionsTable rows={walletInfo.rejectedTransactions}/>
                   </div>
                 </div>
-
               </div>
             </div>
-
           </div>
         </div>
       </div>

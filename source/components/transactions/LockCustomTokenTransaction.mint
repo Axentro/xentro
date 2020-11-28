@@ -33,7 +33,7 @@ component LockCustomTokenTransaction {
           {
             selectedToken = "Choose",
             speed = currentWalletConfig.speed,
-            confirmCheck = false,
+            confirmCheck = false
           }
 
         resetStatus(false)
@@ -51,10 +51,11 @@ component LockCustomTokenTransaction {
       }
   }
 
- get tokenOptions : Array(String) {
-     Array.append(["Choose"],options)
+  get tokenOptions : Array(String) {
+    Array.append(["Choose"], options)
   } where {
-      options = myTokens
+    options =
+      myTokens
       |> Array.map(.name)
       |> Array.reject((name : String) { String.toLowerCase(name) == "axnt" })
   }
@@ -90,25 +91,25 @@ component LockCustomTokenTransaction {
     !confirmCheck || !String.isEmpty(feeError) || selectedToken == "Choose"
   }
 
-  fun processSendTransaction(
+  fun processSendTransaction (
     event : Html.Event,
     baseUrl : String,
     recipientAddress : String,
     senderWif : String,
     transaction : Transaction
-   ) {
-     sequence {
+  ) {
+    sequence {
       next { confirmCheck = false }
       sendTransaction(event, baseUrl, recipientAddress, senderWif, transaction)
-     }
+    }
   }
 
   fun render : Html {
-      if (Array.isEmpty(myTokens)){
-       <div/>
-      } else {
-          renderView()
-      }
+    if (Array.isEmpty(myTokens)) {
+      <div/>
+    } else {
+      renderView()
+    }
   }
 
   fun renderView : Html {
@@ -119,10 +120,10 @@ component LockCustomTokenTransaction {
         </h4>
 
         <{ UiHelper.errorAlert(feeError) }>
-        
+
         <div>
           <div class="form-group">
-           <div class="col">
+            <div class="col">
               <label for="token-to-lock">
                 "Token"
               </label>
@@ -135,28 +136,27 @@ component LockCustomTokenTransaction {
                 <{ UiHelper.selectNameOptions(selectedToken, tokenOptions) }>
 
               </select>
-
             </div>
           </div>
 
           <div class="form-group">
-           <div class="col">
-            <div class="custom-control custom-checkbox custom-checkbox-success">
-              <input
-                type="checkbox"
-                onChange={onCheck}
-                class="custom-control-input"
-                checked={confirmCheck}
-                id="customCheckLock"/>
+            <div class="col">
+              <div class="custom-control custom-checkbox custom-checkbox-success">
+                <input
+                  type="checkbox"
+                  onChange={onCheck}
+                  class="custom-control-input"
+                  checked={confirmCheck}
+                  id="customCheckLock"/>
 
-              <label
-                class="custom-control-label"
-                for="customCheckLock">
+                <label
+                  class="custom-control-label"
+                  for="customCheckLock">
 
-                "I've double checked everything is correct!"
+                  "I've double checked everything is correct!"
 
-              </label>
-            </div>
+                </label>
+              </div>
             </div>
           </div>
 

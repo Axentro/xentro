@@ -5,8 +5,8 @@ component Layout {
 
   fun componentDidMount : Promise(Never, Void) {
     sequence {
-     LayoutHelper.preLoad()
-     LayoutHelper.feedback()
+      LayoutHelper.preLoad()
+      LayoutHelper.feedback()
     }
   }
 
@@ -22,7 +22,10 @@ component Layout {
                   src="/assets/media/image/axentro-logo-h.svg"
                   width="150"
                   alt="logo"/>
-                  <span style="margin-left:6px;padding-top:12px;"><Version/></span>
+
+                <span style="margin-left:6px;padding-top:12px;">
+                  <Version/>
+                </span>
               </a>
             </div>
           </div>
@@ -36,7 +39,6 @@ component Layout {
               <div class="page-header"/>
               <{ dataError }>
               <{ content }>
-              
             </div>
           </div>
         </div>

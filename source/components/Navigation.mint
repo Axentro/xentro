@@ -120,7 +120,7 @@ component Navigation {
             </a>
           </li>
 
-          <li class="nav-item"> 
+          <li class="nav-item">
             <a
               class={"mr-2 btn " + activeStyle("tokens")}
               href="/tokens">
@@ -130,7 +130,7 @@ component Navigation {
             </a>
           </li>
 
-         <li class="nav-item">
+          <li class="nav-item">
             <a
               class={"mr-2 btn " + activeStyle("transactions")}
               href="/transactions">
@@ -163,22 +163,22 @@ component Navigation {
       </div>
 
       <div class="header-body-right">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav"/>
 
-         
-        </ul>
-         <ul class="navbar-nav flex-row mb-2">
-         <li class="mr-1 nav-item">
+        <ul class="navbar-nav flex-row mb-2">
+          <li class="mr-1 nav-item">
             <{ showConnectionNode }>
           </li>
 
           <li class="mr-3 nav-item">
             <{ showConnectionStatus() }>
           </li>
-           <li class="mr-2 nav-item">
+
+          <li class="mr-2 nav-item">
             <{ showWalletName }>
           </li>
-           <li class="nav-item">
+
+          <li class="nav-item">
             <a
               onClick={logout}
               class="btn btn-sm btn-outline-secondary"
@@ -187,9 +187,8 @@ component Navigation {
               "Logout"
 
             </a>
-       
           </li>
-         </ul>
+        </ul>
       </div>
     </div>
   }

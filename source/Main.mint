@@ -101,7 +101,7 @@ component Main {
   }
 
   connect WalletStore exposing { currentWallet }
- 
+
   use Provider.WalletWebSocket {
     url = webSocketUrl,
     onMessage = handleMessage,
@@ -112,7 +112,7 @@ component Main {
     shouldWebSocketConnect
   }
 
-   use Provider.MinerWebSocket {
+  use Provider.MinerWebSocket {
     url = minerWebSocketUrl,
     onMessage = handleMinerMessage,
     onError = handleMinerError,
@@ -122,9 +122,8 @@ component Main {
     shouldMinerWebSocketConnect
   }
 
-   fun handleMinerOpen (socket : WebSocket) : Promise(Never, Void) {
+  fun handleMinerOpen (socket : WebSocket) : Promise(Never, Void) {
     sequence {
-
       setMinerWebSocket(socket)
       setMinerConnectionstatus(ConnectionStatus::Connected)
 
@@ -141,7 +140,7 @@ component Main {
 
   fun handleMinerClose : Promise(Never, Void) {
     sequence {
-       setMinerConnectionstatus(ConnectionStatus::Disconnected)
+      setMinerConnectionstatus(ConnectionStatus::Disconnected)
     }
   }
 
@@ -153,22 +152,21 @@ component Main {
 
   fun handleMinerMessage (data : String) : Promise(Never, Void) {
     sequence {
-
       json =
         Json.parse(data)
-        |> Maybe.toResult("Json parsing error") 
+        |> Maybe.toResult("Json parsing error")
 
-       minerMessage =
+      minerMessage =
         decode json as MinerMessage
 
-        if(minerMessage.type == MinerConnection:HANDSHAKE_ACCEPTED) {
-           handshakeAccepted(minerMessage)
-        } else if (minerMessage.type == MinerConnection:HANDSHAKE_REJECTED) {
-           handshakeRejected(minerMessage)
-        } else {
-         unrecognised() 
-        }
-      
+      if (minerMessage.type == MinerConnection:HANDSHAKE_ACCEPTED) {
+        handshakeAccepted(minerMessage)
+      } else if (minerMessage.type == MinerConnection:HANDSHAKE_REJECTED) {
+        handshakeRejected(minerMessage)
+      } else {
+        unrecognised()
+      }
+
       setDataError("")
     } catch String => er {
       setDataError("Could not parse handleMinerMessage json response")
@@ -177,16 +175,16 @@ component Main {
     }
   }
 
-  fun handshakeAccepted(minerMessage : MinerMessage) : Promise(Never,Void) {
+  fun handshakeAccepted (minerMessage : MinerMessage) : Promise(Never, Void) {
     sequence {
       json =
         Json.parse(minerMessage.content)
-        |> Maybe.toResult("Json parsing error (handshakeAccepted)") 
+        |> Maybe.toResult("Json parsing error (handshakeAccepted)")
 
       content =
         decode json as MinerAcceptedMessage
 
-      Debug.log(content.block)  
+      Debug.log(content.block)
 
       Promise.never()
     } catch String => er {
@@ -196,14 +194,13 @@ component Main {
     }
   }
 
-  fun handshakeRejected(minerMessage : MinerMessage) : Promise(Never, Void) {
+  fun handshakeRejected (minerMessage : MinerMessage) : Promise(Never, Void) {
     sequence {
-
       json =
         Json.parse(minerMessage.content)
-        |> Maybe.toResult("Json parsing error") 
+        |> Maybe.toResult("Json parsing error")
 
-       content =
+      content =
         decode json as MinerRejectedMessage
 
       setDataError(content.reason)
@@ -214,8 +211,8 @@ component Main {
     }
   }
 
-  fun unrecognised() : Promise(Never,Void) {
-     setDataError("Message was not recognised - ignoring it!")
+  fun unrecognised : Promise(Never, Void) {
+    setDataError("Message was not recognised - ignoring it!")
   }
 
   fun getWalletInfo {
@@ -311,7 +308,7 @@ component Main {
       {
         name = "purchase",
         contents = <PrivateSale/>
-      }, 
+      },
       {
         name = "login",
         contents = <Login/>
@@ -322,10 +319,7 @@ component Main {
       },
       {
         name = "not_found",
-        contents =
-          <div>
-            "404"
-          </div>
+        contents = <div>"404"</div>
       }
     ]
   }

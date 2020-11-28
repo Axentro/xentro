@@ -119,25 +119,25 @@ component BuyAddressTransaction {
     <div/>
   }
 
-  fun processSendTransaction(
+  fun processSendTransaction (
     event : Html.Event,
     baseUrl : String,
     recipientAddress : String,
     senderWif : String,
     transaction : Transaction
-   ) {
-     sequence {
+  ) {
+    sequence {
       next { confirmCheck = false }
       sendTransaction(event, baseUrl, recipientAddress, senderWif, transaction)
-     }
+    }
   }
 
   fun render {
-   if(Array.isEmpty(readable)){
-     getAddressView()
-   } else {
-    alreadyHaveAddressView()
-   }
+    if (Array.isEmpty(readable)) {
+      getAddressView()
+    } else {
+      alreadyHaveAddressView()
+    }
   }
 
   fun alreadyHaveAddressView : Html {
@@ -151,9 +151,7 @@ component BuyAddressTransaction {
           class="alert alert-info alert-with-border"
           role="alert">
 
-          <p>
-            "You may only have 1 human readable address per wallet address."
-          </p>
+          <p>"You may only have 1 human readable address per wallet address."</p>
 
         </div>
       </div>
@@ -171,31 +169,23 @@ component BuyAddressTransaction {
           class="alert alert-info alert-with-border"
           role="alert">
 
-          <p>
-            "Please select a name within the following restrictions:"
-          </p>
+          <p>"Please select a name within the following restrictions:"</p>
 
           <hr/>
 
           <p class="mb-0">
             <ul class="ml-3">
-              <li>
-                "- Can only contain alphanumerics"
-              </li>
+              <li>"- Can only contain alphanumerics"</li>
 
               <li>
                 "- Must end with the suffix: "
 
-                <b>
-                  ".ax"
-                </b>
+                <b>".ax"</b>
 
                 " (e.g. myname.ax)"
               </li>
 
-              <li>
-                "- Length must be between 1 and 20 characters (excluding suffix)"
-              </li>
+              <li>"- Length must be between 1 and 20 characters (excluding suffix)"</li>
             </ul>
           </p>
 

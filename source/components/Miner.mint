@@ -1,16 +1,17 @@
 component Miner {
-  connect Application exposing { numberProcesses, initMinerSlider, setNumberProcesses, minerConnectionStatus}
+  connect Application exposing { numberProcesses, initMinerSlider, setNumberProcesses, minerConnectionStatus }
   connect WalletStore exposing { currentWalletConfig }
 
   fun componentDidMount {
     sequence {
-   initMinerSlider()
+      initMinerSlider()
     }
   }
 
-   fun showMinerConnectionStatus : Html {
+  fun showMinerConnectionStatus : Html {
     <div>
-    "Mining Processes " <{ status }>
+      "Mining Processes "
+      <{ status }>
     </div>
   } where {
     status =
@@ -26,24 +27,19 @@ component Miner {
   fun render {
     <div class="card">
       <div class="card-body">
-       <div class="d-flex justify-content-between mb-3">
+        <div class="d-flex justify-content-between mb-3">
+          <div class="col-12">
+            <p class="text-muted">
+              <{ showMinerConnectionStatus() }>
+            </p>
 
-
-            <div class="col-12">
-              <p class="text-muted">
-                <{ showMinerConnectionStatus() }>
-              </p>
-
-              <input
-                type="text"
-                class="form-control"
-                id="number-processes"
-                />
-
-            </div>
-       
+            <input
+              type="text"
+              class="form-control"
+              id="number-processes"/>
+          </div>
         </div>
-    </div>
+      </div>
     </div>
   }
 }

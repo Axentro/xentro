@@ -66,9 +66,7 @@ component Login {
   fun renderForm : Html {
     <div>
       <div>
-        <h5>
-          "Login Wallet"
-        </h5>
+        <h5>"Login Wallet"</h5>
 
         <{ UiHelper.errorAlert(loginError) }>
 
@@ -77,9 +75,7 @@ component Login {
             class="ml-1"
             for="walletName">
 
-            <i>
-              "Wallet name"
-            </i>
+            <i>"Wallet name"</i>
 
           </label>
 
@@ -98,15 +94,14 @@ component Login {
             class="ml-1"
             for="password">
 
-            <i>
-              "Password"
-            </i>
+            <i>"Password"</i>
 
           </label>
 
           <div class="input-group mb-3">
             <input
               onInput={onPassword}
+              onKeyPress={(event : Html.Event) { UiHelper.submitOnEnter(event, login) }}
               type="password"
               class="form-control"
               id="password"
@@ -165,8 +160,10 @@ component Login {
             src="/assets/media/image/axentro-logo-v.png"
             width="150"
             alt="logo"/>
-            <Version/>
+
+          <Version/>
         </div>
+
         <{ formOrNoWallet() }>
       </div>
     </div>

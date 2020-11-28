@@ -23,9 +23,7 @@ component Receive {
   }
 
   get loadingPageContent : Html {
-    <div>
-      "LOADING"
-    </div>
+    <div>"LOADING"</div>
   }
 
   fun copyAddress (event : Html.Event) : Void {
@@ -53,6 +51,7 @@ component Receive {
               address={walletInfo.address}
               readable={walletInfo.readable}
               tokens={walletInfo.tokens}/>
+
             <News/>
           </div>
 
@@ -67,13 +66,9 @@ component Receive {
                   class="alert alert-info"
                   role="alert">
 
-                  <p>
-                    "Give the sender your wallet address when they want to send you tokens. You can either provide the address below or scan the QR code."
-                  </p>
+                  <p>"Give the sender your wallet address when they want to send you tokens. You can either provide the address below or scan the QR code."</p>
 
-                  <p>
-                    "If you have a human readable address you can also provide that. "
-                  </p>
+                  <p>"If you have a human readable address you can also provide that. "</p>
 
                 </div>
 

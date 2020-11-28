@@ -65,7 +65,7 @@ component CreateCustomTokenTransaction {
       Dom.getValue(event.target)
   }
 
-   fun onAmount (event : Html.Event) : Promise(Never, Void) {
+  fun onAmount (event : Html.Event) : Promise(Never, Void) {
     next
       {
         amount = value,
@@ -76,19 +76,20 @@ component CreateCustomTokenTransaction {
       Dom.getValue(event.target)
   }
 
-   fun onToken (event : Html.Event) {
+  fun onToken (event : Html.Event) {
     tokenExists(currentWalletConfig.node, value)
   } where {
     value =
       Dom.getValue(event.target)
   }
 
-  fun validateAmount(value : String) : String {
-      if((Number.fromString(value) |> Maybe.withDefault(0)) <= 0) {
-       "Please supply a number greater than 0"
-      } else {
-          ""
-      }
+  fun validateAmount (value : String) : String {
+    if ((Number.fromString(value)
+        |> Maybe.withDefault(0)) <= 0) {
+      "Please supply a number greater than 0"
+    } else {
+      ""
+    }
   }
 
   fun validateName (value : String) : String {
@@ -97,8 +98,9 @@ component CreateCustomTokenTransaction {
         Regexp.create("^[A-Z0-9]{1,20}")
         |> Regexp.match(value)
 
-      allCaps = String.toUpperCase(value) == value
-   
+      allCaps =
+        String.toUpperCase(value) == value
+
       if (regexResult && allCaps) {
         ""
       } else {
@@ -142,17 +144,17 @@ component CreateCustomTokenTransaction {
     <div/>
   }
 
-  fun processSendTransaction(
+  fun processSendTransaction (
     event : Html.Event,
     baseUrl : String,
     recipientAddress : String,
     senderWif : String,
     transaction : Transaction
-   ) {
-     sequence {
+  ) {
+    sequence {
       next { confirmCheck = false }
       sendTransaction(event, baseUrl, recipientAddress, senderWif, transaction)
-     }
+    }
   }
 
   fun render : Html {
@@ -166,21 +168,15 @@ component CreateCustomTokenTransaction {
           class="alert alert-info alert-with-border"
           role="alert">
 
-          <p>
-            "Please select a token name within the following restrictions:"
-          </p>
+          <p>"Please select a token name within the following restrictions:"</p>
 
           <hr/>
 
           <p class="mb-0">
             <ul class="ml-3">
-              <li>
-                "- Can only contain uppercase letters or numbers"
-              </li>
+              <li>"- Can only contain uppercase letters or numbers"</li>
 
-              <li>
-                "- Length must be between 1 and 20 characters"
-              </li>
+              <li>"- Length must be between 1 and 20 characters"</li>
             </ul>
           </p>
 
@@ -216,7 +212,7 @@ component CreateCustomTokenTransaction {
             </div>
           </div>
 
-           <div class="form-row">
+          <div class="form-row">
             <div class="col-md-3 mb-3">
               <label for="amount-to-create">
                 "Amount to create"

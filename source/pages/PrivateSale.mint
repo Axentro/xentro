@@ -24,36 +24,24 @@ component PrivateSale {
   }
 
   get loadingPageContent : Html {
-    <div>
-      "LOADING"
-    </div>
+    <div>"LOADING"</div>
   }
 
   fun pageContent (walletInfo : WalletInfo) : Html {
     <div class="container-fluid">
-          <div class="row">
-          <div class="col-md-3">
-            <PurchaseInfo/>
-              <Referrals senderAddress={walletInfo.address}/>
-          </div>
-
-          <div class="col-md-9">
-
-             <{ UiHelper.errorAlert(sendError) }>
-             <{ UiHelper.successAlert(sendSuccess) }>
-
-             <PurchaseTokens
-              senderAddress={walletInfo.address}/>
-          
-                  
-          </div>
-
+      <div class="row">
+        <div class="col-md-3">
+          <PurchaseInfo/>
+          <Referrals senderAddress={walletInfo.address}/>
         </div>
 
-       
-          </div>
-       
+        <div class="col-md-9">
+          <{ UiHelper.errorAlert(sendError) }>
+          <{ UiHelper.successAlert(sendSuccess) }>
 
-  
-  } 
+          <PurchaseTokens senderAddress={walletInfo.address}/>
+        </div>
+      </div>
+    </div>
+  }
 }

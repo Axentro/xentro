@@ -8,7 +8,7 @@ component RejectedTransactionsTable {
   }
 
   fun renderAddress (address : String) : String {
-      trunc(address, 7)
+    trunc(address, 7)
   }
 
   fun renderStatus (status : String) : Html {
@@ -23,9 +23,6 @@ component RejectedTransactionsTable {
         "bg-warning"
       }
   }
-
- 
- 
 
   fun renderBodyRow (row : RejectedTransaction) : Html {
     <tr>
@@ -42,7 +39,7 @@ component RejectedTransactionsTable {
       </td>
 
       <td>
-        <{ row.rejectionReason}>
+        <{ row.rejectionReason }>
       </td>
 
       <td>
@@ -60,9 +57,7 @@ component RejectedTransactionsTable {
   }
 
   fun renderNoRows : Html {
-    <p>
-      "No transactions have been sent yet!"
-    </p>
+    <p>"No transactions have been sent yet!"</p>
   }
 
   fun renderTable : Html {

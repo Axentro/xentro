@@ -12,12 +12,14 @@ component Register {
             src="/assets/media/image/axentro-logo-v.png"
             width="150"
             alt="logo"/>
-             <Version/>
+
+          <Version/>
         </div>
 
         <div>
           <CreateEncryptedWallet/>
           <hr/>
+
           <p class="text-muted">
             "Already have a wallet?"
           </p>

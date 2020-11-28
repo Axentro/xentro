@@ -134,11 +134,12 @@ component CreateEncryptedWallet {
 
   fun createWallet (event : Html.Event) : Promise(Never, Void) {
     sequence {
-      network = if (selectedNetwork == "Mainnet"){
-        Network.Prefix.mainNet()
-      } else {
-        Network.Prefix.testNet()
-      }
+      network =
+        if (selectedNetwork == "Mainnet") {
+          Network.Prefix.mainNet()
+        } else {
+          Network.Prefix.testNet()
+        }
 
       wallet =
         Axentro.Wallet.generateEncryptedWallet(network, name, password)
@@ -216,9 +217,7 @@ component CreateEncryptedWallet {
       } else {
         <div::height>
           <div class={"alert alert-" + rating.colour}>
-            <span>
-              "Strength: "
-            </span>
+            <span>"Strength: "</span>
 
             <strong>
               <{ rating.text + " " }>
@@ -318,31 +317,24 @@ component CreateEncryptedWallet {
     Window.navigate(cancelUrl)
   }
 
-   get networkOptions : Array(String) {
-    ["Mainnet","Testnet"]
-  } 
+  get networkOptions : Array(String) {
+    ["Mainnet", "Testnet"]
+  }
 
-   fun onNetwork (event : Html.Event) {
-    next
-      {
-        selectedNetwork = Dom.getValue(event.target)
-      }
+  fun onNetwork (event : Html.Event) {
+    next { selectedNetwork = Dom.getValue(event.target) }
   }
 
   fun render : Html {
     <div>
-      <h5>
-        "Create Wallet"
-      </h5>
+      <h5>"Create Wallet"</h5>
 
       <div class="text-left form-group">
         <label
           class="ml-1"
           for="walletName">
 
-          <i>
-            "Wallet name"
-          </i>
+          <i>"Wallet name"</i>
 
         </label>
 
@@ -361,9 +353,7 @@ component CreateEncryptedWallet {
           class="ml-1"
           for="password">
 
-          <i>
-            "Password"
-          </i>
+          <i>"Password"</i>
 
         </label>
 
@@ -402,9 +392,7 @@ component CreateEncryptedWallet {
           class="ml-1"
           for="password">
 
-          <i>
-            "Repeat Password"
-          </i>
+          <i>"Repeat Password"</i>
 
         </label>
 
@@ -443,20 +431,18 @@ component CreateEncryptedWallet {
           class="ml-1"
           for="network">
 
-          <i>
-            "Network"
-          </i>
+          <i>"Network"</i>
 
         </label>
 
-          <select
-                onChange={onNetwork}
-                class="form-control"
-                id="network">
+        <select
+          onChange={onNetwork}
+          class="form-control"
+          id="network">
 
-                <{ UiHelper.selectNameOptions(selectedNetwork, networkOptions) }>
+          <{ UiHelper.selectNameOptions(selectedNetwork, networkOptions) }>
 
-              </select>
+        </select>
       </div>
 
       <button

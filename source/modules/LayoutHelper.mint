@@ -11,7 +11,7 @@ module LayoutHelper {
   }
 
   fun feedback {
-     `
+    `
     (() => {
       window.requestAnimationFrame(function () { 
         var buttons = document.getElementsByClassName("feedback-btn").length;    
@@ -26,7 +26,3 @@ module LayoutHelper {
     `
   }
 }
-
-
-
-

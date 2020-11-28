@@ -1,7 +1,7 @@
 record AllOrdersResponse {
   id : String,
   timestamp : String,
-  address : String, 
+  address : String,
   referral : String,
   tokenAmount : String using "token_amount",
   amount : String,
@@ -22,7 +22,7 @@ record OrderStatusUpdateRequest {
 
 component AdminOrders {
   connect WalletStore exposing { currentWallet, currentWalletConfig }
-  connect OrderStore exposing { toHash, signPrivateSale}
+  connect OrderStore exposing { toHash, signPrivateSale }
 
   property senderAddress : String
   state selectedOrder : String = "Choose"
@@ -32,217 +32,248 @@ component AdminOrders {
   state selectedStatus : String = "Choose"
 
   fun componentDidMount : Promise(Never, Void) {
-      fetchAllOrders(senderAddress, currentWalletConfig, currentWallet)
+    fetchAllOrders(senderAddress, currentWalletConfig, currentWallet)
   }
-  
-   fun onOrderId (event : Html.Event) {
+
+  fun onOrderId (event : Html.Event) {
     next
       {
-        selectedOrder = Dom.getValue(event.target), updateError = ""
+        selectedOrder = Dom.getValue(event.target),
+        updateError = ""
       }
-  
-}
+  }
 
-fun fetchAllOrders(senderAddress : String, currentWalletConfig : WalletConfig, currentWallet : Maybe(Wallet)) {
+  fun fetchAllOrders (
+    senderAddress : String,
+    currentWalletConfig : WalletConfig,
+    currentWallet : Maybe(Wallet)
+  ) {
     sequence {
+      hexPrivateKey =
+        currentWallet
+        |> Maybe.map(
+          (w : Wallet) {
+            Axentro.Wallet.getPrivateKeyFromWif(w.wif)
+            |> Result.withDefault("error")
+          })
+        |> Maybe.withDefault("error")
 
+      publicKey =
+        currentWallet
+        |> Maybe.map((w : Wallet) { w.publicKey })
+        |> Maybe.withDefault("error")
 
-       hexPrivateKey =
-                      currentWallet 
-                      |> Maybe.map((w : Wallet) { Axentro.Wallet.getPrivateKeyFromWif(w.wif) |> Result.withDefault("error") })
-                      |> Maybe.withDefault("error")
-        
+      data =
+        senderAddress + publicKey
 
-      publicKey = currentWallet
-                  |> Maybe.map((w : Wallet) { w.publicKey })
-                  |> Maybe.withDefault("error")
+      hash =
+        toHash(data)
 
+      signature =
+        signPrivateSale(hash, hexPrivateKey)
 
-      data = senderAddress + publicKey
-      hash = toHash(data)
-      signature = signPrivateSale(hash, hexPrivateKey)
+      payload =
+        {
+          address = senderAddress,
+          publicKey = publicKey,
+          hash = hash,
+          signature = signature
+        }
 
-      payload = { address = senderAddress, publicKey = publicKey, hash = hash, signature = signature}   
-      
-      requestBody = encode { call = "private_sale", action = "all_orders", payload = payload }
-      baseUrl = currentWalletConfig.node
+      requestBody =
+        encode {
+          call = "private_sale",
+          action = "all_orders",
+          payload = payload
+        }
+
+      baseUrl =
+        currentWalletConfig.node
 
       response =
         Http.post(baseUrl + "/rpc")
         |> Http.jsonBody(requestBody)
         |> Http.send()
 
-        json = 
-          Json.parse(response.body)
-          |> Maybe.toResult("Json parsing error with fetch orders")
+      json =
+        Json.parse(response.body)
+        |> Maybe.toResult("Json parsing error with fetch orders")
 
-        result =
-          decode json as Array(AllOrdersResponse)
+      result =
+        decode json as Array(AllOrdersResponse)
 
       if (response.status == 200) {
-           next { allOrders = result }
+        next { allOrders = result }
       } else {
-       Promise.never()
+        Promise.never()
       }
     } catch {
-       Promise.never()
+      Promise.never()
     }
-  } 
+  }
 
-
- fun onOrderStatus (event : Html.Event) {
+  fun onOrderStatus (event : Html.Event) {
     next
       {
-        selectedStatus = Dom.getValue(event.target), updateError = ""
+        selectedStatus = Dom.getValue(event.target),
+        updateError = ""
       }
   }
 
   fun render : Html {
-      if (Array.isEmpty(allOrders)) {
-        <div></div>
-      } else {
-        renderOrders()
-      }
+    if (Array.isEmpty(allOrders)) {
+      <div/>
+    } else {
+      renderOrders()
+    }
   }
 
-  fun renderOrderRow(order : AllOrdersResponse) : Html {
-       <tr>
+  fun renderOrderRow (order : AllOrdersResponse) : Html {
+    <tr>
       <td>
         <{ order.id }>
       </td>
-       <td>
+
+      <td>
         <{ order.timestamp }>
       </td>
-       <td>
+
+      <td>
         <{ order.address }>
       </td>
+
       <td>
         <{ order.tokenAmount }>
       </td>
+
       <td>
         <{ order.amount }>
       </td>
+
       <td>
         <{ order.paymentMethod }>
       </td>
+
       <td>
         <{ order.referral }>
       </td>
+
       <td>
         <{ order.transactionId }>
       </td>
-        <td>
+
+      <td>
         <{ order.agree }>
       </td>
+
       <td>
         <{ order.status }>
       </td>
-      </tr>
+    </tr>
   }
 
   get orderTable : Html {
-         <div class="table-responsive">
-        <table
-          id="order-table"
-          class="table table-striped table-bordered">
+    <div class="table-responsive">
+      <table
+        id="order-table"
+        class="table table-striped table-bordered">
 
-          <thead>
-            <tr>
-               <th>
-                  "Order Id"
-                </th>
-                 <th>
-                  "Timestamp"
-                </th>
-                <th>
-                "Address"
-                </th>
-                  <th>
-                "Token amount"
-                </th> 
-                <th>
-                "Amount"
-                </th>   
-                <th>
-                "Payment method"
-                </th>
-                <th>
-                "Referral code"
-                </th>
-                <th>
-                "Transaction Id"
-                </th>
-                 <th>
-                "Agreed"
-                </th>
-                <th>
-                "Status"
-                </th>
-            </tr>
-          </thead>
+        <thead>
+          <tr>
+            <th>"Order Id"</th>
+            <th>"Timestamp"</th>
+            <th>"Address"</th>
+            <th>"Token amount"</th>
+            <th>"Amount"</th>
+            <th>"Payment method"</th>
+            <th>"Referral code"</th>
+            <th>"Transaction Id"</th>
+            <th>"Agreed"</th>
+            <th>"Status"</th>
+          </tr>
+        </thead>
 
-          <tbody>
-              for (order of allOrders) {
-              renderOrderRow(order)
-            }
-          </tbody>
+        <tbody>
+          for (order of allOrders) {
+            renderOrderRow(order)
+          }
+        </tbody>
 
-        </table>
-      </div>
+      </table>
+    </div>
   }
 
   fun renderOrders : Html {
-       <div class="card border-dark mb-3">
+    <div class="card border-dark mb-3">
       <div class="card-body">
         <h4 class="card-title">
           "Admin Orders"
         </h4>
 
-     <{ UiHelper.errorAlert(updateError) }>
+        <{ UiHelper.errorAlert(updateError) }>
 
-
-     <{ orderTable }>
-    
-     <{ updateOrderStatus() }>
-      
+        <{ orderTable }>
+        <{ updateOrderStatus() }>
       </div>
     </div>
   }
 
-  fun updateOrderStatus() : Html {
+  fun updateOrderStatus : Html {
     if (Array.isEmpty(allOrders)) {
-       <div></div>
+      <div/>
     } else {
-       renderUpdateStatus()
+      renderUpdateStatus()
     }
   }
 
-    get validateUpdateStatusButton : Bool {
+  get validateUpdateStatusButton : Bool {
     selectedOrder == "Choose" || selectedStatus == "Choose"
   }
 
- fun postUpdateStatus(event : Html.Event) {
+  fun postUpdateStatus (event : Html.Event) {
     sequence {
-      
-       hexPrivateKey =
-                      currentWallet 
-                      |> Maybe.map((w : Wallet) { Axentro.Wallet.getPrivateKeyFromWif(w.wif) |> Result.withDefault("error") })
-                      |> Maybe.withDefault("error")
-        
+      hexPrivateKey =
+        currentWallet
+        |> Maybe.map(
+          (w : Wallet) {
+            Axentro.Wallet.getPrivateKeyFromWif(w.wif)
+            |> Result.withDefault("error")
+          })
+        |> Maybe.withDefault("error")
 
-      publicKey = currentWallet
-                  |> Maybe.map((w : Wallet) { w.publicKey })
-                  |> Maybe.withDefault("error")
+      publicKey =
+        currentWallet
+        |> Maybe.map((w : Wallet) { w.publicKey })
+        |> Maybe.withDefault("error")
 
+      data =
+        senderAddress + selectedOrder + selectedStatus + publicKey
 
-      data = senderAddress + selectedOrder + selectedStatus + publicKey
-      hash = toHash(data)
-      signature = signPrivateSale(hash, hexPrivateKey)
+      hash =
+        toHash(data)
 
-      payload = {  id = selectedOrder, address = senderAddress, status = selectedStatus, publicKey = publicKey, hash = hash, signature = signature }
+      signature =
+        signPrivateSale(hash, hexPrivateKey)
 
-      requestBody = encode { call = "private_sale", action = "update_status", payload = payload }
-      baseUrl = currentWalletConfig.node
+      payload =
+        {
+          id = selectedOrder,
+          address = senderAddress,
+          status = selectedStatus,
+          publicKey = publicKey,
+          hash = hash,
+          signature = signature
+        }
+
+      requestBody =
+        encode {
+          call = "private_sale",
+          action = "update_status",
+          payload = payload
+        }
+
+      baseUrl =
+        currentWalletConfig.node
 
       response =
         Http.post(baseUrl + "/rpc")
@@ -251,81 +282,87 @@ fun fetchAllOrders(senderAddress : String, currentWalletConfig : WalletConfig, c
 
       if (response.status == 200) {
         sequence {
-          next { selectedOrder = "Choose", transactionId = "" }
+          next
+            {
+              selectedOrder = "Choose",
+              transactionId = ""
+            }
+
           fetchAllOrders(senderAddress, currentWalletConfig, currentWallet)
         }
       } else {
         next { updateError = "Unable to update order" }
       }
     } catch {
-        next { updateError = "Unable to update order" }
+      next { updateError = "Unable to update order" }
     }
-  } 
-
-  get statusOptions : Array(String) {
-      ["awaiting payment", "verifying payment", "complete", "error"]
   }
 
-  fun renderUpdateStatus() : Html {
-    if (Array.isEmpty(orderIds)){
-       <div></div>
+  get statusOptions : Array(String) {
+    ["awaiting payment", "verifying payment", "complete", "error"]
+  }
+
+  fun renderUpdateStatus : Html {
+    if (Array.isEmpty(orderIds)) {
+      <div/>
     } else {
       <div>
-      <hr/>
+        <hr/>
 
-<div class="form-group">
-              <div class="col">
-              <label for="order-id-update">
-                "Order status update"
-              </label>
+        <div class="form-group">
+          <div class="col">
+            <label for="order-id-update">
+              "Order status update"
+            </label>
 
-              <select
-                onChange={onOrderId}
-                class="form-control"
-                id="order-id-update">
+            <select
+              onChange={onOrderId}
+              class="form-control"
+              id="order-id-update">
 
-                <{ UiHelper.selectNameOptions(selectedOrder, orderOptions) }>
+              <{ UiHelper.selectNameOptions(selectedOrder, orderOptions) }>
 
-              </select>
-            </div>
-            </div>
+            </select>
+          </div>
+        </div>
 
-<div class="form-group">
-            <div class="col">
-              <label for="transaction-update">
-                "Order status"
-              </label>
+        <div class="form-group">
+          <div class="col">
+            <label for="transaction-update">
+              "Order status"
+            </label>
 
-              <select
-                onChange={onOrderStatus}
-                class="form-control"
-                id="order-status-update">
+            <select
+              onChange={onOrderStatus}
+              class="form-control"
+              id="order-status-update">
 
-                <{ UiHelper.selectNameOptions(selectedStatus, statusOptions) }>
+              <{ UiHelper.selectNameOptions(selectedStatus, statusOptions) }>
 
-              </select>
-            </div>
-            </div>
-          
+            </select>
+          </div>
+        </div>
 
-          <button
-            class="btn btn-secondary"
-            onClick={postUpdateStatus}
-            disabled={validateUpdateStatusButton}
-            type="submit">
+        <button
+          class="btn btn-secondary"
+          onClick={postUpdateStatus}
+          disabled={validateUpdateStatusButton}
+          type="submit">
 
-            "Update"
+          "Update"
 
-          </button>
-          <br/><br/>
-         
+        </button>
+
+        <br/>
+        <br/>
       </div>
     }
   } where {
-      orderIds = allOrders
-                 |> Array.map((o : AllOrdersResponse) { o.id })
-      orderOptions = Array.append(["Choose"], orderIds)           
-  }
+    orderIds =
+      allOrders
+      |> Array.map((o : AllOrdersResponse) { o.id })
 
- 
+    orderOptions =
+      Array.append(["Choose"], orderIds)
+  }
 }

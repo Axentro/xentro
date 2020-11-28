@@ -15,32 +15,32 @@ store Application {
 
   fun updateMinerWebSocketConnect (nodeUrl : String) {
     sequence {
-     next
+      next
         {
           minerWebSocketUrl = NodeHelper.minerWebSocketUrl(nodeUrl),
           shouldMinerWebSocketConnect = false,
           minerConnectionStatus = ConnectionStatus::Initial
         }
-      
+
       next { shouldMinerWebSocketConnect = canMinerConnect() }
     }
   }
 
-  fun canMinerConnect() : Bool {
+  fun canMinerConnect : Bool {
     numberProcesses > 0
   }
 
   state numberProcesses : Number = 0
- 
+
   fun setNumberProcesses (value : Number) {
     sequence {
       next { numberProcesses = value }
       Timer.timeout(2000, updateMinerWebSocketConnect(minerWebSocketUrl))
     }
   }
- 
+
   fun getNumberProcesses {
-      numberProcesses
+    numberProcesses
   }
 
   fun initMinerSlider {
@@ -67,7 +67,6 @@ store Application {
     `
   }
 
-
   fun updateWebSocketConnect (nodeUrl : String) {
     sequence {
       next
@@ -84,7 +83,7 @@ store Application {
     next { connectionStatus = status }
   }
 
-   fun setMinerConnectionstatus (status : ConnectionStatus) : Promise(Never, Void) {
+  fun setMinerConnectionstatus (status : ConnectionStatus) : Promise(Never, Void) {
     next { minerConnectionStatus = status }
   }
 
@@ -121,7 +120,7 @@ store Application {
     next { webSocket = Maybe.nothing() }
   }
 
-   fun setMinerWebSocket (s : WebSocket) : Promise(Never, Void) {
+  fun setMinerWebSocket (s : WebSocket) : Promise(Never, Void) {
     next { minerWebSocket = Maybe.just(s) }
   }
 
