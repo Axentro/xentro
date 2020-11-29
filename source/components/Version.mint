@@ -1,7 +1,7 @@
 component Version {
   fun render {
     <div class="text-muted">
-      "v0.1.8"
+      "v0.1.9"
     </div>
   }
 }

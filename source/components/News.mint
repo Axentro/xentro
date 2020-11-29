@@ -11,6 +11,16 @@ component News {
               <strong>"News & Updates"</strong>
             </p>
 
+             <p>
+              <span class="text-muted">
+                "v0.1.8 wallet released"
+              </span>
+
+              <ul>
+                <li>"- Mainnet released"</li>
+              </ul>
+            </p>
+
             <p>
               <span class="text-muted">
                 "v0.1.8 wallet released"
