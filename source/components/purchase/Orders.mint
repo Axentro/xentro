@@ -173,14 +173,14 @@ component Orders {
             "Please transfer "
             <b>"ETH"</b>
             " to this address: "
-            <b>"0x1aA054d3Fb8a285220CF19f55Ab6da93Ecf5337c"</b>
+            <b>"0x5236bb0310869c2Cac85a2B08F47540777c78b4C"</b>
           </p>
 
           <p>
             "Please transfer "
             <b>"BTC"</b>
             " to this address: "
-            <b>"1CQ52yVDzQjV4NXbwQc4LYDur69hmD9Wu9"</b>
+            <b>"31nueJVFz8SjxhLwUp8LsbuWe9Y3Km4Fh8"</b>
           </p>
 
         </div>
