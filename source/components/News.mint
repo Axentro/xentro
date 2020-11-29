@@ -13,6 +13,16 @@ component News {
 
             <p>
               <span class="text-muted">
+                "v0.1.8 wallet released"
+              </span>
+
+              <ul>
+                <li>"- Private fund raising released"</li>
+              </ul>
+            </p>
+
+            <p>
+              <span class="text-muted">
                 "v0.1.7 wallet released"
               </span>
 
