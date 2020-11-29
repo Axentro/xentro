@@ -34,6 +34,7 @@ component UpdateCustomTokenTransaction {
         next
           {
             amount = "",
+            amountError = "",
             selectedToken = "Choose",
             speed = currentWalletConfig.speed,
             confirmCheck = false
@@ -144,7 +145,7 @@ component UpdateCustomTokenTransaction {
     <div class="card border-dark mb-3">
       <div class="card-body">
         <h4 class="card-title">
-          "Update Custom Token"
+          "Increase Custom Token Amount"
         </h4>
 
         <div>
@@ -168,14 +169,14 @@ component UpdateCustomTokenTransaction {
           <div class="form-group">
             <div class="col">
               <label for="amount-to-update">
-                "Update amount"
+                "Add additional amount"
               </label>
 
               <input
                 type="text"
                 class="form-control"
                 id="amount-to-update"
-                placeholder="Update amount"
+                placeholder="Additional amount"
                 onInput={onAmount}
                 value={amount}/>
 
