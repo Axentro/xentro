@@ -144,7 +144,20 @@ component CreateEncryptedWallet {
       wallet =
         Axentro.Wallet.generateEncryptedWallet(network, name, password)
 
-      storeWallet(wallet, Maybe.nothing())
+      walletConfig = 
+        if (selectedNetwork == "Mainnet") {
+           {
+             node = "https://mainnet.axentro.io",
+             speed = "FAST"
+           }
+        } else {
+           {
+             node = "https://testnet.axentro.io",
+             speed = "FAST"
+           }
+        }
+
+      storeWallet(wallet, Maybe.just(walletConfig))
 
       getWallet(name, password)
       updateWebSocketConnect(currentWalletConfig.node)
