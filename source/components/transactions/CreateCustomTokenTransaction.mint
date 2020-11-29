@@ -95,13 +95,10 @@ component CreateCustomTokenTransaction {
   fun validateName (value : String) : String {
     try {
       regexResult =
-        Regexp.create("^[A-Z0-9]{1,20}")
+        Regexp.create("^[A-Z0-9]{1,20}$")
         |> Regexp.match(value)
 
-      allCaps =
-        String.toUpperCase(value) == value
-
-      if (regexResult && allCaps) {
+      if (regexResult) {
         ""
       } else {
         "Please comply with the rules for a name listed above"
