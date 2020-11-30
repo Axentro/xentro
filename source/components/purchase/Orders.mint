@@ -172,8 +172,9 @@ component Orders {
           <p>
             "Please transfer "
             <b>"ETH"</b>
-            " to this address: "
+            " to this address:"
             <b>"0x5236bb0310869c2Cac85a2B08F47540777c78b4C"</b>
+            <p>"(only send ETH - " <b>"DO NOT"</b> " send any ERC20 tokens to this address)"</p>
           </p>
 
           <p>
