@@ -325,11 +325,11 @@ component PurchaseTokens {
 
           <p>
             "We are aiming to raise "
-            <strong>"£50,000 GBP"</strong>
+            <strong>"$70,000 USD"</strong>
             " and as such the maximum amount of tokens you can buy is set at "
-            <b>"50,000"</b>
+            <b>"70,000"</b>
             " costing "
-            <b>"£1"</b>
+            <b>"$1"</b>
             " per token."
           </p>
 
@@ -507,7 +507,7 @@ component PurchaseTokens {
             <{ selectedAmount }>
           </td>
 
-          <td>"£1 GBP"</td>
+          <td>"$1 USD"</td>
 
           <td>
             <{ selectedPaymentType }>

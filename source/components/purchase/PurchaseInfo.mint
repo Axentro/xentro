@@ -13,7 +13,7 @@ component PurchaseInfo {
 
             <p>
               "The aim of this private fund raising round is to raise "
-              <b>"£50,000 GBP"</b>
+              <b>"$70,000 USD"</b>
               " to cover the following expenses:"
             </p>
 
@@ -21,22 +21,22 @@ component PurchaseInfo {
               <ul>
                 <li>
                   "Hosting & infrastructure: "
-                  <b>"£6,000"</b>
+                  <b>"$6,000"</b>
                 </li>
 
                 <li>
                   "Security audit & testing: "
-                  <b>"£4,000"</b>
+                  <b>"$4,000"</b>
                 </li>
 
                 <li>
                   "Exchange listing fees: "
-                  <b>"£30,000"</b>
+                  <b>"$35,000"</b>
                 </li>
 
                 <li>
                   "Marketing & PR: "
-                  <b>"£10,000"</b>
+                  <b>"$25,000"</b>
                 </li>
               </ul>
             </p>
