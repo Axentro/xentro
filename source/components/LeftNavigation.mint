@@ -99,7 +99,7 @@ component LeftNavigation {
               onClick={(e : Html.Event) { go(e, "transactions") }}
               >
 
-              "Transactions"
+              "Rejections"
 
             </a>
 
