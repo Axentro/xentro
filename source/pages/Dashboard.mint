@@ -12,7 +12,8 @@ component Dashboard {
 
   fun render : Html {
     <Layout
-      navigation=[<Navigation/>]
+      topNavigation=[<TopNavigation/>]
+      leftNavigation=[<LeftNavigation/>]
       content=[renderPageContent]/>
   }
 
@@ -35,13 +36,13 @@ component Dashboard {
 
         <div class="row">
           <div class="col-md-3">
+          <AccountStatus/>
             <WalletBalances
               address={walletInfo.address}
               readable={walletInfo.readable}
               tokens={walletInfo.tokens}/>
 
             <News/>
-            <TestnetCurrency/>
           </div>
 
           <div class="col-md-9">

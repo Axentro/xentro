@@ -12,7 +12,8 @@ component Transactions {
 
   fun render : Html {
     <Layout
-      navigation=[<Navigation current="transactions"/>]
+      topNavigation=[<TopNavigation/>]
+      leftNavigation=[<LeftNavigation current="transactions"/>]
       content=[renderPageContent]/>
   }
 
@@ -35,6 +36,7 @@ component Transactions {
 
         <div class="row">
           <div class="col-md-3">
+          <AccountStatus/>
             <WalletBalances
               address={walletInfo.address}
               readable={walletInfo.readable}

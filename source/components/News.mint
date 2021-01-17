@@ -13,7 +13,7 @@ component News {
 
              <p>
               <span class="text-muted">
-                "v0.1.8 wallet released"
+                "v0.1.9 wallet released"
               </span>
 
               <ul>

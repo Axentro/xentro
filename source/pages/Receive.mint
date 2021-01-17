@@ -12,7 +12,8 @@ component Receive {
 
   fun render : Html {
     <Layout
-      navigation=[<Navigation current="receive"/>]
+      topNavigation=[<TopNavigation/>]
+      leftNavigation=[<LeftNavigation current="receive"/>]
       content=[renderPageContent]/>
   }
 
@@ -47,6 +48,7 @@ component Receive {
 
         <div class="row">
           <div class="col-md-3">
+          <AccountStatus/>
             <WalletBalances
               address={walletInfo.address}
               readable={walletInfo.readable}

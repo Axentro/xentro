@@ -12,7 +12,8 @@ component Tools {
 
   fun render : Html {
     <Layout
-      navigation=[<Navigation current="tools"/>]
+      topNavigation=[<TopNavigation/>]
+      leftNavigation=[<LeftNavigation current="tools"/>]
       content=[renderPageContent]/>
   }
 
@@ -33,6 +34,7 @@ component Tools {
 
         <div class="row">
           <div class="col-md-3">
+          <AccountStatus/>
             <WalletBalances
               address={walletInfo.address}
               readable={walletInfo.readable}

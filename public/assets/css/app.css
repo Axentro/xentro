@@ -10217,11 +10217,12 @@ small {
   left: 0;
   bottom: 0;
   top: 75px;
+  margin-top:75px;
 }
 
 .navigation .navigation-menu-tab {
   border-right: 1px solid #e6e6e6;
-  width: 80px;
+  width: 120px;
   display: -webkit-box;
   display: flex;
   -webkit-box-orient: vertical;

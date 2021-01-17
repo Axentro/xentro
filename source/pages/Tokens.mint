@@ -13,7 +13,8 @@ component Tokens {
 
   fun render : Html {
     <Layout
-      navigation=[<Navigation current="tokens"/>]
+      topNavigation=[<TopNavigation/>]
+      leftNavigation=[<LeftNavigation current="tokens"/>]
       content=[renderPageContent]/>
   }
 
@@ -31,6 +32,7 @@ component Tokens {
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-3">
+        <AccountStatus/>
           <WalletBalances
             address={walletInfo.address}
             readable={walletInfo.readable}

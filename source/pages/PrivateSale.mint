@@ -13,7 +13,8 @@ component PrivateSale {
 
   fun render : Html {
     <Layout
-      navigation=[<Navigation current="purchase"/>]
+     topNavigation=[<TopNavigation/>]
+      leftNavigation=[<LeftNavigation/>]
       content=[renderPageContent]/>
   }
 

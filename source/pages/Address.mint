@@ -12,7 +12,8 @@ component Address {
 
   fun render : Html {
     <Layout
-      navigation=[<Navigation current="address"/>]
+      topNavigation=[<TopNavigation/>]
+      leftNavigation=[<LeftNavigation current="address"/>]
       content=[renderPageContent]/>
   }
 
@@ -33,6 +34,7 @@ component Address {
 
         <div class="row">
           <div class="col-md-3">
+          <AccountStatus/>
             <WalletBalances
               address={walletInfo.address}
               readable={walletInfo.readable}

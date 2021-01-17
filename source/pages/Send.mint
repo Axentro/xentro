@@ -12,7 +12,8 @@ component Send {
 
   fun render : Html {
     <Layout
-      navigation=[<Navigation current="send"/>]
+      topNavigation=[<TopNavigation/>]
+      leftNavigation=[<LeftNavigation current="send"/>]
       content=[renderPageContent]/>
   }
 
@@ -33,6 +34,7 @@ component Send {
 
         <div class="row">
           <div class="col-md-3">
+          <AccountStatus/>
             <WalletBalances
               address={walletInfo.address}
               readable={walletInfo.readable}
