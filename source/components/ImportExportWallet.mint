@@ -25,6 +25,10 @@ component ImportExportWallet {
   state selectedExport : String = "Encrypted"
   state selectedImport : String = "Encrypted"
 
+  fun componentDidMount : Promise(Never, Void) {
+    next { importErrorMessage = "", exportErrorMessage = "" }
+  }
+
   fun onImportDecryptedWallet (event : Html.Event) {
     next
       {
