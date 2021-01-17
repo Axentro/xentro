@@ -306,10 +306,6 @@ component Main {
         contents = <Transactions/>
       },
       {
-        name = "purchase",
-        contents = <PrivateSale/>
-      },
-      {
         name = "login",
         contents = <Login/>
       },

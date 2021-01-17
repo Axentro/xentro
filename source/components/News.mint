@@ -13,6 +13,27 @@ component News {
 
              <p>
               <span class="text-muted">
+                "IEO & LISTING on VINDAX EXCHANGE"
+              </span>
+
+              <ul>
+                <li>"- IEO on 25th January"</li>
+                <li>"- for more information visit https://axentro.io"</li>
+              </ul>
+            </p>
+
+             <p>
+              <span class="text-muted">
+                "v0.1.10 wallet released"
+              </span>
+
+              <ul>
+                <li>"- moved navigation to the left"</li>
+              </ul>
+            </p>
+
+             <p>
+              <span class="text-muted">
                 "v0.1.9 wallet released"
               </span>
 
