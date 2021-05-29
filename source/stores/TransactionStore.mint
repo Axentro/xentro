@@ -320,6 +320,11 @@ store TransactionStore {
             amount = amount
           }
         ],
+      assets = [],
+      modules = [],
+      inputs = [],
+      outputs = [],
+      linked = "",  
       message = "0",
       token = token,
       prevHash = "0",
@@ -350,6 +355,11 @@ store TransactionStore {
           }
         ],
       recipients = [],
+      assets = [],
+      modules = [],
+      inputs = [],
+      outputs = [],
+      linked = "",  
       message = name,
       token = "AXNT",
       prevHash = "0",
@@ -387,6 +397,11 @@ store TransactionStore {
             amount = amount
           }
         ],
+      assets = [],
+      modules = [],
+      inputs = [],
+      outputs = [],
+      linked = "",    
       message = "0",
       token = name,
       prevHash = "0",
@@ -424,6 +439,11 @@ store TransactionStore {
             amount = amount
           }
         ],
+      assets = [],
+      modules = [],
+      inputs = [],
+      outputs = [],
+      linked = "",      
       message = "0",
       token = name,
       prevHash = "0",
@@ -460,6 +480,11 @@ store TransactionStore {
             amount = "0"
           }
         ],
+      assets = [],
+      modules = [],
+      inputs = [],
+      outputs = [],
+      linked = "",      
       message = "0",
       token = name,
       prevHash = "0",
@@ -497,6 +522,11 @@ store TransactionStore {
             amount = amount
           }
         ],
+      assets = [],
+      modules = [],
+      inputs = [],
+      outputs = [],
+      linked = "",     
       message = "0",
       token = name,
       prevHash = "0",
