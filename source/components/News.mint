@@ -13,6 +13,16 @@ component News {
 
              <p>
               <span class="text-muted">
+                "v0.1.11 wallet released"
+              </span>
+
+              <ul>
+                <li>"- updates to support v3"</li>
+              </ul>
+            </p>
+
+             <p>
+              <span class="text-muted">
                 "IEO & LISTING on VINDAX EXCHANGE"
               </span>
 
